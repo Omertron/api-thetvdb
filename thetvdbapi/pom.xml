@@ -12,14 +12,17 @@
 	<name>TheTVDB API</name>
 
 	<description>API for TheTVDB.com website</description>
+	
 	<issueManagement>
 		<system>Google Code</system>
 		<url>http://code.google.com/p/javatvdbapi/issues/list</url>
 	</issueManagement>
+	
 	<ciManagement>
 		<system>Hudson CI</system>
 		<url>http://mediadeveloper.org:8080/job/API-TheTVDb/</url>
 	</ciManagement>
+	
 	<scm>
 		<connection>scm:svn:http://javatvdbapi.googlecode.com/svn/trunk/thetvdbapi</connection>
 		<developerConnection>scm:svn:https://javatvdbapi.googlecode.com/svn/trunk/thetvdbapi</developerConnection>
@@ -27,8 +30,8 @@
 	</scm>
 
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<skipTests>true</skipTests>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<distribution.format>zip</distribution.format>
 	</properties>
@@ -42,6 +45,7 @@
 			</plugin>
 		</plugins>
 	</reporting>
+	
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
