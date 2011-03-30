@@ -30,6 +30,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<skipTests>true</skipTests>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<distribution.format>zip</distribution.format>
 	</properties>
 
 	<reporting>
@@ -180,9 +181,58 @@
 				</configuration>
 			</plugin>
 
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<id>create-version-txt</id>
+						<phase>generate-resources</phase>
+						<configuration>
+							<target>
+								<property name="version_file" value="${project.build.directory}/version.txt" />
+								<property name="header_line" value="TheTVDb API${line.separator}" />
+								<property name="build_date_line" value="Build Date: ${timestamp}${line.separator}" />
+								<property name="version_line" value="Version: ${project.version}${line.separator}" />
+								<property name="revision_line" value="Revision: r${buildNumber}${line.separator}" />
+								<echo>Writing version file: ${version_file}</echo>
+								<echo file="${version_file}" append="false">${header_line}</echo>
+								<echo file="${version_file}" append="true">${build_date_line}</echo>
+								<echo file="${version_file}" append="true">${version_line}</echo>
+								<echo file="${version_file}" append="true">${revision_line}</echo>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>distro-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>src/main/resources/bin.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 
 		<finalName>${project.artifactId}-${project.version}-r${buildNumber}</finalName>
+		<resources>
+		</resources>
 
 	</build>
 </project>

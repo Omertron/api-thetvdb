@@ -179,6 +179,30 @@ public class TheTVDB {
     }
     
     /**
+     * Get all the episodes for a series.
+     * Note: This could be a lot of records
+     * @param id
+     * @param language
+     * @return
+     */
+    public List<Episode> getAllEpisodes(String id, String language) {
+        String urlString = null;
+        try {
+            urlString = getXmlMirror() + apiKey + SERIES_URL + id + "/all/" + (language!=null?language+XML_EXTENSION:"");
+        } catch (Throwable tw) {
+            logger.severe(tw.getMessage());
+            return null;
+        }
+        
+        List<Episode> episodeList = TvdbParser.getAllEpisodes(urlString);
+        if (episodeList.isEmpty()) {
+            return null;
+        } else {
+            return episodeList;
+        }
+    }
+    
+    /**
      * Get a specific episode's information
      * @param seriesId
      * @param seasonNbr

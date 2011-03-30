@@ -286,4 +286,40 @@ public class Episode {
         this.airsBeforeEpisode = airsBeforeEpisode;
     }
     
+    @Override
+    public String toString() {
+        StringBuffer sbEpisode = new StringBuffer("[Episode ");
+        
+        sbEpisode.append("[id=").append(id).append("]");
+        sbEpisode.append("[combinedEpisodeNumber=").append(combinedEpisodeNumber).append("]");
+        sbEpisode.append("[combinedSeason=").append(combinedSeason).append("]");
+        sbEpisode.append("[dvdChapter=").append(dvdChapter).append("]");
+        sbEpisode.append("[dvdChapter=").append(dvdDiscId).append("]");
+        sbEpisode.append("[dvdEpisodeNumber=").append(dvdEpisodeNumber).append("]");
+        sbEpisode.append("[dvdSeason=").append(dvdSeason).append("]");
+        sbEpisode.append("[directors=").append(directors.toString()).append("]");
+        sbEpisode.append("[epImgFlag=").append(epImgFlag).append("]");
+        sbEpisode.append("[episodeName=").append(episodeName).append("]");
+        sbEpisode.append("[episodeNumber=").append(episodeNumber).append("]");
+        sbEpisode.append("[firstAired=").append(firstAired).append("]");
+        sbEpisode.append("[guestStars=").append(guestStars.toString()).append("]");
+        sbEpisode.append("[imdbId=").append(imdbId).append("]");
+        sbEpisode.append("[language=").append(language).append("]");
+        sbEpisode.append("[overview=").append(overview).append("]");
+        sbEpisode.append("[productionCode=").append(productionCode).append("]");
+        sbEpisode.append("[rating=").append(rating).append("]");
+        sbEpisode.append("[seasonNumber=").append(seasonNumber).append("]");
+        sbEpisode.append("[writers=").append(writers.toString()).append("]");
+        sbEpisode.append("[absoluteNumber=").append(absoluteNumber).append("]");
+        sbEpisode.append("[airsAfterSeason=").append(airsAfterSeason).append("]");
+        sbEpisode.append("[airsBeforeSeason=").append(airsBeforeSeason).append("]");
+        sbEpisode.append("[airsBeforeEpisode=").append(airsBeforeEpisode).append("]");
+        sbEpisode.append("[filename=").append(filename).append("]");
+        sbEpisode.append("[lastUpdated=").append(lastUpdated).append("]");
+        sbEpisode.append("[seriesId=").append(seriesId).append("]");
+        sbEpisode.append("[seasonId=").append(seasonId).append("]");
+        sbEpisode.append("]");
+        
+        return sbEpisode.toString();
+    }
 }

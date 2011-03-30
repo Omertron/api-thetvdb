@@ -35,235 +35,6 @@ import com.moviejukebox.thetvdb.model.Series;
 public class TvdbParser {
     private static Logger logger = TheTVDB.getLogger();
 
-    private static Series parseNextSeries(Element eSeries) throws Throwable {
-        String bannerMirror = TheTVDB.getBannerMirror();
-        
-        Series series = new Series();
-        String artwork;
-        
-        series.setId(DOMHelper.getValueFromElement(eSeries, "id"));
-        series.setActors(parseList(DOMHelper.getValueFromElement(eSeries, "Actors"),"|,"));
-        series.setAirsDayOfWeek(DOMHelper.getValueFromElement(eSeries, "Airs_DayOfWeek"));
-        series.setAirsTime(DOMHelper.getValueFromElement(eSeries, "Airs_Time"));
-        series.setContentRating(DOMHelper.getValueFromElement(eSeries, "ContentRating"));
-        series.setFirstAired(DOMHelper.getValueFromElement(eSeries, "FirstAired"));
-        series.setGenres(parseList(DOMHelper.getValueFromElement(eSeries, "Genre"), "|,"));
-        series.setImdbId(DOMHelper.getValueFromElement(eSeries, "IMDB_ID"));
-        series.setLanguage(DOMHelper.getValueFromElement(eSeries, "language"));
-        series.setNetwork(DOMHelper.getValueFromElement(eSeries, "Network"));
-        series.setOverview(DOMHelper.getValueFromElement(eSeries, "Overview"));
-        series.setRating(DOMHelper.getValueFromElement(eSeries, "Rating"));
-        series.setRuntime(DOMHelper.getValueFromElement(eSeries, "Runtime"));
-        series.setSeriesId(DOMHelper.getValueFromElement(eSeries, "SeriesID"));
-        series.setSeriesName(DOMHelper.getValueFromElement(eSeries, "SeriesName"));
-        series.setStatus(DOMHelper.getValueFromElement(eSeries, "Status"));
-        
-        artwork = DOMHelper.getValueFromElement(eSeries, "banner");
-        if (!artwork.isEmpty()) {
-            series.setBanner(bannerMirror + artwork);
-        }
-        
-        artwork = DOMHelper.getValueFromElement(eSeries, "fanart");
-        if (!artwork.isEmpty()) {
-            series.setFanart(bannerMirror + artwork);
-        }
-        
-        artwork = DOMHelper.getValueFromElement(eSeries, "poster");
-        if (!artwork.isEmpty()) {
-            series.setPoster(bannerMirror + artwork);
-        }
-                
-        series.setLastUpdated(DOMHelper.getValueFromElement(eSeries, "lastupdated"));
-        series.setZap2ItId(DOMHelper.getValueFromElement(eSeries, "zap2it_id"));
-
-        return series;
-    }
-    
-    private static Banner parseNextBanner(Element eBanner) throws Throwable {
-        String bannerMirror = TheTVDB.getBannerMirror();
-        Banner banner = new Banner();
-        String artwork;
-        
-        artwork = DOMHelper.getValueFromElement(eBanner, "BannerPath");
-        if (!artwork.isEmpty()) {
-            banner.setUrl(bannerMirror + artwork);
-        }
-        
-        artwork = DOMHelper.getValueFromElement(eBanner, "VignettePath");
-        if (!artwork.isEmpty()) {
-            banner.setVignette(bannerMirror + artwork);
-        }
-        
-        artwork = DOMHelper.getValueFromElement(eBanner, "ThumbnailPath");
-        if (!artwork.isEmpty()) {
-            banner.setThumb(bannerMirror + artwork);
-        }
-        
-        banner.setBannerType(DOMHelper.getValueFromElement(eBanner, "BannerType"));
-        banner.setBannerType2(DOMHelper.getValueFromElement(eBanner, "BannerType2"));
-        banner.setLanguage(DOMHelper.getValueFromElement(eBanner, "Language"));
-        banner.setSeason(DOMHelper.getValueFromElement(eBanner, "Season"));
-        
-        return banner;
-    }
-
-    /**
-     * Get the episode information from the URL
-     * @param urlString
-     * @return
-     */
-    public static Episode getEpisode(String urlString) {
-        Episode episode = null;
-        Document doc;
-        
-        try {
-            doc = DOMHelper.getEventDocFromUrl(urlString);
-            episode = parseNextEpisode(doc);
-        } catch (Exception error) {
-            logger.warning(parseErrorMessage(error.getMessage()));
-        } catch (Throwable tw) {
-            // Message is passed to us
-            logger.warning(tw.getMessage());
-        }
-        return episode;
-    }
-
-    /**
-     * Parse the document for episode information
-     * @param doc
-     * @return
-     * @throws Throwable 
-     */
-    private static Episode parseNextEpisode(Document doc) throws Throwable {
-        Episode episode = null;
-        NodeList nlEpisode;
-        Node nEpisode;
-        Element eEpisode;
-        
-        nlEpisode = doc.getElementsByTagName("Episode");
-        
-        for (int loop = 0; loop < nlEpisode.getLength(); loop++) {
-            nEpisode = nlEpisode.item(loop);
-            
-            if (nEpisode.getNodeType() == Node.ELEMENT_NODE) {
-                episode = new Episode();
-                eEpisode = (Element) nEpisode;
-                
-                episode.setId(DOMHelper.getValueFromElement(eEpisode, "id"));
-                episode.setCombinedEpisodeNumber(DOMHelper.getValueFromElement(eEpisode, "Combined_episodenumber"));
-                episode.setCombinedSeason(DOMHelper.getValueFromElement(eEpisode, "Combined_season"));
-                episode.setDvdChapter(DOMHelper.getValueFromElement(eEpisode, "DVD_chapter"));
-                episode.setDvdDiscId(DOMHelper.getValueFromElement(eEpisode, "DVD_discid"));
-                episode.setDvdEpisodeNumber(DOMHelper.getValueFromElement(eEpisode, "DVD_episodenumber"));
-                episode.setDvdSeason(DOMHelper.getValueFromElement(eEpisode, "DVD_season"));
-                episode.setDirectors(parseList(DOMHelper.getValueFromElement(eEpisode, "Director"), "|,"));
-                episode.setEpImgFlag(DOMHelper.getValueFromElement(eEpisode, "EpImgFlag"));
-                episode.setEpisodeName(DOMHelper.getValueFromElement(eEpisode, "EpisodeName"));
-                try {
-                    episode.setEpisodeNumber(Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, "EpisodeNumber")));
-                } catch (Exception ignore) {
-                    episode.setEpisodeNumber(0);
-                }
-                episode.setFirstAired(DOMHelper.getValueFromElement(eEpisode, "FirstAired"));
-                episode.setGuestStars(parseList(DOMHelper.getValueFromElement(eEpisode, "GuestStars"), "|,"));
-                episode.setImdbId(DOMHelper.getValueFromElement(eEpisode, "IMDB_ID"));
-                episode.setLanguage(DOMHelper.getValueFromElement(eEpisode, "Language"));
-                episode.setOverview(DOMHelper.getValueFromElement(eEpisode, "Overview"));
-                episode.setProductionCode(DOMHelper.getValueFromElement(eEpisode, "ProductionCode"));
-                episode.setRating(DOMHelper.getValueFromElement(eEpisode, "Rating"));
-                try {
-                    episode.setSeasonNumber(Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, "SeasonNumber")));
-                } catch (Exception ignore) {
-                    episode.setSeasonNumber(0);
-                }
-                episode.setWriters(parseList(DOMHelper.getValueFromElement(eEpisode, "Writer"), "|,"));
-                episode.setAbsoluteNumber(DOMHelper.getValueFromElement(eEpisode, "absolute_number"));
-                String s = DOMHelper.getValueFromElement(eEpisode, "filename");
-                if (!s.isEmpty()) {
-                    episode.setFilename(TheTVDB.getBannerMirror() + s);
-                }
-                episode.setLastUpdated(DOMHelper.getValueFromElement(eEpisode, "lastupdated"));
-                episode.setSeasonId(DOMHelper.getValueFromElement(eEpisode, "seasonid"));
-                episode.setSeriesId(DOMHelper.getValueFromElement(eEpisode, "seriesid"));
-
-                try {
-                    episode.setAirsAfterSeason(Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, "airsafter_season")));
-                } catch (Exception ignore) {
-                    episode.setAirsAfterSeason(0);
-                }
-                
-                try {
-                    episode.setAirsBeforeEpisode(Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, "airsbefore_episode")));
-                } catch (Exception ignore) {
-                    episode.setAirsBeforeEpisode(0);
-                }
-
-                try {
-                    episode.setAirsBeforeSeason(Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, "airsbefore_season")));
-                } catch (Exception ignore) {
-                    episode.setAirsBeforeSeason(0);
-}
-                break;  // We only want the first episode
-            }     
-        }
-        return episode;
-    }
-
-    /**
-     * Create a List from a delimited string
-     * @param input
-     * @param delim
-     * @return
-     */
-    private static List<String> parseList(String input, String delim) {
-        List<String> result = new ArrayList<String>();
-        
-        StringTokenizer st = new StringTokenizer(input, delim);
-        while (st.hasMoreTokens()) {
-            String token = st.nextToken().trim();
-            if (token.length() > 0) {
-                result.add(token);
-            }
-        }
-        
-        return result;
-    }
-
-    /**
-     * Get a list of series from the url
-     * @param urlString
-     * @return
-     */
-    public static List<Series> getSeriesList(String urlString) {
-        List<Series> seriesList = new ArrayList<Series>();
-        Series series = null;
-        NodeList nlSeries;
-        Node nSeries;
-        Element eSeries;
-        
-        try {
-            Document doc = DOMHelper.getEventDocFromUrl(urlString);
-            nlSeries = doc.getElementsByTagName("Series");
-            for (int loop = 0; loop < nlSeries.getLength(); loop++) {
-                nSeries = nlSeries.item(loop);
-                if (nSeries.getNodeType() == Node.ELEMENT_NODE) {
-                    eSeries = (Element) nSeries;
-                    series = parseNextSeries(eSeries);
-                    if (series != null) {
-                        seriesList.add(series);
-                    }
-                }
-            }
-        } catch (Exception error) {
-            logger.warning("Series error: " + error.getMessage());
-        } catch (Throwable tw) {
-            // Message is passed to us
-            logger.warning(tw.getMessage());
-        }
-        
-        return seriesList;
-    }
-    
     /**
      * Get a list of the actors from the url
      * @param urlString
@@ -311,6 +82,42 @@ public class TvdbParser {
         Collections.sort(results);
         return results;
     }
+    
+    /**
+     * Get all the episodes from the URL
+     * @param urlString
+     * @return
+     */
+    public static List<Episode> getAllEpisodes(String urlString) {
+        List<Episode> episodeList = new ArrayList<Episode>();
+        Episode episode = null;
+        NodeList nlEpisode;
+        Node nEpisode;
+        Element eEpisode;
+        
+        try {
+            Document doc = DOMHelper.getEventDocFromUrl(urlString);
+            nlEpisode = doc.getElementsByTagName("Episode");
+            for (int loop = 0; loop < nlEpisode.getLength(); loop++) {
+                nEpisode = nlEpisode.item(loop);
+                if (nEpisode.getNodeType() == Node.ELEMENT_NODE) {
+                    eEpisode = (Element) nEpisode;
+                    episode = parseNextEpisode(eEpisode);
+                    if (episode != null) {
+                        episodeList.add(episode);
+                        logger.fine("Adding Episode:\n" + episode.toString());  // XXX DEBUG
+                    }
+                }
+            }
+        } catch (Exception error) {
+            logger.warning("All Episodes error: " + error.getMessage());
+        } catch (Throwable tw) {
+            // Message is passed to us
+            logger.warning(tw.getMessage());
+        }
+        
+        return episodeList;
+    }
 
     /**
      * Get a list of banners from the URL
@@ -347,6 +154,77 @@ public class TvdbParser {
         }
         
         return banners;
+    }
+
+    /**
+     * Get the episode information from the URL
+     * @param urlString
+     * @return
+     */
+    public static Episode getEpisode(String urlString) {
+        Episode episode = null;
+        NodeList nlEpisode;
+        Node nEpisode;
+        Element eEpisode;
+        
+        try {
+            Document doc = DOMHelper.getEventDocFromUrl(urlString);
+            nlEpisode = doc.getElementsByTagName("Episode");
+            for (int loop = 0; loop < nlEpisode.getLength(); loop++) {
+                nEpisode = nlEpisode.item(loop);
+                if (nEpisode.getNodeType() == Node.ELEMENT_NODE) {
+                    eEpisode = (Element) nEpisode;
+                    episode = parseNextEpisode(eEpisode);
+                    if (episode != null) {
+                        // We only need the first episode
+                        break;
+                    }
+                }
+            }
+        } catch (Exception error) {
+            logger.warning("Series error: " + error.getMessage());
+        } catch (Throwable tw) {
+            // Message is passed to us
+            logger.warning(tw.getMessage());
+        }
+        
+        return episode;
+
+    }
+
+    /**
+     * Get a list of series from the URL
+     * @param urlString
+     * @return
+     */
+    public static List<Series> getSeriesList(String urlString) {
+        List<Series> seriesList = new ArrayList<Series>();
+        Series series = null;
+        NodeList nlSeries;
+        Node nSeries;
+        Element eSeries;
+        
+        try {
+            Document doc = DOMHelper.getEventDocFromUrl(urlString);
+            nlSeries = doc.getElementsByTagName("Series");
+            for (int loop = 0; loop < nlSeries.getLength(); loop++) {
+                nSeries = nlSeries.item(loop);
+                if (nSeries.getNodeType() == Node.ELEMENT_NODE) {
+                    eSeries = (Element) nSeries;
+                    series = parseNextSeries(eSeries);
+                    if (series != null) {
+                        seriesList.add(series);
+                    }
+                }
+            }
+        } catch (Exception error) {
+            logger.warning("Series error: " + error.getMessage());
+        } catch (Throwable tw) {
+            // Message is passed to us
+            logger.warning(tw.getMessage());
+        }
+        
+        return seriesList;
     }
 
     /**
@@ -390,6 +268,176 @@ public class TvdbParser {
         }
         
         return response;
+    }
+
+    /**
+     * Create a List from a delimited string
+     * @param input
+     * @param delim
+     * @return
+     */
+    private static List<String> parseList(String input, String delim) {
+        List<String> result = new ArrayList<String>();
+        
+        StringTokenizer st = new StringTokenizer(input, delim);
+        while (st.hasMoreTokens()) {
+            String token = st.nextToken().trim();
+            if (token.length() > 0) {
+                result.add(token);
+            }
+        }
+        
+        return result;
+    }
+    
+    /**
+     * Parse the banner record from the document
+     * @param eBanner
+     * @return
+     * @throws Throwable
+     */
+    private static Banner parseNextBanner(Element eBanner) throws Throwable {
+        String bannerMirror = TheTVDB.getBannerMirror();
+        Banner banner = new Banner();
+        String artwork;
+        
+        artwork = DOMHelper.getValueFromElement(eBanner, "BannerPath");
+        if (!artwork.isEmpty()) {
+            banner.setUrl(bannerMirror + artwork);
+        }
+        
+        artwork = DOMHelper.getValueFromElement(eBanner, "VignettePath");
+        if (!artwork.isEmpty()) {
+            banner.setVignette(bannerMirror + artwork);
+        }
+        
+        artwork = DOMHelper.getValueFromElement(eBanner, "ThumbnailPath");
+        if (!artwork.isEmpty()) {
+            banner.setThumb(bannerMirror + artwork);
+        }
+        
+        banner.setBannerType(DOMHelper.getValueFromElement(eBanner, "BannerType"));
+        banner.setBannerType2(DOMHelper.getValueFromElement(eBanner, "BannerType2"));
+        banner.setLanguage(DOMHelper.getValueFromElement(eBanner, "Language"));
+        banner.setSeason(DOMHelper.getValueFromElement(eBanner, "Season"));
+        
+        return banner;
+    }
+
+    /**
+     * Parse the document for episode information
+     * @param doc
+     * @return
+     * @throws Throwable 
+     */
+    private static Episode parseNextEpisode(Element eEpisode) throws Throwable {
+        Episode episode = new Episode();
+        
+        episode.setId(DOMHelper.getValueFromElement(eEpisode, "id"));
+        episode.setCombinedEpisodeNumber(DOMHelper.getValueFromElement(eEpisode, "Combined_episodenumber"));
+        episode.setCombinedSeason(DOMHelper.getValueFromElement(eEpisode, "Combined_season"));
+        episode.setDvdChapter(DOMHelper.getValueFromElement(eEpisode, "DVD_chapter"));
+        episode.setDvdDiscId(DOMHelper.getValueFromElement(eEpisode, "DVD_discid"));
+        episode.setDvdEpisodeNumber(DOMHelper.getValueFromElement(eEpisode, "DVD_episodenumber"));
+        episode.setDvdSeason(DOMHelper.getValueFromElement(eEpisode, "DVD_season"));
+        episode.setDirectors(parseList(DOMHelper.getValueFromElement(eEpisode, "Director"), "|,"));
+        episode.setEpImgFlag(DOMHelper.getValueFromElement(eEpisode, "EpImgFlag"));
+        episode.setEpisodeName(DOMHelper.getValueFromElement(eEpisode, "EpisodeName"));
+        try {
+            episode.setEpisodeNumber(Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, "EpisodeNumber")));
+        } catch (Exception ignore) {
+            episode.setEpisodeNumber(0);
+        }
+        episode.setFirstAired(DOMHelper.getValueFromElement(eEpisode, "FirstAired"));
+        episode.setGuestStars(parseList(DOMHelper.getValueFromElement(eEpisode, "GuestStars"), "|,"));
+        episode.setImdbId(DOMHelper.getValueFromElement(eEpisode, "IMDB_ID"));
+        episode.setLanguage(DOMHelper.getValueFromElement(eEpisode, "Language"));
+        episode.setOverview(DOMHelper.getValueFromElement(eEpisode, "Overview"));
+        episode.setProductionCode(DOMHelper.getValueFromElement(eEpisode, "ProductionCode"));
+        episode.setRating(DOMHelper.getValueFromElement(eEpisode, "Rating"));
+        try {
+            episode.setSeasonNumber(Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, "SeasonNumber")));
+        } catch (Exception ignore) {
+            episode.setSeasonNumber(0);
+        }
+        episode.setWriters(parseList(DOMHelper.getValueFromElement(eEpisode, "Writer"), "|,"));
+        episode.setAbsoluteNumber(DOMHelper.getValueFromElement(eEpisode, "absolute_number"));
+        String s = DOMHelper.getValueFromElement(eEpisode, "filename");
+        if (!s.isEmpty()) {
+            episode.setFilename(TheTVDB.getBannerMirror() + s);
+        }
+        episode.setLastUpdated(DOMHelper.getValueFromElement(eEpisode, "lastupdated"));
+        episode.setSeasonId(DOMHelper.getValueFromElement(eEpisode, "seasonid"));
+        episode.setSeriesId(DOMHelper.getValueFromElement(eEpisode, "seriesid"));
+
+        try {
+            episode.setAirsAfterSeason(Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, "airsafter_season")));
+        } catch (Exception ignore) {
+            episode.setAirsAfterSeason(0);
+        }
+        
+        try {
+            episode.setAirsBeforeEpisode(Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, "airsbefore_episode")));
+        } catch (Exception ignore) {
+            episode.setAirsBeforeEpisode(0);
+        }
+
+        try {
+            episode.setAirsBeforeSeason(Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, "airsbefore_season")));
+        } catch (Exception ignore) {
+            episode.setAirsBeforeSeason(0);
+        }
+        
+        return episode;
+    }
+
+    /**
+     * Parse the series record from the document
+     * @param eSeries
+     * @return
+     * @throws Throwable
+     */
+    private static Series parseNextSeries(Element eSeries) throws Throwable {
+        String bannerMirror = TheTVDB.getBannerMirror();
+        
+        Series series = new Series();
+        
+        series.setId(DOMHelper.getValueFromElement(eSeries, "id"));
+        series.setActors(parseList(DOMHelper.getValueFromElement(eSeries, "Actors"),"|,"));
+        series.setAirsDayOfWeek(DOMHelper.getValueFromElement(eSeries, "Airs_DayOfWeek"));
+        series.setAirsTime(DOMHelper.getValueFromElement(eSeries, "Airs_Time"));
+        series.setContentRating(DOMHelper.getValueFromElement(eSeries, "ContentRating"));
+        series.setFirstAired(DOMHelper.getValueFromElement(eSeries, "FirstAired"));
+        series.setGenres(parseList(DOMHelper.getValueFromElement(eSeries, "Genre"), "|,"));
+        series.setImdbId(DOMHelper.getValueFromElement(eSeries, "IMDB_ID"));
+        series.setLanguage(DOMHelper.getValueFromElement(eSeries, "language"));
+        series.setNetwork(DOMHelper.getValueFromElement(eSeries, "Network"));
+        series.setOverview(DOMHelper.getValueFromElement(eSeries, "Overview"));
+        series.setRating(DOMHelper.getValueFromElement(eSeries, "Rating"));
+        series.setRuntime(DOMHelper.getValueFromElement(eSeries, "Runtime"));
+        series.setSeriesId(DOMHelper.getValueFromElement(eSeries, "SeriesID"));
+        series.setSeriesName(DOMHelper.getValueFromElement(eSeries, "SeriesName"));
+        series.setStatus(DOMHelper.getValueFromElement(eSeries, "Status"));
+        
+        String artwork = DOMHelper.getValueFromElement(eSeries, "banner");
+        if (!artwork.isEmpty()) {
+            series.setBanner(bannerMirror + artwork);
+        }
+        
+        artwork = DOMHelper.getValueFromElement(eSeries, "fanart");
+        if (!artwork.isEmpty()) {
+            series.setFanart(bannerMirror + artwork);
+        }
+        
+        artwork = DOMHelper.getValueFromElement(eSeries, "poster");
+        if (!artwork.isEmpty()) {
+            series.setPoster(bannerMirror + artwork);
+        }
+                
+        series.setLastUpdated(DOMHelper.getValueFromElement(eSeries, "lastupdated"));
+        series.setZap2ItId(DOMHelper.getValueFromElement(eSeries, "zap2it_id"));
+
+        return series;
     }
     
 }
