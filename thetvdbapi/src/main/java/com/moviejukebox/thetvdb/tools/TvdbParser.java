@@ -105,7 +105,6 @@ public class TvdbParser {
                     episode = parseNextEpisode(eEpisode);
                     if (episode != null) {
                         episodeList.add(episode);
-                        logger.fine("Adding Episode:\n" + episode.toString());  // XXX DEBUG
                     }
                 }
             }
