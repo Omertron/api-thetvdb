@@ -194,7 +194,32 @@ public class TheTVDB {
             return null;
         }
         
-        List<Episode> episodeList = TvdbParser.getAllEpisodes(urlString);
+        List<Episode> episodeList = TvdbParser.getAllEpisodes(urlString, -1);
+        if (episodeList.isEmpty()) {
+            return null;
+        } else {
+            return episodeList;
+        }
+    }
+    
+    /**
+     * Get all the episodes from a specific season for a series.
+     * Note: This could be a lot of records
+     * @param id
+     * @param season
+     * @param language
+     * @return
+     */
+    public List<Episode> getAllEpisodes(String id, int season, String language) {
+        String urlString = null;
+        try {
+            urlString = getXmlMirror() + apiKey + SERIES_URL + id + "/all/" + (language!=null?language+XML_EXTENSION:"");
+        } catch (Throwable tw) {
+            logger.severe(tw.getMessage());
+            return null;
+        }
+        
+        List<Episode> episodeList = TvdbParser.getAllEpisodes(urlString, season);
         if (episodeList.isEmpty()) {
             return null;
         } else {

@@ -86,9 +86,10 @@ public class TvdbParser {
     /**
      * Get all the episodes from the URL
      * @param urlString
+     * @param season 
      * @return
      */
-    public static List<Episode> getAllEpisodes(String urlString) {
+    public static List<Episode> getAllEpisodes(String urlString, int season) {
         List<Episode> episodeList = new ArrayList<Episode>();
         Episode episode = null;
         NodeList nlEpisode;
@@ -104,7 +105,10 @@ public class TvdbParser {
                     eEpisode = (Element) nEpisode;
                     episode = parseNextEpisode(eEpisode);
                     if (episode != null) {
-                        episodeList.add(episode);
+                        // Add the episode only if the season is -1 (all seasons) or matches the season
+                        if (season == -1 || episode.getSeasonId().equals("" + season)) {
+                            episodeList.add(episode);
+                        }
                     }
                 }
             }
