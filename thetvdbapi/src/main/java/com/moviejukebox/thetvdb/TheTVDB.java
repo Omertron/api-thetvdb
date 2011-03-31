@@ -210,7 +210,7 @@ public class TheTVDB {
      * @param language
      * @return
      */
-    public List<Episode> getAllEpisodes(String id, int season, String language) {
+    public List<Episode> getSeasonEpisodes(String id, int season, String language) {
         String urlString = null;
         try {
             urlString = getXmlMirror() + apiKey + SERIES_URL + id + "/all/" + (language!=null?language+XML_EXTENSION:"");
