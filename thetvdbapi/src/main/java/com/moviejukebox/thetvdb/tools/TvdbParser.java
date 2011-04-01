@@ -106,7 +106,7 @@ public class TvdbParser {
                     episode = parseNextEpisode(eEpisode);
                     if (episode != null) {
                         // Add the episode only if the season is -1 (all seasons) or matches the season
-                        if (season == -1 || episode.getSeasonId().equals("" + season)) {
+                        if (season == -1 || episode.getSeasonNumber() == season) {
                             episodeList.add(episode);
                         }
                     }
