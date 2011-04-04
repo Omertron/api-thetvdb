@@ -218,5 +218,34 @@ public class Series {
     public void setPoster(String poster) {
         this.poster = poster;
     }
-    
+
+    @Override
+    public String toString() {
+        StringBuffer series = new StringBuffer("[Series ");
+
+        series.append("[id=").append(id).append("]");
+        series.append("[seriesId=").append(seriesId).append("]");
+        series.append("[language=").append(language).append("]");
+        series.append("[seriesName=").append(seriesName).append("]");
+        series.append("[banner=").append(banner).append("]");
+        series.append("[overview=").append(overview).append("]");
+        series.append("[firstAired=").append(firstAired).append("]");
+        series.append("[imdbId=").append(imdbId).append("]");
+        series.append("[zap2ItId=").append(zap2ItId).append("]");
+        series.append("[actors=").append(actors.toString()).append("]");
+        series.append("[airsDayOfWeek=").append(airsDayOfWeek).append("]");
+        series.append("[airsTime=").append(airsTime).append("]");
+        series.append("[contentRating=").append(contentRating).append("]");
+        series.append("[genres=").append(genres.toString()).append("]");
+        series.append("[network=").append(network).append("]");
+        series.append("[rating=").append(rating).append("]");
+        series.append("[runtime=").append(runtime).append("]");
+        series.append("[status=").append(status).append("]");
+        series.append("[fanart=").append(fanart).append("]");
+        series.append("[lastUpdated=").append(lastUpdated).append("]");
+        series.append("[poster").append(poster).append("]");    
+
+        series.append("]");
+        return series.toString();
+    }
 }

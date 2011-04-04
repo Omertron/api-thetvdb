@@ -88,4 +88,36 @@ public class Banners {
         }
     }
     
+    @Override
+    public String toString() {
+        StringBuffer banners = new StringBuffer("[Banners ");
+        
+        banners.append("[seriesList=");
+        for (Banner banner : seriesList) {
+            banners.append(banner.toString());
+        }
+        banners.append("]");
+
+        banners.append("[seasonList=");
+        for (Banner banner : seasonList) {
+            banners.append(banner.toString());
+        }
+        banners.append("]");
+
+        banners.append("[posterList=");
+        for (Banner banner : posterList) {
+            banners.append(banner.toString());
+        }
+        banners.append("]");
+
+        banners.append("[fanartList=");
+        for (Banner banner : fanartList) {
+            banners.append(banner.toString());
+        }
+        banners.append("]");
+
+        banners.append("]");
+        return banners.toString();
+    }
+    
 }

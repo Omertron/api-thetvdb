@@ -82,5 +82,16 @@ public class Actor implements Comparable<Actor> {
     public int compareTo(Actor other) {
         return sortOrder - other.getSortOrder();
     }
-    
+
+    @Override
+    public String toString() {
+        StringBuffer actor = new StringBuffer("[Actor ");
+        actor.append("[id=").append(id).append("]");
+        actor.append("[name=").append(name).append("]");
+        actor.append("[role=").append(role).append("]");
+        actor.append("[image=").append(image).append("]");
+        actor.append("[sortOrder=").append(sortOrder).append("]");
+        actor.append("]");
+        return actor.toString();
+    }
 }

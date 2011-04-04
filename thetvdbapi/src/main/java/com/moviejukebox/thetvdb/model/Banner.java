@@ -94,5 +94,18 @@ public class Banner {
     public void setBannerType2(String bannerType2) {
         this.bannerType2 = bannerType2;
     }
-    
+
+    @Override
+    public String toString() {
+        StringBuffer banner = new StringBuffer("[Banner ");
+        banner.append("[url=").append(url).append("]");
+        banner.append("[vignette=").append(vignette).append("]");
+        banner.append("[thumb=").append(thumb).append("]");
+        banner.append("[language=").append(language).append("]");
+        banner.append("[season=").append(season).append("]");
+        banner.append("[bannerType=").append(bannerType).append("]");
+        banner.append("[bannerType2=").append(bannerType2).append("]");
+        banner.append("]");
+        return banner.toString();
+    }
 }
