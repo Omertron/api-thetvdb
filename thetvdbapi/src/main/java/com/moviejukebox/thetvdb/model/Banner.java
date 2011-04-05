@@ -23,6 +23,7 @@ public class Banner {
     public static final String TYPE_POSTER = "poster";
     public static final String TYPE_FANART = "fanart";
     
+    private int id;
     private String url;
     private String vignette;
     private String thumb;
@@ -98,6 +99,7 @@ public class Banner {
     @Override
     public String toString() {
         StringBuffer banner = new StringBuffer("[Banner ");
+        banner.append("[id=").append(id).append("]");
         banner.append("[url=").append(url).append("]");
         banner.append("[vignette=").append(vignette).append("]");
         banner.append("[thumb=").append(thumb).append("]");
@@ -107,5 +109,21 @@ public class Banner {
         banner.append("[bannerType2=").append(bannerType2).append("]");
         banner.append("]");
         return banner.toString();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setId(String id) {
+        try {
+            this.id = Integer.parseInt(id);
+        } catch (Exception ignore) {
+            this.id = 0;
+        }
     }
 }

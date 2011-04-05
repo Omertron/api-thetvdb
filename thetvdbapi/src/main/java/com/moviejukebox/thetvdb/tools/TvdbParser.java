@@ -319,6 +319,7 @@ public class TvdbParser {
             banner.setThumb(bannerMirror + artwork);
         }
         
+        banner.setId(DOMHelper.getValueFromElement(eBanner, "id"));
         banner.setBannerType(DOMHelper.getValueFromElement(eBanner, "BannerType"));
         banner.setBannerType2(DOMHelper.getValueFromElement(eBanner, "BannerType2"));
         banner.setLanguage(DOMHelper.getValueFromElement(eBanner, "Language"));
