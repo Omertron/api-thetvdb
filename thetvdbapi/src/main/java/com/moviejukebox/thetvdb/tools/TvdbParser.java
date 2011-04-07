@@ -29,6 +29,7 @@ import com.moviejukebox.thetvdb.TheTVDB;
 import com.moviejukebox.thetvdb.model.Banner;
 import com.moviejukebox.thetvdb.model.Banners;
 import com.moviejukebox.thetvdb.model.Episode;
+import com.moviejukebox.thetvdb.model.Job;
 import com.moviejukebox.thetvdb.model.Person;
 import com.moviejukebox.thetvdb.model.Series;
 
@@ -36,7 +37,7 @@ public class TvdbParser {
     private static Logger logger = TheTVDB.getLogger();
 
     /**
-     * Get a list of the actors from the url
+     * Get a list of the actors from the URL
      * @param urlString
      * @return
      */
@@ -67,7 +68,7 @@ public class TvdbParser {
                     }
                     actor.setName(DOMHelper.getValueFromElement(eActor, "Name"));
                     actor.setRole(DOMHelper.getValueFromElement(eActor, "Role"));
-                    actor.setJob("Actor");  // Default the job to Actor
+                    actor.setJob(Job.Actor.toString());  // Default the job to Actor
                     actor.setSortOrder(DOMHelper.getValueFromElement(eActor, "SortOrder"));
                     
                     results.add(actor);
@@ -295,6 +296,26 @@ public class TvdbParser {
     }
     
     /**
+     * Create a List of people from a delimited string
+     * @param input
+     * @param delim
+     * @return
+     */
+    private static List<Person> parsePersonList(String input, String delim, Job job) {
+        List<Person> people = new ArrayList<Person>();
+        
+        StringTokenizer st = new StringTokenizer(input, delim);
+        while (st.hasMoreTokens()) {
+            String personName = st.nextToken().trim();
+            if (personName.length() > 0) {
+                people.add(new Person(personName, job.toString()));
+            }
+        }
+        
+        return people;
+    }
+    
+    /**
      * Parse the banner record from the document
      * @param eBanner
      * @return
@@ -345,7 +366,7 @@ public class TvdbParser {
         episode.setDvdDiscId(DOMHelper.getValueFromElement(eEpisode, "DVD_discid"));
         episode.setDvdEpisodeNumber(DOMHelper.getValueFromElement(eEpisode, "DVD_episodenumber"));
         episode.setDvdSeason(DOMHelper.getValueFromElement(eEpisode, "DVD_season"));
-        episode.setDirectors(parseList(DOMHelper.getValueFromElement(eEpisode, "Director"), "|,"));
+        episode.setDirectors(parsePersonList(DOMHelper.getValueFromElement(eEpisode, "Director"), "|,", Job.Director));
         episode.setEpImgFlag(DOMHelper.getValueFromElement(eEpisode, "EpImgFlag"));
         episode.setEpisodeName(DOMHelper.getValueFromElement(eEpisode, "EpisodeName"));
         try {
@@ -354,7 +375,7 @@ public class TvdbParser {
             episode.setEpisodeNumber(0);
         }
         episode.setFirstAired(DOMHelper.getValueFromElement(eEpisode, "FirstAired"));
-        episode.setGuestStars(parseList(DOMHelper.getValueFromElement(eEpisode, "GuestStars"), "|,"));
+        episode.setGuestStars(parsePersonList(DOMHelper.getValueFromElement(eEpisode, "GuestStars"), "|,", Job.GuestStar));
         episode.setImdbId(DOMHelper.getValueFromElement(eEpisode, "IMDB_ID"));
         episode.setLanguage(DOMHelper.getValueFromElement(eEpisode, "Language"));
         episode.setOverview(DOMHelper.getValueFromElement(eEpisode, "Overview"));
@@ -365,7 +386,7 @@ public class TvdbParser {
         } catch (Exception ignore) {
             episode.setSeasonNumber(0);
         }
-        episode.setWriters(parseList(DOMHelper.getValueFromElement(eEpisode, "Writer"), "|,"));
+        episode.setWriters(parsePersonList(DOMHelper.getValueFromElement(eEpisode, "Writer"), "|,", Job.Writer));
         episode.setAbsoluteNumber(DOMHelper.getValueFromElement(eEpisode, "absolute_number"));
         String s = DOMHelper.getValueFromElement(eEpisode, "filename");
         if (!s.isEmpty()) {

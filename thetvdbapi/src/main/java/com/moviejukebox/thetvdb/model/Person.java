@@ -37,6 +37,20 @@ public class Person implements Comparable<Person> {
         this.image = "";
         this.sortOrder = 0;
     }
+    
+    /**
+     * Constructor for people with a name & job
+     * @param name
+     * @param job
+     */
+    public Person(String name, String job) {
+        this.id = 0;
+        this.name = name;
+        this.role = "";
+        this.job = job;
+        this.image = "";
+        this.sortOrder = 0;
+    }
 
     public int compareTo(Person other) {
         // TODO: This needs to be properly implemented using name and role

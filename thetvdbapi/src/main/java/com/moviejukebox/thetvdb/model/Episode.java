@@ -28,19 +28,19 @@ public class Episode {
     private String dvdDiscId;
     private String dvdEpisodeNumber;
     private String dvdSeason;
-    private List<String> directors = new ArrayList<String>();
+    private List<Person> directors = new ArrayList<Person>();
     private String epImgFlag;
     private String episodeName;
     private int episodeNumber;
     private String firstAired;
-    private List<String> guestStars = new ArrayList<String>();
+    private List<Person> guestStars = new ArrayList<Person>();
     private String imdbId;
     private String language;
     private String overview;
     private String productionCode;
     private String rating;
     private int seasonNumber;
-    private List<String> writers = new ArrayList<String>();
+    private List<Person> writers = new ArrayList<Person>();
     private String absoluteNumber;
     private int airsAfterSeason;
     private int airsBeforeSeason;
@@ -106,15 +106,20 @@ public class Episode {
         this.dvdSeason = dvdSeason;
     }
 
-    public List<String> getDirectors() {
+    public List<Person> getDirectors() {
         return directors;
     }
 
-    public void setDirectors(List<String> directors) {
+    public void setDirectors(List<Person> directors) {
         this.directors = directors;
     }
     
     public void addDirector(String director) {
+        // Add a person object with just the name and job
+        this.directors.add(new Person(director, Job.Director.toString()));
+    }
+    
+    public void addDirector(Person director) {
         this.directors.add(director);
     }
 
@@ -150,15 +155,19 @@ public class Episode {
         this.firstAired = firstAired;
     }
 
-    public List<String> getGuestStars() {
+    public List<Person> getGuestStars() {
         return guestStars;
     }
 
-    public void setGuestStars(List<String> guestStars) {
+    public void setGuestStars(List<Person> guestStars) {
         this.guestStars = guestStars;
     }
 
     public void addGuestStar(String guestStar) {
+        this.guestStars.add(new Person(guestStar, Job.GuestStar.toString()));
+    }
+    
+    public void addGuestStar(Person guestStar) {
         this.guestStars.add(guestStar);
     }
     
@@ -210,16 +219,20 @@ public class Episode {
         this.seasonNumber = seasonNumber;
     }
 
-    public List<String> getWriters() {
+    public List<Person> getWriters() {
         return writers;
     }
 
-    public void setWriters(List<String> writers) {
+    public void setWriters(List<Person> writers) {
         this.writers = writers;
     }
 
-    public void addWriter(String writer) {
+    public void addWriter(Person writer) {
         this.writers.add(writer);
+    }
+    
+    public void addWriter(String writerName) {
+        this.writers.add(new Person(writerName, Job.Writer.toString()));
     }
     
     public String getAbsoluteNumber() {
