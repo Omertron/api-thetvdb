@@ -26,10 +26,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.moviejukebox.thetvdb.TheTVDB;
-import com.moviejukebox.thetvdb.model.Actor;
 import com.moviejukebox.thetvdb.model.Banner;
 import com.moviejukebox.thetvdb.model.Banners;
 import com.moviejukebox.thetvdb.model.Episode;
+import com.moviejukebox.thetvdb.model.Person;
 import com.moviejukebox.thetvdb.model.Series;
 
 public class TvdbParser {
@@ -40,9 +40,9 @@ public class TvdbParser {
      * @param urlString
      * @return
      */
-    public static List<Actor> getActors(String urlString) {
-        List<Actor> results = new ArrayList<Actor>();
-        Actor actor = null;
+    public static List<Person> getActors(String urlString) {
+        List<Person> results = new ArrayList<Person>();
+        Person actor = null;
         Document doc;
         NodeList nlActor;
         Node nActor;
@@ -58,7 +58,7 @@ public class TvdbParser {
                 
                 if (nActor.getNodeType() == Node.ELEMENT_NODE) {
                     eActor = (Element) nActor;
-                    actor = new Actor();
+                    actor = new Person();
                 
                     actor.setId(DOMHelper.getValueFromElement(eActor, "id"));
                     String image = DOMHelper.getValueFromElement(eActor, "Image");
@@ -67,6 +67,7 @@ public class TvdbParser {
                     }
                     actor.setName(DOMHelper.getValueFromElement(eActor, "Name"));
                     actor.setRole(DOMHelper.getValueFromElement(eActor, "Role"));
+                    actor.setJob("Actor");  // Default the job to Actor
                     actor.setSortOrder(DOMHelper.getValueFromElement(eActor, "SortOrder"));
                     
                     results.add(actor);
