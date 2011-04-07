@@ -23,10 +23,10 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.moviejukebox.thetvdb.model.Actor;
 import com.moviejukebox.thetvdb.model.Banners;
 import com.moviejukebox.thetvdb.model.Episode;
 import com.moviejukebox.thetvdb.model.Mirrors;
-import com.moviejukebox.thetvdb.model.Person;
 import com.moviejukebox.thetvdb.model.Series;
 import com.moviejukebox.thetvdb.tools.LogFormatter;
 import com.moviejukebox.thetvdb.tools.TvdbParser;
@@ -331,13 +331,13 @@ public class TheTVDB {
      * @param SeriesId
      * @return
      */
-    public List<Person> getActors(String seriesId) {
+    public List<Actor> getActors(String seriesId) {
         String urlString = null;
         try {
             urlString = getXmlMirror() + apiKey + SERIES_URL + seriesId + "/actors.xml";
         } catch (Throwable tw) {
             logger.severe(tw.getMessage());
-            return new ArrayList<Person>();
+            return new ArrayList<Actor>();
         }
         return TvdbParser.getActors(urlString);
     }
