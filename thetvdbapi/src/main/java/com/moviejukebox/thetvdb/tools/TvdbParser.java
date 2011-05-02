@@ -28,6 +28,8 @@ import org.w3c.dom.NodeList;
 import com.moviejukebox.thetvdb.TheTVDB;
 import com.moviejukebox.thetvdb.model.Actor;
 import com.moviejukebox.thetvdb.model.Banner;
+import com.moviejukebox.thetvdb.model.BannerListType;
+import com.moviejukebox.thetvdb.model.BannerType;
 import com.moviejukebox.thetvdb.model.Banners;
 import com.moviejukebox.thetvdb.model.Episode;
 import com.moviejukebox.thetvdb.model.Series;
@@ -320,8 +322,8 @@ public class TvdbParser {
         }
         
         banner.setId(DOMHelper.getValueFromElement(eBanner, "id"));
-        banner.setBannerType(DOMHelper.getValueFromElement(eBanner, "BannerType"));
-        banner.setBannerType2(DOMHelper.getValueFromElement(eBanner, "BannerType2"));
+        banner.setBannerType(BannerListType.fromString(DOMHelper.getValueFromElement(eBanner, "BannerType")));
+        banner.setBannerType2(BannerType.fromString(DOMHelper.getValueFromElement(eBanner, "BannerType2")));
         banner.setLanguage(DOMHelper.getValueFromElement(eBanner, "Language"));
         banner.setSeason(DOMHelper.getValueFromElement(eBanner, "Season"));
         

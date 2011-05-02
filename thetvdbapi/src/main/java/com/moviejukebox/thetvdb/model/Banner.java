@@ -18,10 +18,10 @@ package com.moviejukebox.thetvdb.model;
  */
 public class Banner {
 
-    public static final String TYPE_SERIES = "series";
-    public static final String TYPE_SEASON = "season";
-    public static final String TYPE_POSTER = "poster";
-    public static final String TYPE_FANART = "fanart";
+//    public static final String TYPE_SERIES = "series";
+//    public static final String TYPE_SEASON = "season";
+//    public static final String TYPE_POSTER = "poster";
+//    public static final String TYPE_FANART = "fanart";
     
     private int id;
     private String url;
@@ -29,8 +29,8 @@ public class Banner {
     private String thumb;
     private String language;
     private int season = 0;
-    private String bannerType;
-    private String bannerType2;
+    private BannerListType bannerType;
+    private BannerType bannerType2;
 
     public String getUrl() {
         return url;
@@ -80,19 +80,19 @@ public class Banner {
         }
     }
 
-    public String getBannerType() {
+    public BannerListType getBannerType() {
         return bannerType;
     }
 
-    public void setBannerType(String bannerType) {
+    public void setBannerType(BannerListType bannerType) {
         this.bannerType = bannerType;
     }
 
-    public String getBannerType2() {
+    public BannerType getBannerType2() {
         return bannerType2;
     }
 
-    public void setBannerType2(String bannerType2) {
+    public void setBannerType2(BannerType bannerType2) {
         this.bannerType2 = bannerType2;
     }
 

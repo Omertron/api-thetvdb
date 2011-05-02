@@ -76,13 +76,13 @@ public class Banners {
     
     public void addBanner(Banner banner) {
         if (banner != null) {
-            if (Banner.TYPE_SERIES.equalsIgnoreCase(banner.getBannerType())) {
+            if (banner.getBannerType() == BannerListType.series) {
                 addSeriesBanner(banner);
-            } else if (Banner.TYPE_SEASON.equalsIgnoreCase(banner.getBannerType())) {
+            } else if (banner.getBannerType() == BannerListType.season) {
                 addSeasonBanner(banner);
-            } else if (Banner.TYPE_POSTER.equalsIgnoreCase(banner.getBannerType())) {
+            } else if (banner.getBannerType() == BannerListType.poster) {
                 addPosterBanner(banner);
-            } else if (Banner.TYPE_FANART.equalsIgnoreCase(banner.getBannerType())) {
+            } else if (banner.getBannerType() == BannerListType.fanart) {
                 addFanartBanner(banner);
             }
         }
