@@ -13,14 +13,15 @@
 package com.moviejukebox.thetvdb.model;
 
 /**
- * Describes the list of banner types that are retuned in the "BannerType2" field from TheTVDB
+ * Describes the list of banner types that are returned in the "BannerType2" field from TheTVDB
  * @author Stuart.Boston
  *
  */
 public enum BannerType {
     Season("seasonwide"),
     Series("graphical"),
-    Blank("blank");
+    Blank("blank"),
+    Artwork("artwork");
     
     private String type;
     
@@ -31,13 +32,23 @@ public enum BannerType {
     public String getType() {
         return this.type;
     }
-    
+
+    /**
+     * Set the banner type from a string.
+     * If the banner type isn't found, but the type contains an "x" as in 1920x1080 then the type will be set to Artwork
+     * @param type
+     * @return
+     */
     public static BannerType fromString(String type) {
         if (type != null) {
             try {
                 return BannerType.valueOf(type.trim().toLowerCase());
             } catch (IllegalArgumentException ex) {
-                throw new IllegalArgumentException("BannerType " + type + " does not exist");
+                if (type.toLowerCase().contains("x")) {
+                    return BannerType.Artwork;
+                } else {
+                    throw new IllegalArgumentException("BannerType " + type + " does not exist");
+                }
             }
         }
         throw new IllegalArgumentException("BannerType is null");

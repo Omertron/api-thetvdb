@@ -18,19 +18,16 @@ package com.moviejukebox.thetvdb.model;
  */
 public class Banner {
 
-//    public static final String TYPE_SERIES = "series";
-//    public static final String TYPE_SEASON = "season";
-//    public static final String TYPE_POSTER = "poster";
-//    public static final String TYPE_FANART = "fanart";
-    
-    private int id;
-    private String url;
-    private String vignette;
-    private String thumb;
-    private String language;
-    private int season = 0;
-    private BannerListType bannerType;
-    private BannerType bannerType2;
+    private int             id;
+    private String          url;
+    private BannerListType  bannerType;
+    private BannerType      bannerType2;
+    private String          colours;
+    private String          language;
+    private boolean         seriesName;
+    private String          thumb;
+    private String          vignette;
+    private int             season = 0;
 
     public String getUrl() {
         return url;
@@ -98,17 +95,29 @@ public class Banner {
 
     @Override
     public String toString() {
-        StringBuffer banner = new StringBuffer("[Banner ");
-        banner.append("[id=").append(id).append("]");
-        banner.append("[url=").append(url).append("]");
-        banner.append("[vignette=").append(vignette).append("]");
-        banner.append("[thumb=").append(thumb).append("]");
-        banner.append("[language=").append(language).append("]");
-        banner.append("[season=").append(season).append("]");
-        banner.append("[bannerType=").append(bannerType).append("]");
-        banner.append("[bannerType2=").append(bannerType2).append("]");
-        banner.append("]");
-        return banner.toString();
+        StringBuilder builder = new StringBuilder();
+        builder.append("[Banner=[id=");
+        builder.append(id);
+        builder.append("], [url=");
+        builder.append(url);
+        builder.append("], [bannerType=");
+        builder.append(bannerType);
+        builder.append("], [bannerType2=");
+        builder.append(bannerType2);
+        builder.append("], [colours=");
+        builder.append(colours);
+        builder.append("], [language=");
+        builder.append(language);
+        builder.append("], [seriesName=");
+        builder.append(seriesName);
+        builder.append("], [thumb=");
+        builder.append(thumb);
+        builder.append("], [vignette=");
+        builder.append(vignette);
+        builder.append("], [season=");
+        builder.append(season);
+        builder.append("]]");
+        return builder.toString();
     }
 
     public int getId() {
@@ -125,5 +134,21 @@ public class Banner {
         } catch (Exception ignore) {
             this.id = 0;
         }
+    }
+
+    public String getColours() {
+        return colours;
+    }
+
+    public void setColours(String colours) {
+        this.colours = colours;
+    }
+
+    public boolean isSeriesName() {
+        return seriesName;
+    }
+
+    public void setSeriesName(boolean seriesName) {
+        this.seriesName = seriesName;
     }
 }
