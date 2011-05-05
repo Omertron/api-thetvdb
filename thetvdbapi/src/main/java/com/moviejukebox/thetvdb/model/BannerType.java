@@ -47,12 +47,21 @@ public enum BannerType {
     public static BannerType fromString(String type) {
         if (type != null) {
             try {
-                return BannerType.valueOf(type.trim().toLowerCase());
+                for (BannerType bannerType : BannerType.values()) {
+                    if (type.equalsIgnoreCase(bannerType.type)) {
+                        return bannerType;
+                    }
+                }
+                
+                // If we've not found the type, then try a generic Artwork for the 1920x1080, 1280x720 or 680x1000 values
+                if (type.toLowerCase().contains("x")) {
+                    return BannerType.Artwork;
+                }
             } catch (IllegalArgumentException ex) {
                 if (type.toLowerCase().contains("x")) {
                     return BannerType.Artwork;
                 } else {
-                    throw new IllegalArgumentException("BannerType " + type + " does not exist");
+                    throw new IllegalArgumentException("BannerType '" + type + "' does not exist");
                 }
             }
         }
