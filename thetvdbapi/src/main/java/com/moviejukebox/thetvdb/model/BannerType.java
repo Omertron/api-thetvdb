@@ -18,9 +18,14 @@ package com.moviejukebox.thetvdb.model;
  *
  */
 public enum BannerType {
-    Season("seasonwide"),
-    Series("graphical"),
+    Graphical("graphical"),
+    Season("season"),
+    SeasonWide("seasonwide"),
     Blank("blank"),
+    Text("text"),
+    FanartHD("1920x1080"),
+    FanartSD("1280x720"),
+    Poster("680x1000"),
     Artwork("artwork");
     
     private String type;
