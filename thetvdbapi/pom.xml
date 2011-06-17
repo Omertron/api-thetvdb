@@ -19,8 +19,8 @@
 	</issueManagement>
 	
 	<ciManagement>
-		<system>Hudson CI</system>
-		<url>http://mediadeveloper.org:8080/job/API-TheTVDb/</url>
+		<system>Jenkins CI</system>
+		<url>http://jenkins.omertron.com/job/API-TheTVDb/</url>
 	</ciManagement>
 	
 	<scm>
