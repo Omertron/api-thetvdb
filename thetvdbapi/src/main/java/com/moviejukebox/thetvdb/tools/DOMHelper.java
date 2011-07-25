@@ -78,7 +78,7 @@ public class DOMHelper {
      * @return
      * @throws Exception 
      */
-    public synchronized static Document getEventDocFromUrl(String url) {
+    public static synchronized Document getEventDocFromUrl(String url) {
         String webPage = null;
         InputStream in = null;
         

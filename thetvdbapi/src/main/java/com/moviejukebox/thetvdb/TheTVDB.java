@@ -47,7 +47,7 @@ public class TheTVDB {
     private static LogFormatter logFormatter = new LogFormatter();
     private static ConsoleHandler logConsoleHandler = new ConsoleHandler();
 
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     
     private static final String XML_EXTENSION = ".xml";
     private static final String SERIES_URL = "/series/";
@@ -301,7 +301,7 @@ public class TheTVDB {
             Date date;
             
             try {
-                date = dateFormat.parse(episode.getFirstAired());
+                date = DATE_FORMAT.parse(episode.getFirstAired());
             } catch (ParseException error) {
                 date = null;
             }

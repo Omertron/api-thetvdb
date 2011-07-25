@@ -37,6 +37,14 @@ import com.moviejukebox.thetvdb.model.Series;
 public class TvdbParser {
     private static Logger logger = TheTVDB.getLogger();
 
+    private static final String TYPE_BANNER = "banner";
+    private static final String TYPE_FANART = "fanart";
+    private static final String TYPE_POSTER = "poster";
+    
+    private static final String BANNER_PATH = "BannerPath";
+    private static final String VIGNETTE_PATH = "VignettePath";
+    private static final String THUMBNAIL_PATH = "ThumbnailPath";
+
     private static final int MAX_EPISODE = 24;  // The anticipated largest episode number
     
     // Hide the constructor
@@ -309,17 +317,17 @@ public class TvdbParser {
         Banner banner = new Banner();
         String artwork;
         
-        artwork = DOMHelper.getValueFromElement(eBanner, "BannerPath");
+        artwork = DOMHelper.getValueFromElement(eBanner, BANNER_PATH);
         if (!artwork.isEmpty()) {
             banner.setUrl(bannerMirror + artwork);
         }
         
-        artwork = DOMHelper.getValueFromElement(eBanner, "VignettePath");
+        artwork = DOMHelper.getValueFromElement(eBanner, VIGNETTE_PATH);
         if (!artwork.isEmpty()) {
             banner.setVignette(bannerMirror + artwork);
         }
         
-        artwork = DOMHelper.getValueFromElement(eBanner, "ThumbnailPath");
+        artwork = DOMHelper.getValueFromElement(eBanner, THUMBNAIL_PATH);
         if (!artwork.isEmpty()) {
             banner.setThumb(bannerMirror + artwork);
         }
@@ -435,17 +443,17 @@ public class TvdbParser {
         series.setSeriesName(DOMHelper.getValueFromElement(eSeries, "SeriesName"));
         series.setStatus(DOMHelper.getValueFromElement(eSeries, "Status"));
         
-        String artwork = DOMHelper.getValueFromElement(eSeries, "banner");
+        String artwork = DOMHelper.getValueFromElement(eSeries, TYPE_BANNER);
         if (!artwork.isEmpty()) {
             series.setBanner(bannerMirror + artwork);
         }
         
-        artwork = DOMHelper.getValueFromElement(eSeries, "fanart");
+        artwork = DOMHelper.getValueFromElement(eSeries, TYPE_FANART);
         if (!artwork.isEmpty()) {
             series.setFanart(bannerMirror + artwork);
         }
         
-        artwork = DOMHelper.getValueFromElement(eSeries, "poster");
+        artwork = DOMHelper.getValueFromElement(eSeries, TYPE_POSTER);
         if (!artwork.isEmpty()) {
             series.setPoster(bannerMirror + artwork);
         }
