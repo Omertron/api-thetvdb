@@ -22,11 +22,15 @@ import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
+
+import com.moviejukebox.thetvdb.TheTVDB;
 
 /**
  * Web browser with simple cookies support
  */
 public final class WebBrowser {
+    private static Logger logger = TheTVDB.getLogger();
     
     private static Map<String, String> browserProperties = new HashMap<String, String>();
     private static Map<String, Map<String, String>> cookies;
@@ -43,6 +47,12 @@ public final class WebBrowser {
         cookies = new HashMap<String, Map<String, String>>();
     }
     
+    // Hide the constructor
+    protected WebBrowser() {
+        // prevents calls from subclass
+        throw new UnsupportedOperationException();
+    }
+
     public static String request(String url) throws IOException {
         return request(new URL(url));
     }
@@ -92,7 +102,7 @@ public final class WebBrowser {
                     if(cnx instanceof HttpURLConnection) {
                         ((HttpURLConnection)cnx).disconnect();
                     } else {
-                        System.err.println("Warning: Connection not closed!");
+                        logger.warning("Warning: Connection not closed!");
                     }
                 }
             }

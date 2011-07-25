@@ -40,30 +40,26 @@ public class Mirrors {
     private List<String> bannerList = new ArrayList<String>();
     private List<String> zipList = new ArrayList<String>();
     
-    public Mirrors(String apiKey) throws Throwable {
+    public Mirrors(String apiKey) {
         // Make this synchronized so that only one 
         synchronized (this) {
             String urlString = "http://www.thetvdb.com/api/" + apiKey + "/mirrors.xml";
             Document doc = null;
-            try {
-                doc = DOMHelper.getEventDocFromUrl(urlString);
-                int typeMask = 0;
-                String url = null;
+            
+            doc = DOMHelper.getEventDocFromUrl(urlString);
+            int typeMask = 0;
+            String url = null;
+            
+            NodeList nlMirror = doc.getElementsByTagName("Mirror");
+            for (int nodeLoop = 0; nodeLoop < nlMirror.getLength(); nodeLoop++) {
+                Node nMirror = nlMirror.item(nodeLoop);
                 
-                NodeList nlMirror = doc.getElementsByTagName("Mirror");
-                for (int nodeLoop = 0; nodeLoop < nlMirror.getLength(); nodeLoop++) {
-                    Node nMirror = nlMirror.item(nodeLoop);
-                    
-                    if (nMirror.getNodeType() == Node.ELEMENT_NODE) {
-                        Element eMirror = (Element) nMirror;
-                        url = DOMHelper.getValueFromElement(eMirror, "mirrorpath");
-                        typeMask = Integer.parseInt(DOMHelper.getValueFromElement(eMirror, "typemask"));
-                        addMirror(typeMask, url);
-                    }
+                if (nMirror.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eMirror = (Element) nMirror;
+                    url = DOMHelper.getValueFromElement(eMirror, "mirrorpath");
+                    typeMask = Integer.parseInt(DOMHelper.getValueFromElement(eMirror, "typemask"));
+                    addMirror(typeMask, url);
                 }
-            } catch (Exception error) {
-                System.out.println("ERROR: TheTVDB API -> " + error.getMessage());
-                return;
             }
         }
     }
@@ -103,7 +99,6 @@ public class Mirrors {
                     break;
             default:
                     break;
-                        
         }
     }
 }

@@ -14,11 +14,14 @@ package com.moviejukebox.thetvdb.tools;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -31,6 +34,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
+import org.xml.sax.SAXException;
+
+import com.moviejukebox.thetvdb.TheTVDB;
 
 /**
  * Generic set of routines to process the DOM model data
@@ -38,8 +44,16 @@ import org.w3c.dom.Text;
  *
  */
 public class DOMHelper {
-    private static final String YES = "yes";
+    private static Logger logger = TheTVDB.getLogger();
     
+    private static final String YES = "yes";
+
+    // Hide the constructor
+    protected DOMHelper() {
+        // prevents calls from subclass
+        throw new UnsupportedOperationException();
+    }
+
     /**
      * Gets the string value of the tag element name passed
      * @param element
@@ -67,28 +81,40 @@ public class DOMHelper {
      * @return
      * @throws Exception 
      */
-    public synchronized static Document getEventDocFromUrl(String url) throws Throwable {
+    public synchronized static Document getEventDocFromUrl(String url) {
         String webPage = null;
         InputStream in = null;
         
         try {
             webPage = WebBrowser.request(url);
             in = new ByteArrayInputStream(webPage.getBytes("UTF-8"));
-        } catch (Throwable tw) {
-            throw new RuntimeException("Unable to download URL", tw);
+        } catch (IOException error) {
+            throw new RuntimeException("Unable to download URL: " + url, error);
         }
         
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
         Document doc = null;
         
         try {
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+
             doc = db.parse(in);
             doc.getDocumentElement().normalize();
-        } catch (Throwable tw) {
-            throw new RuntimeException("Unable to parse TheTVDb response, please try again later.", tw);
+        } catch (ParserConfigurationException error) {
+            throw new RuntimeException("Unable to parse TheTVDb response, please try again later.", error);
+        } catch (SAXException error) {
+            throw new RuntimeException("Unable to parse TheTVDb response, please try again later.", error);
+        } catch (IOException error) {
+            throw new RuntimeException("Unable to parse TheTVDb response, please try again later.", error);
         } finally {
-            in.close();
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException error) {
+                    // Input Stream was already closed or null
+                    in = null;
+                }
+            }
         }
         
         return doc;
@@ -130,8 +156,8 @@ public class DOMHelper {
             trans.transform(new DOMSource(doc), new StreamResult(new File(localFile)));
             return true;
         } catch (Exception error) {
-            System.out.println("Error writing the document to " + localFile);
-            System.out.println("Message: " + error.getMessage());
+            logger.warning("Error writing the document to " + localFile);
+            logger.warning("Message: " + error.getMessage());
             return false;
         }
     }

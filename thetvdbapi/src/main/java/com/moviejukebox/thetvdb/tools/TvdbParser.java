@@ -37,6 +37,12 @@ import com.moviejukebox.thetvdb.model.Series;
 public class TvdbParser {
     private static Logger logger = TheTVDB.getLogger();
 
+    // Hide the constructor
+    protected TvdbParser() {
+        // prevents calls from subclass
+        throw new UnsupportedOperationException();
+    }
+
     /**
      * Get a list of the actors from the url
      * @param urlString
@@ -50,38 +56,32 @@ public class TvdbParser {
         Node nActor;
         Element eActor;
         
-        try {
-            doc = DOMHelper.getEventDocFromUrl(urlString);
-    
-            nlActor = doc.getElementsByTagName("Actor");
-            
-            for (int loop = 0; loop < nlActor.getLength(); loop++) {
-                nActor = nlActor.item(loop);
-                
-                if (nActor.getNodeType() == Node.ELEMENT_NODE) {
-                    eActor = (Element) nActor;
-                    actor = new Actor();
-                
-                    actor.setId(DOMHelper.getValueFromElement(eActor, "id"));
-                    String image = DOMHelper.getValueFromElement(eActor, "Image");
-                    if (!image.isEmpty()) {
-                        actor.setImage(TheTVDB.getBannerMirror() + image);                    
-                    }
-                    actor.setName(DOMHelper.getValueFromElement(eActor, "Name"));
-                    actor.setRole(DOMHelper.getValueFromElement(eActor, "Role"));
-                    actor.setSortOrder(DOMHelper.getValueFromElement(eActor, "SortOrder"));
-                    
-                    results.add(actor);
-                }
-            }
-        } catch (Exception error) {
-            logger.warning("Actors error: " + error.getMessage());
-        } catch (Throwable tw) {
-            // Message is passed to us
-            logger.warning(tw.getMessage());
-        }
+        doc = DOMHelper.getEventDocFromUrl(urlString);
+
+        nlActor = doc.getElementsByTagName("Actor");
         
+        for (int loop = 0; loop < nlActor.getLength(); loop++) {
+            nActor = nlActor.item(loop);
+            
+            if (nActor.getNodeType() == Node.ELEMENT_NODE) {
+                eActor = (Element) nActor;
+                actor = new Actor();
+            
+                actor.setId(DOMHelper.getValueFromElement(eActor, "id"));
+                String image = DOMHelper.getValueFromElement(eActor, "Image");
+                if (!image.isEmpty()) {
+                    actor.setImage(TheTVDB.getBannerMirror() + image);                    
+                }
+                actor.setName(DOMHelper.getValueFromElement(eActor, "Name"));
+                actor.setRole(DOMHelper.getValueFromElement(eActor, "Role"));
+                actor.setSortOrder(DOMHelper.getValueFromElement(eActor, "SortOrder"));
+                
+                results.add(actor);
+            }
+        }
+
         Collections.sort(results);
+        
         return results;
     }
     

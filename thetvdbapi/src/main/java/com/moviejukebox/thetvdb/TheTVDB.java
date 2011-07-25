@@ -104,7 +104,7 @@ public class TheTVDB {
      * Get the mirror information from TheTVDb
      * @return True if everything is OK, false otherwise.
      */
-    private static void getMirrors() throws Throwable {
+    private static void getMirrors() {
         // If we don't need to get the mirrors, then just return
         if (xmlMirror != null && bannerMirror != null) {
             return;
@@ -343,7 +343,7 @@ public class TheTVDB {
     }
     
     public List<Series> searchSeries(String title, String language) {
-        StringBuffer urlString = new StringBuffer();
+        StringBuilder urlString = new StringBuilder();
         String mirror = "";
         
         try {
@@ -353,7 +353,7 @@ public class TheTVDB {
             return new ArrayList<Series>();
         }
 
-        urlString.append(mirror + "GetSeries.php?seriesname=");
+        urlString.append(mirror).append("GetSeries.php?seriesname=");
 
         try {
             urlString.append(URLEncoder.encode(title, "UTF-8"));
@@ -385,7 +385,7 @@ public class TheTVDB {
      * @return
      * @throws Throwable 
      */
-    public static String getBannerMirror() throws Throwable {
+    public static String getBannerMirror() {
         // Force a load of the mirror information if it doesn't exist
         getMirrors();
         return bannerMirror;
