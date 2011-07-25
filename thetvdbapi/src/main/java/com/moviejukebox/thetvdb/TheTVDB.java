@@ -14,6 +14,7 @@ package com.moviejukebox.thetvdb;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -296,18 +297,19 @@ public class TheTVDB {
         String year = null;
 
         Episode episode = getEpisode(id, seasonNbr, 1, language);
-        if (episode != null) {
-            if (episode.getFirstAired() != null && !episode.getFirstAired().isEmpty()) {
-                try {
-                    Date date = dateFormat.parse(episode.getFirstAired());
-                    if (date != null) {
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTime(date);
-                        year = "" + cal.get(Calendar.YEAR);
-                    }
-                } catch (Exception ignore) {
-                    return "";
-                }
+        if ( (episode != null)  && ((episode.getFirstAired() != null && !episode.getFirstAired().isEmpty())) ) {
+            Date date;
+            
+            try {
+                date = dateFormat.parse(episode.getFirstAired());
+            } catch (ParseException error) {
+                date = null;
+            }
+            
+            if (date != null) {
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date);
+                year = "" + cal.get(Calendar.YEAR);
             }
         }
 

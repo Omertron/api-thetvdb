@@ -37,6 +37,8 @@ import com.moviejukebox.thetvdb.model.Series;
 public class TvdbParser {
     private static Logger logger = TheTVDB.getLogger();
 
+    private static final int MAX_EPISODE = 24;  // The anticipated largest episode number
+    
     // Hide the constructor
     protected TvdbParser() {
         // prevents calls from subclass
@@ -44,7 +46,7 @@ public class TvdbParser {
     }
 
     /**
-     * Get a list of the actors from the url
+     * Get a list of the actors from the URL
      * @param urlString
      * @return
      */
@@ -106,11 +108,9 @@ public class TvdbParser {
                 if (nEpisode.getNodeType() == Node.ELEMENT_NODE) {
                     eEpisode = (Element) nEpisode;
                     episode = parseNextEpisode(eEpisode);
-                    if (episode != null) {
+                    if ((episode != null) &&  (season == -1 || episode.getSeasonNumber() == season)) {
                         // Add the episode only if the season is -1 (all seasons) or matches the season
-                        if (season == -1 || episode.getSeasonNumber() == season) {
-                            episodeList.add(episode);
-                        }
+                        episodeList.add(episode);
                     }
                 }
             }
@@ -238,7 +238,7 @@ public class TvdbParser {
      * @return
      */
     public static String parseErrorMessage(String errorMessage) {
-        String response = "";
+        StringBuilder response = new StringBuilder();
         
         Pattern pattern = Pattern.compile(".*?/series/(\\d*?)/default/(\\d*?)/(\\d*?)/.*?");
         Matcher matcher = pattern.matcher(errorMessage);
@@ -249,30 +249,33 @@ public class TvdbParser {
             int seasonId = Integer.parseInt(matcher.group(2));
             int episodeId = Integer.parseInt(matcher.group(3));
             
-            response = "Series Id: " + seriesId + ", Season: " + seasonId + ", Episode: " + episodeId + ": ";
+            response.append("Series Id: ").append(seriesId);
+            response.append(", Season: ").append(seasonId);
+            response.append(", Episode: ").append(episodeId);
+            response.append(": ");
             
             if (episodeId == 0) {
                 // We should probably try an scrape season 0/episode 1
-                response += "Episode seems to be a misnamed pilot episode.";
-            } else if (episodeId > 24) {
-                response += "Episode number seems to be too large.";
+                response.append("Episode seems to be a misnamed pilot episode.");
+            } else if (episodeId > MAX_EPISODE) {
+                response.append("Episode number seems to be too large.");
             } else if (seasonId == 0 && episodeId > 1) {
-                response += "This special episode does not exist.";
+                response.append("This special episode does not exist.");
             } else if (errorMessage.toLowerCase().contains("content is not allowed in prolog")) {
-                response += "Unable to retrieve episode information from TheTVDb, try again later.";
+                response.append("Unable to retrieve episode information from TheTVDb, try again later.");
             } else {
-                response += "Unknown episode error: " + errorMessage;
+                response.append("Unknown episode error: ").append(errorMessage);
             }
         } else {
             // Don't recognise the error format, so just return it
             if (errorMessage.toLowerCase().contains("content is not allowed in prolog")) {
-                response = "Unable to retrieve episode information from TheTVDb, try again later.";
+                response.append("Unable to retrieve episode information from TheTVDb, try again later.");
             } else {
-                response = "Episode error: " + errorMessage;
+                response.append("Episode error: ").append(errorMessage);
             }
         }
         
-        return response;
+        return response.toString();
     }
 
     /**

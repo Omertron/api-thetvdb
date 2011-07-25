@@ -33,6 +33,11 @@ public class Mirrors {
     public static final String TYPE_XML = "XML";
     public static final String TYPE_BANNER = "BANNER";
     public static final String TYPE_ZIP = "ZIP";
+
+    private static final int MASK_XML = 1;
+    private static final int MASK_BANNER = 2;
+    private static final int MASK_ZIP = 4;
+    
     
     private static final Random RNDM = new Random();
     
@@ -78,27 +83,34 @@ public class Mirrors {
     
     private void addMirror(int typeMask, String url) {
         switch (typeMask) {
-            case 1: xmlList.add(url);
-                    break;
-            case 2: bannerList.add(url);
-                    break;
-            case 3: xmlList.add(url);
-                    bannerList.add(url);
-                    break;
-            case 4: zipList.add(url);
-                    break;
-            case 5: xmlList.add(url);
-                    zipList.add(url);
-                    break;
-            case 6: bannerList.add(url);
-                    zipList.add(url);
-                    break;
-            case 7: xmlList.add(url);
-                    bannerList.add(url);
-                    zipList.add(url);
-                    break;
+            case MASK_XML:
+                xmlList.add(url);
+                break;
+            case MASK_BANNER: 
+                bannerList.add(url);
+                break;
+            case (MASK_XML + MASK_BANNER): 
+                xmlList.add(url);
+                bannerList.add(url);
+                break;
+            case MASK_ZIP:
+                zipList.add(url);
+                break;
+            case (MASK_XML + MASK_ZIP):
+                xmlList.add(url);
+                zipList.add(url);
+                break;
+            case (MASK_BANNER + MASK_ZIP): 
+                bannerList.add(url);
+                zipList.add(url);
+                break;
+            case (MASK_XML + MASK_BANNER + MASK_ZIP): 
+                xmlList.add(url);
+                bannerList.add(url);
+                zipList.add(url);
+                break;
             default:
-                    break;
+                break;
         }
     }
 }

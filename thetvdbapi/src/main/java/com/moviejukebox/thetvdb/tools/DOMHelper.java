@@ -24,6 +24,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -63,14 +64,10 @@ public class DOMHelper {
     public static String getValueFromElement(Element element, String tagName) {
         String returnValue = "";
         
-        try {
-            NodeList elementNodeList = element.getElementsByTagName(tagName);
-            Element tagElement = (Element) elementNodeList.item(0);
-            NodeList tagNodeList = tagElement.getChildNodes();
-            returnValue = ((Node) tagNodeList.item(0)).getNodeValue();
-        } catch (Exception ignore) {
-            return returnValue;
-        }
+        NodeList elementNodeList = element.getElementsByTagName(tagName);
+        Element tagElement = (Element) elementNodeList.item(0);
+        NodeList tagNodeList = tagElement.getChildNodes();
+        returnValue = ((Node) tagNodeList.item(0)).getNodeValue();
         
         return returnValue;
     }
@@ -155,7 +152,11 @@ public class DOMHelper {
             trans.setOutputProperty(OutputKeys.INDENT, YES);
             trans.transform(new DOMSource(doc), new StreamResult(new File(localFile)));
             return true;
-        } catch (Exception error) {
+        } catch (TransformerConfigurationException error) {
+            logger.warning("Error writing the document to " + localFile);
+            logger.warning("Message: " + error.getMessage());
+            return false;
+        } catch (TransformerException error) {
             logger.warning("Error writing the document to " + localFile);
             logger.warning("Message: " + error.getMessage());
             return false;
