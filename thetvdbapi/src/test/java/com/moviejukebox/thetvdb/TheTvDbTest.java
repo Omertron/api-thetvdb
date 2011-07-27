@@ -36,7 +36,7 @@ import com.moviejukebox.thetvdb.model.Series;
  */
 public class TheTvDbTest {
 
-    private static String apikey = "2805AD2873519EC5";
+    private static String apikey = "";
     private TheTVDB tvdb;
     private static final String LANGUAGE = "en";
     private static final String ID_CHUCK = "80348";
