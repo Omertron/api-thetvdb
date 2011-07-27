@@ -217,24 +217,17 @@ public class TvdbParser {
         Node nSeries;
         Element eSeries;
         
-        try {
-            Document doc = DOMHelper.getEventDocFromUrl(urlString);
-            nlSeries = doc.getElementsByTagName("Series");
-            for (int loop = 0; loop < nlSeries.getLength(); loop++) {
-                nSeries = nlSeries.item(loop);
-                if (nSeries.getNodeType() == Node.ELEMENT_NODE) {
-                    eSeries = (Element) nSeries;
-                    series = parseNextSeries(eSeries);
-                    if (series != null) {
-                        seriesList.add(series);
-                    }
+        Document doc = DOMHelper.getEventDocFromUrl(urlString);
+        nlSeries = doc.getElementsByTagName("Series");
+        for (int loop = 0; loop < nlSeries.getLength(); loop++) {
+            nSeries = nlSeries.item(loop);
+            if (nSeries.getNodeType() == Node.ELEMENT_NODE) {
+                eSeries = (Element) nSeries;
+                series = parseNextSeries(eSeries);
+                if (series != null) {
+                    seriesList.add(series);
                 }
             }
-        } catch (Exception error) {
-            logger.warning("Series error: " + error.getMessage());
-        } catch (Throwable tw) {
-            // Message is passed to us
-            logger.warning(tw.getMessage());
         }
         
         return seriesList;
@@ -421,7 +414,7 @@ public class TvdbParser {
      * @return
      * @throws Throwable
      */
-    private static Series parseNextSeries(Element eSeries) throws Throwable {
+    private static Series parseNextSeries(Element eSeries) {
         String bannerMirror = TheTVDB.getBannerMirror();
         
         Series series = new Series();

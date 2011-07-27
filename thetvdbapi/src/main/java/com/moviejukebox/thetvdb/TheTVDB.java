@@ -163,15 +163,20 @@ public class TheTVDB {
      * @return
      */
     public Series getSeries(String id, String language) {
-        String urlString = null;
+        StringBuilder urlString = new StringBuilder();
         try {
-            urlString = getXmlMirror() + apiKey + SERIES_URL + id + "/" + (language!=null?language+XML_EXTENSION:"");
+            urlString.append(getXmlMirror());
+            urlString.append(apiKey);
+            urlString.append(SERIES_URL);
+            urlString.append(id);
+            urlString.append("/");
+            urlString.append(language!=null?language+XML_EXTENSION:"");
         } catch (Throwable tw) {
             logger.severe(tw.getMessage());
             return null;
         }
         
-        List<Series> seriesList = TvdbParser.getSeriesList(urlString);
+        List<Series> seriesList = TvdbParser.getSeriesList(urlString.toString());
         if (seriesList.isEmpty()) {
             return null;
         } else {

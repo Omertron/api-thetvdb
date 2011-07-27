@@ -1,6 +1,9 @@
 package com.moviejukebox.thetvdb;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -8,8 +11,24 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.moviejukebox.thetvdb.model.Actor;
+import com.moviejukebox.thetvdb.model.Banners;
+import com.moviejukebox.thetvdb.model.Episode;
+import com.moviejukebox.thetvdb.model.Series;
+
+/**
+ * JUnit tests for TheTvDb class. The tester must enter the API key for these tests to work. 
+ * Requires JUnit 4.5.
+ * @author stuart.boston
+ *
+ */
 public class TheTvDbTest {
 
+    private static String apikey = "2805AD2873519EC5";
+    private TheTVDB tvdb;
+    private static final String LANGUAGE = "en";
+    private static final String ID_CHUCK = "80348";
+    
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
     }
@@ -20,6 +39,7 @@ public class TheTvDbTest {
 
     @Before
     public void setUp() throws Exception {
+        tvdb = new TheTVDB(apikey);
     }
 
     @After
@@ -27,93 +47,87 @@ public class TheTvDbTest {
     }
 
     @Test
-    public void testTheTVDB() {
-        fail("Not yet implemented");
-    }
-
-    @Test
-    public void testSetApiKey() {
-        fail("Not yet implemented");
-    }
-
-    @Test
-    public void testGetLogger() {
-        fail("Not yet implemented");
-    }
-
-    @Test
-    public void testSetLogger() {
-        fail("Not yet implemented");
-    }
-
-    @Test
-    public void testSetProxy() {
-        fail("Not yet implemented");
-    }
-
-    @Test
-    public void testSetTimeout() {
-        fail("Not yet implemented");
-    }
-
-    @Test
     public void testGetSeries() {
-        fail("Not yet implemented");
+        Series series = tvdb.getSeries(ID_CHUCK, LANGUAGE);
+        assertTrue(series.getSeriesName().equals("Chuck"));
     }
 
     @Test
     public void testGetAllEpisodes() {
-        fail("Not yet implemented");
+        List<Episode> episodes = tvdb.getAllEpisodes(ID_CHUCK, LANGUAGE);
+        assertFalse(episodes.isEmpty());
     }
 
     @Test
     public void testGetSeasonEpisodes() {
-        fail("Not yet implemented");
+        List<Episode> episodes = tvdb.getSeasonEpisodes(ID_CHUCK, 1, LANGUAGE);
+        assertFalse(episodes.isEmpty());
     }
 
     @Test
     public void testGetEpisode() {
-        fail("Not yet implemented");
+        Episode episode = tvdb.getEpisode(ID_CHUCK, 1, 1, LANGUAGE);
+        assertTrue(episode.getEpisodeName().length() > 0);
     }
 
     @Test
     public void testGetDVDEpisode() {
-        fail("Not yet implemented");
+        Episode episode = tvdb.getDVDEpisode(ID_CHUCK, 1, 1, LANGUAGE);
+        assertTrue(episode.getDvdEpisodeNumber().length() > 0);
     }
 
     @Test
     public void testGetAbsoluteEpisode() {
-        fail("Not yet implemented");
+        Episode episode = tvdb.getAbsoluteEpisode(ID_CHUCK, 1, LANGUAGE);
+        assertTrue(episode.getAbsoluteNumber().equals("1"));
     }
 
     @Test
     public void testGetSeasonYear() {
-        fail("Not yet implemented");
+        String year = tvdb.getSeasonYear(ID_CHUCK, 1, LANGUAGE);
+        assertTrue(year.equals("2007"));
     }
 
     @Test
     public void testGetBanners() {
-        fail("Not yet implemented");
+        Banners banners = tvdb.getBanners(ID_CHUCK);
+        assertFalse(banners.getFanartList().isEmpty());
+        assertFalse(banners.getPosterList().isEmpty());
+        assertFalse(banners.getSeasonList().isEmpty());
+        assertFalse(banners.getSeriesList().isEmpty());
     }
 
     @Test
     public void testGetActors() {
-        fail("Not yet implemented");
+        List<Actor> actors = tvdb.getActors(ID_CHUCK);
+        assertFalse(actors.isEmpty());
     }
 
     @Test
     public void testSearchSeries() {
-        fail("Not yet implemented");
+        List<Series> seriesList = tvdb.searchSeries("chuck", LANGUAGE);
+        assertFalse(seriesList.isEmpty());
+        
+        boolean found = false;
+        for (Series series : seriesList) {
+            if (series.getId().equals(ID_CHUCK)) {
+                found = true;
+                break;
+            }
+        }
+        assertTrue("Series found", found);
     }
 
     @Test
-    public void testGetXmlMirror() {
-        fail("Not yet implemented");
+    public void testGetXmlMirror() throws Throwable {
+        String mirror = TheTVDB.getXmlMirror();
+        assertTrue(mirror.length() > 0);
     }
 
     @Test
     public void testGetBannerMirror() {
-        fail("Not yet implemented");
+        String mirror = TheTVDB.getBannerMirror();
+        assertTrue(mirror.length() > 0);
     }
 
 }
