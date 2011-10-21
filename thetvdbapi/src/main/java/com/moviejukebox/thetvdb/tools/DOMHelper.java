@@ -48,6 +48,8 @@ public class DOMHelper {
     private static Logger logger = TheTVDB.getLogger();
     
     private static final String YES = "yes";
+    private static final String ENCODING = "UTF-8";
+    private static final int RETRY_COUNT = 3;
 
     // Hide the constructor
     protected DOMHelper() {
@@ -82,10 +84,28 @@ public class DOMHelper {
     public static synchronized Document getEventDocFromUrl(String url) {
         String webPage = null;
         InputStream in = null;
+        int retryCount = 0;     // Count the number of times we download the webpage
+        boolean valid = false;  // Is the web page valid
         
         try {
-            webPage = WebBrowser.request(url);
-            in = new ByteArrayInputStream(webPage.getBytes("UTF-8"));
+            while (!valid || retryCount < RETRY_COUNT) {
+                webPage = WebBrowser.request(url);
+                retryCount++;
+                
+                // See if the ID is null
+                if (!webPage.contains("<id>") || webPage.contains("<id></id>")) {
+                    continue;
+                } else {
+                    valid = true;
+                }
+            }
+
+            // Couldn't get a valid webPage so, quit.
+            if (!valid) {
+                throw new RuntimeException("Failed to download data from " + url);
+            }
+            
+            in = new ByteArrayInputStream(webPage.getBytes(ENCODING));
         } catch (IOException error) {
             throw new RuntimeException("Unable to download URL: " + url, error);
         }
