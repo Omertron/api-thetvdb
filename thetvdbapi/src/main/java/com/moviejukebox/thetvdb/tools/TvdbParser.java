@@ -61,12 +61,16 @@ public class TvdbParser {
     public static List<Actor> getActors(String urlString) {
         List<Actor> results = new ArrayList<Actor>();
         Actor actor = null;
-        Document doc;
+        Document doc = null;
         NodeList nlActor;
         Node nActor;
         Element eActor;
         
-        doc = DOMHelper.getEventDocFromUrl(urlString);
+        try {
+            doc = DOMHelper.getEventDocFromUrl(urlString);
+        } catch (Throwable tw) {
+            return results;
+        }
 
         nlActor = doc.getElementsByTagName("Actor");
         
@@ -217,7 +221,14 @@ public class TvdbParser {
         Node nSeries;
         Element eSeries;
         
-        Document doc = DOMHelper.getEventDocFromUrl(urlString);
+        Document doc = null;
+        
+        try {
+            doc = DOMHelper.getEventDocFromUrl(urlString);
+        } catch (Throwable tw) {
+            return seriesList;
+        }
+        
         nlSeries = doc.getElementsByTagName("Series");
         for (int loop = 0; loop < nlSeries.getLength(); loop++) {
             nSeries = nlSeries.item(loop);
