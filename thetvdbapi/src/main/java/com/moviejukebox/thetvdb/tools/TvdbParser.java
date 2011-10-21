@@ -456,5 +456,4 @@ public class TvdbParser {
 
         return series;
     }
-    
 }

@@ -49,7 +49,7 @@ public class DOMHelper {
     
     private static final String YES = "yes";
     private static final String ENCODING = "UTF-8";
-    private static final int RETRY_COUNT = 3;
+    private static final int RETRY_COUNT = 5;
 
     // Hide the constructor
     protected DOMHelper() {
@@ -88,12 +88,14 @@ public class DOMHelper {
         boolean valid = false;  // Is the web page valid
         
         try {
-            while (!valid || retryCount < RETRY_COUNT) {
+            while (!valid && (retryCount < RETRY_COUNT)) {
                 webPage = WebBrowser.request(url);
                 retryCount++;
                 
                 // See if the ID is null
                 if (!webPage.contains("<id>") || webPage.contains("<id></id>")) {
+                    // Wait an increasing amount of time the more retries that happen
+                    waiting(retryCount * 500);
                     continue;
                 } else {
                     valid = true;
@@ -198,5 +200,18 @@ public class DOMHelper {
         parentElement.appendChild(child);
 
         return;
+    }
+
+
+    /**
+     * Wait for a few milliseconds
+     * @param milliseconds
+     */
+    private static void waiting (int milliseconds){
+        long t0, t1;
+        t0 =  System.currentTimeMillis();
+        do {
+            t1 = System.currentTimeMillis();
+        } while ((t1 - t0) < milliseconds);
     }
 }
