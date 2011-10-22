@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -84,13 +85,14 @@ public class DOMHelper {
     public static synchronized Document getEventDocFromUrl(String url) {
         String webPage = null;
         InputStream in = null;
-        int retryCount = 0;     // Count the number of times we download the webpage
+        int retryCount = 0;     // Count the number of times we download the web page
         boolean valid = false;  // Is the web page valid
         
         try {
             while (!valid && (retryCount < RETRY_COUNT)) {
-                webPage = WebBrowser.request(url);
                 retryCount++;
+//                logger.fine("Try #" + retryCount + " for " + url);  // XXX DEBUG
+                webPage = WebBrowser.request(url);
                 
                 // See if the ID is null
                 if (!webPage.contains("<id>") || webPage.contains("<id></id>")) {
@@ -108,6 +110,8 @@ public class DOMHelper {
             }
             
             in = new ByteArrayInputStream(webPage.getBytes(ENCODING));
+        } catch (UnsupportedEncodingException error) {
+            throw new RuntimeException("Unable to encode URL: " + url, error);
         } catch (IOException error) {
             throw new RuntimeException("Unable to download URL: " + url, error);
         }

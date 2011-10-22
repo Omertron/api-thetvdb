@@ -51,6 +51,7 @@ public class TheTVDB {
     
     private static final String XML_EXTENSION = ".xml";
     private static final String SERIES_URL = "/series/";
+    private static final String ALL_URL = "/all/";
     
     public TheTVDB(String apiKey) {
         if (apiKey == null) {
@@ -170,7 +171,9 @@ public class TheTVDB {
             urlString.append(SERIES_URL);
             urlString.append(id);
             urlString.append("/");
-            urlString.append(language!=null?language+XML_EXTENSION:"");
+            if (language != null) {
+                urlString.append(language).append(XML_EXTENSION);
+            }
         } catch (Throwable tw) {
             logger.severe(tw.getMessage());
             return null;
@@ -192,15 +195,22 @@ public class TheTVDB {
      * @return
      */
     public List<Episode> getAllEpisodes(String id, String language) {
-        String urlString = null;
+        StringBuilder urlString = new StringBuilder();
         try {
-            urlString = getXmlMirror() + apiKey + SERIES_URL + id + "/all/" + (language!=null?language+XML_EXTENSION:"");
+            urlString.append(getXmlMirror());
+            urlString.append(apiKey);
+            urlString.append(SERIES_URL);
+            urlString.append(id);
+            urlString.append(ALL_URL);
+            if (language != null) {
+                urlString.append(language).append(XML_EXTENSION);
+            }
         } catch (Throwable tw) {
             logger.severe(tw.getMessage());
             return null;
         }
         
-        List<Episode> episodeList = TvdbParser.getAllEpisodes(urlString, -1);
+        List<Episode> episodeList = TvdbParser.getAllEpisodes(urlString.toString(), -1);
         if (episodeList.isEmpty()) {
             return null;
         } else {
@@ -217,15 +227,22 @@ public class TheTVDB {
      * @return
      */
     public List<Episode> getSeasonEpisodes(String id, int season, String language) {
-        String urlString = null;
+        StringBuilder urlString = new StringBuilder();
         try {
-            urlString = getXmlMirror() + apiKey + SERIES_URL + id + "/all/" + (language!=null?language+XML_EXTENSION:"");
+            urlString.append(getXmlMirror());
+            urlString.append(apiKey);
+            urlString.append(SERIES_URL);
+            urlString.append(id);
+            urlString.append(ALL_URL);
+            if (language != null) {
+                urlString.append(language).append(XML_EXTENSION);
+            }
         } catch (Throwable tw) {
             logger.severe(tw.getMessage());
             return null;
         }
         
-        List<Episode> episodeList = TvdbParser.getAllEpisodes(urlString, season);
+        List<Episode> episodeList = TvdbParser.getAllEpisodes(urlString.toString(), season);
         if (episodeList.isEmpty()) {
             return null;
         } else {
@@ -242,15 +259,26 @@ public class TheTVDB {
      * @return
      */
     public Episode getEpisode(String seriesId, int seasonNbr, int episodeNbr, String language) {
-        String urlString = null;
+        StringBuilder urlString = new StringBuilder();
         try {
-            urlString = getXmlMirror() + apiKey + SERIES_URL + seriesId + "/default/" + seasonNbr + "/" + episodeNbr + "/" + (language!=null?language+XML_EXTENSION:"");
+            urlString.append(getXmlMirror());
+            urlString.append(apiKey);
+            urlString.append(SERIES_URL);
+            urlString.append(seriesId);
+            urlString.append("/default/");
+            urlString.append(seasonNbr);
+            urlString.append("/");
+            urlString.append(episodeNbr);
+            urlString.append("/");
+            if (language != null) {
+                urlString.append(language).append(XML_EXTENSION);
+            }
         } catch (Throwable tw) {
             logger.severe(tw.getMessage());
             return new Episode();
         }
 
-        return TvdbParser.getEpisode(urlString);
+        return TvdbParser.getEpisode(urlString.toString());
     }
 
     /**
@@ -262,15 +290,26 @@ public class TheTVDB {
      * @return
      */
     public Episode getDVDEpisode(String seriesId, int seasonNbr, int episodeNbr, String language) {
-        String urlString = null;
+        StringBuilder urlString = new StringBuilder();
         try {
-            urlString = getXmlMirror() + apiKey + SERIES_URL + seriesId + "/dvd/" + seasonNbr + "/" + episodeNbr + "/" + (language!=null?language+XML_EXTENSION:"");
+            urlString.append(getXmlMirror());
+            urlString.append(apiKey);
+            urlString.append(SERIES_URL);
+            urlString.append(seriesId);
+            urlString.append("/dvd/");
+            urlString.append(seasonNbr);
+            urlString.append("/");
+            urlString.append(episodeNbr);
+            urlString.append("/");
+            if (language != null) {
+                urlString.append(language).append(XML_EXTENSION);
+            }
         } catch (Throwable tw) {
             logger.severe(tw.getMessage());
             return new Episode();
         }
 
-        return TvdbParser.getEpisode(urlString);
+        return TvdbParser.getEpisode(urlString.toString());
     }
     
     /**
@@ -282,15 +321,24 @@ public class TheTVDB {
      * @return
      */
     public Episode getAbsoluteEpisode(String seriesId, int episodeNbr, String language) {
-        String urlString = null;
+        StringBuilder urlString = new StringBuilder();
         try {
-            urlString = getXmlMirror() + apiKey + SERIES_URL + seriesId + "/absolute/" + episodeNbr + "/" + (language!=null?language+XML_EXTENSION:"");
+            urlString.append(getXmlMirror());
+            urlString.append(apiKey);
+            urlString.append(SERIES_URL);
+            urlString.append(seriesId);
+            urlString.append("/absolute/");
+            urlString.append(episodeNbr);
+            urlString.append("/");
+            if (language != null) {
+                urlString.append(language).append(XML_EXTENSION);
+            }
         } catch (Throwable tw) {
             logger.severe(tw.getMessage());
             return new Episode();
         }
 
-        return TvdbParser.getEpisode(urlString);
+        return TvdbParser.getEpisode(urlString.toString());
     }
 
     /**
@@ -322,15 +370,19 @@ public class TheTVDB {
     }
 
     public Banners getBanners(String seriesId) {
-        String urlString = null;
+        StringBuilder urlString = new StringBuilder();
         try {
-            urlString = getXmlMirror() + apiKey + SERIES_URL + seriesId + "/banners.xml";
+            urlString.append(getXmlMirror());
+            urlString.append(apiKey);
+            urlString.append(SERIES_URL);
+            urlString.append(seriesId);
+            urlString.append("/banners.xml");
         } catch (Throwable tw) {
             logger.severe(tw.getMessage());
             return new Banners();
         }
 
-        return TvdbParser.getBanners(urlString);
+        return TvdbParser.getBanners(urlString.toString());
     }
     
     /**
@@ -339,31 +391,30 @@ public class TheTVDB {
      * @return
      */
     public List<Actor> getActors(String seriesId) {
-        String urlString = null;
+        StringBuilder urlString = new StringBuilder();
         try {
-            urlString = getXmlMirror() + apiKey + SERIES_URL + seriesId + "/actors.xml";
+            urlString.append(getXmlMirror());
+            urlString.append(apiKey);
+            urlString.append(SERIES_URL);
+            urlString.append(seriesId);
+            urlString.append("/actors.xml");
         } catch (Throwable tw) {
             logger.severe(tw.getMessage());
             return new ArrayList<Actor>();
         }
-        return TvdbParser.getActors(urlString);
+        return TvdbParser.getActors(urlString.toString());
     }
     
     public List<Series> searchSeries(String title, String language) {
         StringBuilder urlString = new StringBuilder();
-        String mirror = "";
         
         try {
-            mirror = getXmlMirror();
-        } catch (Throwable tw) {
-            logger.severe(tw.getMessage());
-            return new ArrayList<Series>();
-        }
-
-        urlString.append(mirror).append("GetSeries.php?seriesname=");
-
-        try {
+            urlString.append(getXmlMirror());
+            urlString.append("GetSeries.php?seriesname=");
             urlString.append(URLEncoder.encode(title, "UTF-8"));
+            if (language != null) {
+                urlString.append("&language=").append(language);
+            }
         } catch (UnsupportedEncodingException e) {
             // Try and use the raw title
             urlString.append(title);
@@ -372,7 +423,6 @@ public class TheTVDB {
             return new ArrayList<Series>();
         }
         
-        urlString.append(language!=null?"&language="+language:"");
         return TvdbParser.getSeriesList(urlString.toString());
     }
     
