@@ -8,7 +8,7 @@
 	</parent>
 	<groupId>com.moviejukebox</groupId>
 	<artifactId>thetvdbapi</artifactId>
-	<version>1.2-SNAPSHOT</version>
+	<version>1.2</version>
 	<name>TheTVDB API</name>
 
 	<description>API for TheTVDB.com website</description>
@@ -24,9 +24,9 @@
 	</ciManagement>
 	
 	<scm>
-		<connection>scm:svn:http://javatvdbapi.googlecode.com/svn/trunk/thetvdbapi</connection>
-		<developerConnection>scm:svn:https://javatvdbapi.googlecode.com/svn/trunk/thetvdbapi</developerConnection>
-		<url>http://code.google.com/p/javatvdbapi/source/browse/trunk/thetvdbapi</url>
+		<connection>scm:svn:http://javatvdbapi.googlecode.com/svn/tags/thetvdbapi-1.2</connection>
+		<developerConnection>scm:svn:https://javatvdbapi.googlecode.com/svn/tags/thetvdbapi-1.2</developerConnection>
+		<url>http://code.google.com/p/javatvdbapi/source/browse/tags/thetvdbapi-1.2</url>
 	</scm>
 
 	<properties>
