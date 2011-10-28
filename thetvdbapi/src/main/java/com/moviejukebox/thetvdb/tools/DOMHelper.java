@@ -51,6 +51,7 @@ public class DOMHelper {
     private static final String YES = "yes";
     private static final String ENCODING = "UTF-8";
     private static final int RETRY_COUNT = 5;
+    private static final int RETRY_TIME = 250;  // Milliseconds to retry
 
     // Hide the constructor
     protected DOMHelper() {
@@ -97,7 +98,7 @@ public class DOMHelper {
                 // See if the ID is null
                 if (!webPage.contains("<id>") || webPage.contains("<id></id>")) {
                     // Wait an increasing amount of time the more retries that happen
-                    waiting(retryCount * 500);
+                    waiting(retryCount * RETRY_TIME);
                     continue;
                 } else {
                     valid = true;
@@ -205,7 +206,6 @@ public class DOMHelper {
 
         return;
     }
-
 
     /**
      * Wait for a few milliseconds
