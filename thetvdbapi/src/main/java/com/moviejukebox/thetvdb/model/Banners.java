@@ -90,7 +90,7 @@ public class Banners {
     
     @Override
     public String toString() {
-        StringBuffer banners = new StringBuffer("[Banners ");
+        StringBuilder banners = new StringBuilder("[Banners ");
         
         banners.append("[seriesList=");
         for (Banner banner : seriesList) {

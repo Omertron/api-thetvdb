@@ -42,8 +42,7 @@ public class TheTVDB {
     private static String xmlMirror = null;
     private static String bannerMirror = null;
     
-    private static final String LOGGERNAME = "TheTVDB";
-    private static Logger logger = null;
+    private static final Logger logger = Logger.getLogger("TheTVDB");
     private static LogFormatter logFormatter = new LogFormatter();
     private static ConsoleHandler logConsoleHandler = new ConsoleHandler();
 
@@ -58,19 +57,16 @@ public class TheTVDB {
             return;
         }
         
-        setLogger(LOGGERNAME);
-        setApiKey(apiKey);
-        
-        // Mirror information is called for when the get??Mirror calls are used
-    }
+        logConsoleHandler.setFormatter(logFormatter);
+        logConsoleHandler.setLevel(Level.FINE);
+        logger.addHandler(logConsoleHandler);
+        logger.setUseParentHandlers(false);
+        logger.setLevel(Level.ALL);
 
-    /**
-     * Set the API Key
-     * @param apiKey
-     */
-    public void setApiKey(String apiKey) {
         TheTVDB.apiKey = apiKey;
         logFormatter.addApiKey(apiKey);
+        
+        // Mirror information is called for when the get??Mirror calls are used
     }
 
     /**
@@ -79,27 +75,6 @@ public class TheTVDB {
      */
     public static Logger getLogger() {
         return logger;
-    }
-
-    /**
-     * Set the logger name
-     * @param loggerName
-     * @return 
-     */
-    public void setLogger(String loggerName) {
-        // Check to see if we need to initalise the logger or not
-        if (logger != null) {
-            return;
-        }
-        
-        logger = Logger.getLogger(loggerName);
-        logConsoleHandler.setFormatter(logFormatter);
-        logConsoleHandler.setLevel(Level.FINE);
-        logger.addHandler(logConsoleHandler);
-        logger.setUseParentHandlers(false);
-        logger.setLevel(Level.ALL);
-        
-        return;
     }
 
     /**
@@ -195,6 +170,11 @@ public class TheTVDB {
      * @return
      */
     public List<Episode> getAllEpisodes(String id, String language) {
+        if (!isValidNumber(id)) {
+            System.out.println("Invalid number: " + id);    // XXX DEBUG
+            return new ArrayList<Episode>();
+        }
+        
         StringBuilder urlString = new StringBuilder();
         try {
             urlString.append(getXmlMirror());
@@ -259,6 +239,11 @@ public class TheTVDB {
      * @return
      */
     public Episode getEpisode(String seriesId, int seasonNbr, int episodeNbr, String language) {
+        if (!isValidNumber(seriesId) || !isValidNumber(seasonNbr) || !isValidNumber(episodeNbr)) {
+            // Invalid number passed
+            return new Episode();
+        }
+        
         StringBuilder urlString = new StringBuilder();
         try {
             urlString.append(getXmlMirror());
@@ -446,6 +431,20 @@ public class TheTVDB {
         // Force a load of the mirror information if it doesn't exist
         getMirrors();
         return bannerMirror;
+    }
+    
+    private boolean isValidNumber(String number) {
+        try {
+            int test = Integer.parseInt(number);
+            return isValidNumber(test);
+        } catch (NumberFormatException error) {
+            // Not a number
+            return false;
+        }
+    }
+    
+    private boolean isValidNumber(int number) {
+        return (number >= 0 ? true : false);
     }
     
 }

@@ -19,11 +19,13 @@ public class LogFormatter extends java.util.logging.Formatter
 {
     private static String apiKey = null;
     private static final String EOL = (String)java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
+        @Override
         public Object run() {
             return System.getProperty("line.separator");
         }
     });
 
+    @Override
     public synchronized String format(LogRecord logRecord) {
         String logMessage = logRecord.getMessage();
 

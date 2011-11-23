@@ -221,7 +221,7 @@ public class Series {
 
     @Override
     public String toString() {
-        StringBuffer series = new StringBuffer("[Series ");
+        StringBuilder series = new StringBuilder("[Series ");
 
         series.append("[id=").append(id).append("]");
         series.append("[seriesId=").append(seriesId).append("]");

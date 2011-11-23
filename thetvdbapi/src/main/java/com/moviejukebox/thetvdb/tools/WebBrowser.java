@@ -15,23 +15,24 @@ package com.moviejukebox.thetvdb.tools;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.moviejukebox.thetvdb.TheTVDB;
+import java.util.zip.GZIPInputStream;
 
 /**
  * Web browser with simple cookies support
  */
 public final class WebBrowser {
-    private static Logger logger = TheTVDB.getLogger();
-    
+
+    private static final Logger logger = TheTVDB.getLogger();
     private static Map<String, String> browserProperties = new HashMap<String, String>();
     private static Map<String, Map<String, String>> cookies;
     private static String proxyHost = null;
@@ -46,7 +47,7 @@ public final class WebBrowser {
         browserProperties.put("User-Agent", "Mozilla/5.25 Netscape/5.0 (Windows; I; Win95)");
         cookies = new HashMap<String, Map<String, String>>();
     }
-    
+
     // Hide the constructor
     protected WebBrowser() {
         // prevents calls from subclass
@@ -56,62 +57,91 @@ public final class WebBrowser {
     public static String request(String url) throws IOException {
         return request(new URL(url));
     }
-    
+
     public static URLConnection openProxiedConnection(URL url) throws IOException {
         if (proxyHost != null) {
             System.getProperties().put("proxySet", "true");
             System.getProperties().put("proxyHost", proxyHost);
             System.getProperties().put("proxyPort", proxyPort);
         }
-        
+
         URLConnection cnx = url.openConnection();
-        
+
         if (proxyUsername != null) {
             cnx.setRequestProperty("Proxy-Authorization", proxyEncodedPassword);
         }
-        
+
         return cnx;
     }
 
-    public static String request(URL url) throws IOException {
-        StringWriter content = null;
+    public static String request(URL url) {
+        StringBuilder content = new StringBuilder();
+
+        BufferedReader in = null;
+        URLConnection cnx = null;
+        InputStreamReader isr = null;
+        GZIPInputStream zis = null;
 
         try {
-            content = new StringWriter();
+            cnx = openProxiedConnection(url);
 
-            BufferedReader in = null;
-            URLConnection cnx = null;
-            try {
-                cnx = openProxiedConnection(url);
+            sendHeader(cnx);
+            readHeader(cnx);
 
-                sendHeader(cnx);
-                readHeader(cnx);
-
+            // Check the content encoding of the connection. Null content encoding is standard HTTP
+            if (cnx.getContentEncoding() == null) {
                 //in = new BufferedReader(new InputStreamReader(cnx.getInputStream(), getCharset(cnx)));
-                in = new BufferedReader(new InputStreamReader(cnx.getInputStream(), "UTF-8"));
-                String line;
-                while ((line = in.readLine()) != null) {
-                    content.write(line);
-                }
-            } finally {
-                if (in != null) {
-                    in.close();
-                }
+                isr = new InputStreamReader(cnx.getInputStream(), "UTF-8");
+            } else if (cnx.getContentEncoding().equalsIgnoreCase("gzip")) {
+                zis = new GZIPInputStream(cnx.getInputStream());
+                isr = new InputStreamReader(zis, "UTF-8");
+            } else {
+                logger.log(Level.WARNING, "Unknown content encoding {0}, aborting", cnx.getContentEncoding());
+                return "";
+            }
 
-                if (cnx != null) {
-                    if(cnx instanceof HttpURLConnection) {
-                        ((HttpURLConnection)cnx).disconnect();
-                    } else {
-                        logger.warning("Warning: Connection not closed!");
-                    }
+            in = new BufferedReader(isr);
+
+            String line;
+            while ((line = in.readLine()) != null) {
+                content.append(line);
+            }
+        } catch (Exception error) {
+            logger.log(Level.FINEST, "Error: {0}", error.getMessage());
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException ex) {
+                    logger.log(Level.FINEST, "Failed to close BufferedReader: {0}", ex.getMessage());
                 }
             }
-            return content.toString();
-        } finally {
-            if (content != null) {
-                content.close();
+            
+            if (isr != null) {
+                try {
+                    isr.close();
+                } catch (IOException ex) {
+                    logger.log(Level.FINEST, "Failed to close InputStreamReader: {0}", ex.getMessage());
+                }
+            }
+            
+            if (zis != null) {
+                try {
+                    zis.close();
+                } catch (IOException ex) {
+                    logger.log(Level.FINEST, "Failed to close GZIPInputStream: {0}", ex.getMessage());
+                }
+            }
+
+            if (cnx != null) {
+                if (cnx instanceof HttpURLConnection) {
+                    ((HttpURLConnection) cnx).disconnect();
+                } else {
+                    logger.finest("Failed to close URLConnection");
+                }
             }
         }
+        return content.toString();
     }
 
     private static void sendHeader(URLConnection cnx) {
@@ -182,32 +212,31 @@ public final class WebBrowser {
         }
     }
 
-/*
+    /*
     @SuppressWarnings("unused")
     private static Charset getCharset(URLConnection cnx) {
-        Charset charset = null;
-        // content type will be string like "text/html; charset=UTF-8" or "text/html"
-        String contentType = cnx.getContentType();
-        if (contentType != null) {
-            // changed 'charset' to 'harset' in regexp because some sites send 'Charset'
-            Matcher m = Pattern.compile("harset *=[ '\"]*([^ ;'\"]+)[ ;'\"]*").matcher(contentType);
-            if (m.find()) {
-                String encoding = m.group(1);
-                try {
-                    charset = Charset.forName(encoding);
-                } catch (UnsupportedCharsetException e) {
-                    // there will be used default charset
-                }
-            }
-        }
-        if (charset == null) {
-            charset = Charset.defaultCharset();
-        }
-        
-        return charset;
+    Charset charset = null;
+    // content type will be string like "text/html; charset=UTF-8" or "text/html"
+    String contentType = cnx.getContentType();
+    if (contentType != null) {
+    // changed 'charset' to 'harset' in regexp because some sites send 'Charset'
+    Matcher m = Pattern.compile("harset *=[ '\"]*([^ ;'\"]+)[ ;'\"]*").matcher(contentType);
+    if (m.find()) {
+    String encoding = m.group(1);
+    try {
+    charset = Charset.forName(encoding);
+    } catch (UnsupportedCharsetException e) {
+    // there will be used default charset
     }
-*/
+    }
+    }
+    if (charset == null) {
+    charset = Charset.defaultCharset();
+    }
     
+    return charset;
+    }
+     */
     public static String getProxyHost() {
         return proxyHost;
     }
@@ -238,7 +267,7 @@ public final class WebBrowser {
 
     public static void setProxyPassword(String tvdbProxyPassword) {
         WebBrowser.proxyPassword = tvdbProxyPassword;
-        
+
         if (proxyUsername != null) {
             proxyEncodedPassword = proxyUsername + ":" + tvdbProxyPassword;
             proxyEncodedPassword = Base64.base64Encode(proxyEncodedPassword);

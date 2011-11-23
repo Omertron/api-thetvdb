@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -46,7 +47,7 @@ import com.moviejukebox.thetvdb.TheTVDB;
  *
  */
 public class DOMHelper {
-    private static Logger logger = TheTVDB.getLogger();
+    private static final Logger logger = TheTVDB.getLogger();
     
     private static final String YES = "yes";
     private static final String ENCODING = "UTF-8";
@@ -181,12 +182,12 @@ public class DOMHelper {
             trans.transform(new DOMSource(doc), new StreamResult(new File(localFile)));
             return true;
         } catch (TransformerConfigurationException error) {
-            logger.warning("Error writing the document to " + localFile);
-            logger.warning("Message: " + error.getMessage());
+            logger.log(Level.WARNING, "Error writing the document to {0}", localFile);
+            logger.log(Level.WARNING, "Message: {0}", error.getMessage());
             return false;
         } catch (TransformerException error) {
-            logger.warning("Error writing the document to " + localFile);
-            logger.warning("Message: " + error.getMessage());
+            logger.log(Level.WARNING, "Error writing the document to {0}", localFile);
+            logger.log(Level.WARNING, "Message: {0}", error.getMessage());
             return false;
         }
     }

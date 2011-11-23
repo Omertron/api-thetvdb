@@ -288,7 +288,7 @@ public class Episode {
     
     @Override
     public String toString() {
-        StringBuffer sbEpisode = new StringBuffer("[Episode ");
+        StringBuilder sbEpisode = new StringBuilder("[Episode ");
         
         sbEpisode.append("[id=").append(id).append("]");
         sbEpisode.append("[combinedEpisodeNumber=").append(combinedEpisodeNumber).append("]");

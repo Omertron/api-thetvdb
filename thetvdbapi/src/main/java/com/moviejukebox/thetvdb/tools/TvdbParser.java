@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,7 +36,7 @@ import com.moviejukebox.thetvdb.model.Episode;
 import com.moviejukebox.thetvdb.model.Series;
 
 public class TvdbParser {
-    private static Logger logger = TheTVDB.getLogger();
+    private static final Logger logger = TheTVDB.getLogger();
 
     private static final String TYPE_BANNER = "banner";
     private static final String TYPE_FANART = "fanart";
@@ -127,7 +128,7 @@ public class TvdbParser {
                 }
             }
         } catch (Exception error) {
-            logger.warning("All Episodes error: " + error.getMessage());
+            logger.log(Level.WARNING, "All Episodes error: {0}", error.getMessage());
         } catch (Throwable tw) {
             // Message is passed to us
             logger.warning(tw.getMessage());
@@ -164,7 +165,7 @@ public class TvdbParser {
                 }
             }
         } catch (Exception error) {
-            logger.warning("Banners error: " + error.getMessage());
+            logger.log(Level.WARNING, "Banners error: {0}", error.getMessage());
         } catch (Throwable tw) {
             // Message is passed to us
             logger.warning(tw.getMessage());
@@ -199,7 +200,7 @@ public class TvdbParser {
                 }
             }
         } catch (Exception error) {
-            logger.warning("Series error: " + error.getMessage());
+            logger.log(Level.WARNING, "Series error: {0}", error.getMessage());
         } catch (Throwable tw) {
             // Message is passed to us
             logger.warning(tw.getMessage());
