@@ -12,14 +12,22 @@
  */
 package com.moviejukebox.thetvdb.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
  *
  * @author altman.matthew
  */
-public class Series {
+@Entity
+@Table(name = "SERIES")
+public class Series implements Serializable {
 
     private String id;
     private String seriesId;
@@ -41,182 +49,177 @@ public class Series {
     private String status;
     private String fanart;
     private String lastUpdated;
-    private String poster;    
+    private String poster;
 
+    @Id
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getSeriesId() {
-        return seriesId;
-    }
-
-    public void setSeriesId(String seriesId) {
-        this.seriesId = seriesId;
-    }
-
-    public String getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
-    }
-
-    public String getSeriesName() {
-        return seriesName;
-    }
-
-    public void setSeriesName(String seriesName) {
-        this.seriesName = seriesName;
-    }
-
-    public String getBanner() {
-        return banner;
-    }
-
-    public void setBanner(String banner) {
-        this.banner = banner;
-    }
-
-    public String getOverview() {
-        return overview;
-    }
-
-    public void setOverview(String overview) {
-        this.overview = overview;
-    }
-
-    public String getFirstAired() {
-        return firstAired;
-    }
-
-    public void setFirstAired(String firstAired) {
-        this.firstAired = firstAired;
-    }
-
-    public String getImdbId() {
-        return imdbId;
-    }
-
-    public void setImdbId(String imdbId) {
-        this.imdbId = imdbId;
-    }
-
-    public String getZap2ItId() {
-        return zap2ItId;
-    }
-
-    public void setZap2ItId(String zap2ItId) {
-        this.zap2ItId = zap2ItId;
-    }
-
+    @ElementCollection
     public List<String> getActors() {
         return actors;
-    }
-
-    public void setActors(List<String> actors) {
-        this.actors = actors;
-    }
-    
-    public void addActor(String actor) {
-        this.actors.add(actor);
     }
 
     public String getAirsDayOfWeek() {
         return airsDayOfWeek;
     }
 
-    public void setAirsDayOfWeek(String airsDayOfWeek) {
-        this.airsDayOfWeek = airsDayOfWeek;
-    }
-
     public String getAirsTime() {
         return airsTime;
     }
 
-    public void setAirsTime(String airsTime) {
-        this.airsTime = airsTime;
+    public String getBanner() {
+        return banner;
     }
 
     public String getContentRating() {
         return contentRating;
     }
 
-    public void setContentRating(String contentRating) {
-        this.contentRating = contentRating;
-    }
-
-    public List<String> getGenres() {
-        return genres;
-    }
-
-    public void setGenres(List<String> genres) {
-        this.genres = genres;
-    }
-    
-    public void addGenre(String genre) {
-        this.genres.add(genre);
-    }
-
-    public String getNetwork() {
-        return network;
-    }
-
-    public void setNetwork(String network) {
-        this.network = network;
-    }
-
-    public String getRating() {
-        return rating;
-    }
-
-    public void setRating(String rating) {
-        this.rating = rating;
-    }
-
-    public String getRuntime() {
-        return runtime;
-    }
-
-    public void setRuntime(String runtime) {
-        this.runtime = runtime;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String getFanart() {
         return fanart;
     }
 
-    public void setFanart(String fanart) {
-        this.fanart = fanart;
+    public String getFirstAired() {
+        return firstAired;
+    }
+
+    @ElementCollection
+    public List<String> getGenres() {
+        return genres;
+    }
+
+    public String getImdbId() {
+        return imdbId;
+    }
+
+    public String getLanguage() {
+        return language;
     }
 
     public String getLastUpdated() {
         return lastUpdated;
     }
 
-    public void setLastUpdated(String lastUpdated) {
-        this.lastUpdated = lastUpdated;
+    public String getNetwork() {
+        return network;
+    }
+
+    public String getOverview() {
+        return overview;
     }
 
     public String getPoster() {
         return poster;
     }
 
+    public String getRating() {
+        return rating;
+    }
+
+    public String getRuntime() {
+        return runtime;
+    }
+
+    public String getSeriesId() {
+        return seriesId;
+    }
+
+    public String getSeriesName() {
+        return seriesName;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getZap2ItId() {
+        return zap2ItId;
+    }
+
+    public void setActors(List<String> actors) {
+        this.actors = actors;
+    }
+
+    public void setAirsDayOfWeek(String airsDayOfWeek) {
+        this.airsDayOfWeek = airsDayOfWeek;
+    }
+
+    public void setAirsTime(String airsTime) {
+        this.airsTime = airsTime;
+    }
+
+    public void setBanner(String banner) {
+        this.banner = banner;
+    }
+
+    public void setContentRating(String contentRating) {
+        this.contentRating = contentRating;
+    }
+
+    public void setFanart(String fanart) {
+        this.fanart = fanart;
+    }
+
+    public void setFirstAired(String firstAired) {
+        this.firstAired = firstAired;
+    }
+
+    public void setGenres(List<String> genres) {
+        this.genres = genres;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setImdbId(String imdbId) {
+        this.imdbId = imdbId;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public void setLastUpdated(String lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
+    public void setNetwork(String network) {
+        this.network = network;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
+    }
+
     public void setPoster(String poster) {
         this.poster = poster;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    public void setRuntime(String runtime) {
+        this.runtime = runtime;
+    }
+
+    public void setSeriesId(String seriesId) {
+        this.seriesId = seriesId;
+    }
+
+    public void setSeriesName(String seriesName) {
+        this.seriesName = seriesName;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setZap2ItId(String zap2ItId) {
+        this.zap2ItId = zap2ItId;
     }
 
     @Override
@@ -243,7 +246,7 @@ public class Series {
         series.append("[status=").append(status).append("]");
         series.append("[fanart=").append(fanart).append("]");
         series.append("[lastUpdated=").append(lastUpdated).append("]");
-        series.append("[poster").append(poster).append("]");    
+        series.append("[poster").append(poster).append("]");
 
         series.append("]");
         return series.toString();

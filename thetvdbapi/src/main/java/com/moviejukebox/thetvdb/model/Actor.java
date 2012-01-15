@@ -12,25 +12,56 @@
  */
 package com.moviejukebox.thetvdb.model;
 
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  *
  * @author matthew.altman
  */
-public class Actor implements Comparable<Actor> {
+@Entity
+@Table(name = "ACTOR")
+public class Actor implements Comparable<Actor>, Serializable {
+
     private int id;
     private String name;
     private String role;
     private String image;
     private int sortOrder = 0;
-    
+
+    @Id
+    @Column(name = "ACTOR_ID")
     public int getId() {
         return id;
     }
-    
+
+    @Column(name = "NAME")
+    public String getName() {
+        return name;
+    }
+
+    @Column(name = "ACTOR_ROLE")
+    public String getRole() {
+        return role;
+    }
+
+    @Column(name = "IMAGE_URL")
+    public String getImage() {
+        return image;
+    }
+
+    @Column(name = "SORT_ORDER")
+    public int getSortOrder() {
+        return sortOrder;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
-    
+
     public void setId(String id) {
         try {
             this.id = Integer.parseInt(id);
@@ -38,39 +69,23 @@ public class Actor implements Comparable<Actor> {
             this.id = 0;
         }
     }
-    
-    public String getName() {
-        return name;
-    }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getRole() {
-        return role;
     }
 
     public void setRole(String role) {
         this.role = role;
     }
 
-    public String getImage() {
-        return image;
-    }
-
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public int getSortOrder() {
-        return sortOrder;
     }
 
     public void setSortOrder(int sortOrder) {
         this.sortOrder = sortOrder;
     }
-    
+
     public void setSortOrder(String sortOrder) {
         try {
             this.sortOrder = Integer.parseInt(sortOrder);
@@ -113,21 +128,21 @@ public class Actor implements Comparable<Actor> {
         if (this == obj) {
             return true;
         }
-        
+
         if (obj == null) {
             return false;
         }
-        
+
         if (!(obj instanceof Actor)) {
             return false;
         }
-        
-        Actor other = (Actor)obj;
-        
+
+        Actor other = (Actor) obj;
+
         if (id != other.id) {
             return false;
         }
-        
+
         if (name == null) {
             if (other.name != null) {
                 return false;
@@ -135,7 +150,7 @@ public class Actor implements Comparable<Actor> {
         } else if (!name.equals(other.name)) {
             return false;
         }
-        
+
         if (role == null) {
             if (other.role != null) {
                 return false;
@@ -143,7 +158,7 @@ public class Actor implements Comparable<Actor> {
         } else if (!role.equals(other.role)) {
             return false;
         }
-        
+
         return true;
     }
 }
