@@ -1,14 +1,14 @@
 /*
  *      Copyright (c) 2004-2012 YAMJ Members
- *      http://code.google.com/p/moviejukebox/people/list 
- *  
+ *      http://code.google.com/p/moviejukebox/people/list
+ *
  *      Web: http://code.google.com/p/moviejukebox/
- *  
+ *
  *      This software is licensed under a Creative Commons License
  *      See this page: http://code.google.com/p/moviejukebox/wiki/License
- *  
- *      For any reuse or distribution, you must make clear to others the 
- *      license terms of this work.  
+ *
+ *      For any reuse or distribution, you must make clear to others the
+ *      license terms of this work.
  */
 package com.moviejukebox.thetvdb.tools;
 
@@ -36,18 +36,16 @@ import com.moviejukebox.thetvdb.model.Episode;
 import com.moviejukebox.thetvdb.model.Series;
 
 public class TvdbParser {
-    private static final Logger logger = TheTVDB.getLogger();
 
+    private static final Logger logger = TheTVDB.getLogger();
     private static final String TYPE_BANNER = "banner";
     private static final String TYPE_FANART = "fanart";
     private static final String TYPE_POSTER = "poster";
-    
     private static final String BANNER_PATH = "BannerPath";
     private static final String VIGNETTE_PATH = "VignettePath";
     private static final String THUMBNAIL_PATH = "ThumbnailPath";
-
     private static final int MAX_EPISODE = 24;  // The anticipated largest episode number
-    
+
     // Hide the constructor
     protected TvdbParser() {
         // prevents calls from subclass
@@ -66,7 +64,7 @@ public class TvdbParser {
         NodeList nlActor;
         Node nActor;
         Element eActor;
-        
+
         try {
             doc = DOMHelper.getEventDocFromUrl(urlString);
         } catch (Throwable tw) {
@@ -74,36 +72,36 @@ public class TvdbParser {
         }
 
         nlActor = doc.getElementsByTagName("Actor");
-        
+
         for (int loop = 0; loop < nlActor.getLength(); loop++) {
             nActor = nlActor.item(loop);
-            
+
             if (nActor.getNodeType() == Node.ELEMENT_NODE) {
                 eActor = (Element) nActor;
                 actor = new Actor();
-            
+
                 actor.setId(DOMHelper.getValueFromElement(eActor, "id"));
                 String image = DOMHelper.getValueFromElement(eActor, "Image");
                 if (!image.isEmpty()) {
-                    actor.setImage(TheTVDB.getBannerMirror() + image);                    
+                    actor.setImage(TheTVDB.getMirror() + image);
                 }
                 actor.setName(DOMHelper.getValueFromElement(eActor, "Name"));
                 actor.setRole(DOMHelper.getValueFromElement(eActor, "Role"));
                 actor.setSortOrder(DOMHelper.getValueFromElement(eActor, "SortOrder"));
-                
+
                 results.add(actor);
             }
         }
 
         Collections.sort(results);
-        
+
         return results;
     }
-    
+
     /**
      * Get all the episodes from the URL
      * @param urlString
-     * @param season 
+     * @param season
      * @return
      */
     public static List<Episode> getAllEpisodes(String urlString, int season) {
@@ -112,7 +110,7 @@ public class TvdbParser {
         NodeList nlEpisode;
         Node nEpisode;
         Element eEpisode;
-        
+
         try {
             Document doc = DOMHelper.getEventDocFromUrl(urlString);
             nlEpisode = doc.getElementsByTagName("Episode");
@@ -121,7 +119,7 @@ public class TvdbParser {
                 if (nEpisode.getNodeType() == Node.ELEMENT_NODE) {
                     eEpisode = (Element) nEpisode;
                     episode = parseNextEpisode(eEpisode);
-                    if ((episode != null) &&  (season == -1 || episode.getSeasonNumber() == season)) {
+                    if ((episode != null) && (season == -1 || episode.getSeasonNumber() == season)) {
                         // Add the episode only if the season is -1 (all seasons) or matches the season
                         episodeList.add(episode);
                     }
@@ -133,7 +131,7 @@ public class TvdbParser {
             // Message is passed to us
             logger.warning(tw.getMessage());
         }
-        
+
         return episodeList;
     }
 
@@ -145,14 +143,14 @@ public class TvdbParser {
     public static Banners getBanners(String urlString) {
         Banners banners = new Banners();
         Banner banner = null;
-        
+
         NodeList nlBanners;
         Node nBanner;
         Element eBanner;
-        
+
         try {
             Document doc = DOMHelper.getEventDocFromUrl(urlString);
-            
+
             nlBanners = doc.getElementsByTagName("Banner");
             for (int loop = 0; loop < nlBanners.getLength(); loop++) {
                 nBanner = nlBanners.item(loop);
@@ -170,7 +168,7 @@ public class TvdbParser {
             // Message is passed to us
             logger.warning(tw.getMessage());
         }
-        
+
         return banners;
     }
 
@@ -184,7 +182,7 @@ public class TvdbParser {
         NodeList nlEpisode;
         Node nEpisode;
         Element eEpisode;
-        
+
         try {
             Document doc = DOMHelper.getEventDocFromUrl(urlString);
             nlEpisode = doc.getElementsByTagName("Episode");
@@ -205,7 +203,7 @@ public class TvdbParser {
             // Message is passed to us
             logger.warning(tw.getMessage());
         }
-        
+
         return episode;
 
     }
@@ -221,15 +219,15 @@ public class TvdbParser {
         NodeList nlSeries;
         Node nSeries;
         Element eSeries;
-        
+
         Document doc = null;
-        
+
         try {
             doc = DOMHelper.getEventDocFromUrl(urlString);
         } catch (Throwable tw) {
             return seriesList;
         }
-        
+
         nlSeries = doc.getElementsByTagName("Series");
         for (int loop = 0; loop < nlSeries.getLength(); loop++) {
             nSeries = nlSeries.item(loop);
@@ -241,7 +239,7 @@ public class TvdbParser {
                 }
             }
         }
-        
+
         return seriesList;
     }
 
@@ -252,21 +250,21 @@ public class TvdbParser {
      */
     public static String parseErrorMessage(String errorMessage) {
         StringBuilder response = new StringBuilder();
-        
+
         Pattern pattern = Pattern.compile(".*?/series/(\\d*?)/default/(\\d*?)/(\\d*?)/.*?");
         Matcher matcher = pattern.matcher(errorMessage);
-        
+
         // See if the error message matches the pattern and therefore we can decode it
         if (matcher.find() && matcher.groupCount() == 3) {
             int seriesId = Integer.parseInt(matcher.group(1));
             int seasonId = Integer.parseInt(matcher.group(2));
             int episodeId = Integer.parseInt(matcher.group(3));
-            
+
             response.append("Series Id: ").append(seriesId);
             response.append(", Season: ").append(seasonId);
             response.append(", Episode: ").append(episodeId);
             response.append(": ");
-            
+
             if (episodeId == 0) {
                 // We should probably try an scrape season 0/episode 1
                 response.append("Episode seems to be a misnamed pilot episode.");
@@ -287,7 +285,7 @@ public class TvdbParser {
                 response.append("Episode error: ").append(errorMessage);
             }
         }
-        
+
         return response.toString();
     }
 
@@ -299,7 +297,7 @@ public class TvdbParser {
      */
     private static List<String> parseList(String input, String delim) {
         List<String> result = new ArrayList<String>();
-        
+
         StringTokenizer st = new StringTokenizer(input, delim);
         while (st.hasMoreTokens()) {
             String token = st.nextToken().trim();
@@ -307,49 +305,49 @@ public class TvdbParser {
                 result.add(token);
             }
         }
-        
+
         return result;
     }
-    
+
     /**
      * Parse the banner record from the document
      * @param eBanner
      * @return
      * @throws Throwable
      */
-    private static Banner parseNextBanner(Element eBanner) throws Throwable {
-        String bannerMirror = TheTVDB.getBannerMirror();
+    private static Banner parseNextBanner(Element eBanner) {
+        String bannerMirror = TheTVDB.getMirror();
         Banner banner = new Banner();
         String artwork;
-        
+
         artwork = DOMHelper.getValueFromElement(eBanner, BANNER_PATH);
         if (!artwork.isEmpty()) {
             banner.setUrl(bannerMirror + artwork);
         }
-        
+
         artwork = DOMHelper.getValueFromElement(eBanner, VIGNETTE_PATH);
         if (!artwork.isEmpty()) {
             banner.setVignette(bannerMirror + artwork);
         }
-        
+
         artwork = DOMHelper.getValueFromElement(eBanner, THUMBNAIL_PATH);
         if (!artwork.isEmpty()) {
             banner.setThumb(bannerMirror + artwork);
         }
-        
+
         banner.setId(DOMHelper.getValueFromElement(eBanner, "id"));
         banner.setBannerType(BannerListType.fromString(DOMHelper.getValueFromElement(eBanner, "BannerType")));
         banner.setBannerType2(BannerType.fromString(DOMHelper.getValueFromElement(eBanner, "BannerType2")));
         banner.setLanguage(DOMHelper.getValueFromElement(eBanner, "Language"));
         banner.setSeason(DOMHelper.getValueFromElement(eBanner, "Season"));
         banner.setColours(DOMHelper.getValueFromElement(eBanner, "Colors"));
-        
+
         try {
             banner.setSeriesName(Boolean.parseBoolean(DOMHelper.getValueFromElement(eBanner, "SeriesName")));
         } catch (Exception error) {
             banner.setSeriesName(false);
         }
-        
+
         return banner;
     }
 
@@ -357,11 +355,11 @@ public class TvdbParser {
      * Parse the document for episode information
      * @param doc
      * @return
-     * @throws Throwable 
+     * @throws Throwable
      */
-    private static Episode parseNextEpisode(Element eEpisode) throws Throwable {
+    private static Episode parseNextEpisode(Element eEpisode) {
         Episode episode = new Episode();
-        
+
         episode.setId(DOMHelper.getValueFromElement(eEpisode, "id"));
         episode.setCombinedEpisodeNumber(DOMHelper.getValueFromElement(eEpisode, "Combined_episodenumber"));
         episode.setCombinedSeason(DOMHelper.getValueFromElement(eEpisode, "Combined_season"));
@@ -393,7 +391,7 @@ public class TvdbParser {
         episode.setAbsoluteNumber(DOMHelper.getValueFromElement(eEpisode, "absolute_number"));
         String s = DOMHelper.getValueFromElement(eEpisode, "filename");
         if (!s.isEmpty()) {
-            episode.setFilename(TheTVDB.getBannerMirror() + s);
+            episode.setFilename(TheTVDB.getMirror() + s);
         }
         episode.setLastUpdated(DOMHelper.getValueFromElement(eEpisode, "lastupdated"));
         episode.setSeasonId(DOMHelper.getValueFromElement(eEpisode, "seasonid"));
@@ -404,7 +402,7 @@ public class TvdbParser {
         } catch (Exception ignore) {
             episode.setAirsAfterSeason(0);
         }
-        
+
         try {
             episode.setAirsBeforeEpisode(Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, "airsbefore_episode")));
         } catch (Exception ignore) {
@@ -416,7 +414,7 @@ public class TvdbParser {
         } catch (Exception ignore) {
             episode.setAirsBeforeSeason(0);
         }
-        
+
         return episode;
     }
 
@@ -427,12 +425,12 @@ public class TvdbParser {
      * @throws Throwable
      */
     private static Series parseNextSeries(Element eSeries) {
-        String bannerMirror = TheTVDB.getBannerMirror();
-        
+        String bannerMirror = TheTVDB.getMirror();
+
         Series series = new Series();
-        
+
         series.setId(DOMHelper.getValueFromElement(eSeries, "id"));
-        series.setActors(parseList(DOMHelper.getValueFromElement(eSeries, "Actors"),"|,"));
+        series.setActors(parseList(DOMHelper.getValueFromElement(eSeries, "Actors"), "|,"));
         series.setAirsDayOfWeek(DOMHelper.getValueFromElement(eSeries, "Airs_DayOfWeek"));
         series.setAirsTime(DOMHelper.getValueFromElement(eSeries, "Airs_Time"));
         series.setContentRating(DOMHelper.getValueFromElement(eSeries, "ContentRating"));
@@ -447,22 +445,22 @@ public class TvdbParser {
         series.setSeriesId(DOMHelper.getValueFromElement(eSeries, "SeriesID"));
         series.setSeriesName(DOMHelper.getValueFromElement(eSeries, "SeriesName"));
         series.setStatus(DOMHelper.getValueFromElement(eSeries, "Status"));
-        
+
         String artwork = DOMHelper.getValueFromElement(eSeries, TYPE_BANNER);
         if (!artwork.isEmpty()) {
             series.setBanner(bannerMirror + artwork);
         }
-        
+
         artwork = DOMHelper.getValueFromElement(eSeries, TYPE_FANART);
         if (!artwork.isEmpty()) {
             series.setFanart(bannerMirror + artwork);
         }
-        
+
         artwork = DOMHelper.getValueFromElement(eSeries, TYPE_POSTER);
         if (!artwork.isEmpty()) {
             series.setPoster(bannerMirror + artwork);
         }
-                
+
         series.setLastUpdated(DOMHelper.getValueFromElement(eSeries, "lastupdated"));
         series.setZap2ItId(DOMHelper.getValueFromElement(eSeries, "zap2it_id"));
 

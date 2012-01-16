@@ -1,14 +1,14 @@
 /*
  *      Copyright (c) 2004-2012 YAMJ Members
- *      http://code.google.com/p/moviejukebox/people/list 
- *  
+ *      http://code.google.com/p/moviejukebox/people/list
+ *
  *      Web: http://code.google.com/p/moviejukebox/
- *  
+ *
  *      This software is licensed under a Creative Commons License
  *      See this page: http://code.google.com/p/moviejukebox/wiki/License
- *  
- *      For any reuse or distribution, you must make clear to others the 
- *      license terms of this work.  
+ *
+ *      For any reuse or distribution, you must make clear to others the
+ *      license terms of this work.
  */
 package com.moviejukebox.thetvdb;
 
@@ -27,11 +27,11 @@ import java.util.logging.Logger;
 import com.moviejukebox.thetvdb.model.Actor;
 import com.moviejukebox.thetvdb.model.Banners;
 import com.moviejukebox.thetvdb.model.Episode;
-import com.moviejukebox.thetvdb.model.Mirrors;
 import com.moviejukebox.thetvdb.model.Series;
 import com.moviejukebox.thetvdb.tools.LogFormatter;
 import com.moviejukebox.thetvdb.tools.TvdbParser;
 import com.moviejukebox.thetvdb.tools.WebBrowser;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author altman.matthew
@@ -39,24 +39,31 @@ import com.moviejukebox.thetvdb.tools.WebBrowser;
  */
 public class TheTVDB {
     private static String apiKey = null;
-    private static String xmlMirror = null;
-    private static String bannerMirror = null;
-    
+    private static final String MIRROR_URL = "http://thetvdb.com";
+
     private static final Logger logger = Logger.getLogger("TheTVDB");
     private static LogFormatter logFormatter = new LogFormatter();
     private static ConsoleHandler logConsoleHandler = new ConsoleHandler();
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-    
+
     private static final String XML_EXTENSION = ".xml";
     private static final String SERIES_URL = "/series/";
     private static final String ALL_URL = "/all/";
-    
+
+    /**
+     * Return the mirror URL
+     * @return
+     */
+    public static String getMirror() {
+        return MIRROR_URL;
+    }
+
     public TheTVDB(String apiKey) {
         if (apiKey == null) {
             return;
         }
-        
+
         logConsoleHandler.setFormatter(logFormatter);
         logConsoleHandler.setLevel(Level.FINE);
         logger.addHandler(logConsoleHandler);
@@ -65,7 +72,7 @@ public class TheTVDB {
 
         TheTVDB.apiKey = apiKey;
         logFormatter.addApiKey(apiKey);
-        
+
         // Mirror information is called for when the get??Mirror calls are used
     }
 
@@ -77,37 +84,6 @@ public class TheTVDB {
         return logger;
     }
 
-    /**
-     * Get the mirror information from TheTVDb
-     * @return True if everything is OK, false otherwise.
-     */
-    private static void getMirrors() {
-        // If we don't need to get the mirrors, then just return
-        if (xmlMirror != null && bannerMirror != null) {
-            return;
-        }
-        
-        Mirrors mirrors = new Mirrors(apiKey);
-        xmlMirror = mirrors.getMirror(Mirrors.TYPE_XML);
-        bannerMirror = mirrors.getMirror(Mirrors.TYPE_BANNER);
-        
-        if (xmlMirror == null) {
-            throw new RuntimeException("There is a problem getting the xmlMirror data from TheTVDB, this means it is likely to be down.");
-        } else {
-            xmlMirror += "/api/";
-        }
-        
-        if (bannerMirror == null) {
-            throw new RuntimeException("There is a problem getting the bannerMirror data from TheTVDB, this means it is likely to be down.");
-        } else {
-            bannerMirror += "/banners/";
-        }
-        
-        //zipMirror = mirrors.getMirror(Mirrors.TYPE_ZIP);
-        
-        return;
-    }
-    
     /**
      * Set the web browser proxy information
      * @param host
@@ -121,7 +97,7 @@ public class TheTVDB {
         WebBrowser.setProxyUsername(username);
         WebBrowser.setProxyPassword(password);
     }
-    
+
     /**
      * Set the web browser timeout settings
      * @param webTimeoutConnect
@@ -131,7 +107,7 @@ public class TheTVDB {
         WebBrowser.setWebTimeoutConnect(webTimeoutConnect);
         WebBrowser.setWebTimeoutRead(webTimeoutRead);
     }
-    
+
     /**
      * Get the series information
      * @param id
@@ -141,7 +117,7 @@ public class TheTVDB {
     public Series getSeries(String id, String language) {
         StringBuilder urlString = new StringBuilder();
         try {
-            urlString.append(getXmlMirror());
+            urlString.append(MIRROR_URL);
             urlString.append(apiKey);
             urlString.append(SERIES_URL);
             urlString.append(id);
@@ -153,7 +129,7 @@ public class TheTVDB {
             logger.severe(tw.getMessage());
             return null;
         }
-        
+
         List<Series> seriesList = TvdbParser.getSeriesList(urlString.toString());
         if (seriesList.isEmpty()) {
             return null;
@@ -161,7 +137,7 @@ public class TheTVDB {
             return seriesList.get(0);
         }
     }
-    
+
     /**
      * Get all the episodes for a series.
      * Note: This could be a lot of records
@@ -171,13 +147,12 @@ public class TheTVDB {
      */
     public List<Episode> getAllEpisodes(String id, String language) {
         if (!isValidNumber(id)) {
-            System.out.println("Invalid number: " + id);    // XXX DEBUG
             return new ArrayList<Episode>();
         }
-        
+
         StringBuilder urlString = new StringBuilder();
         try {
-            urlString.append(getXmlMirror());
+            urlString.append(MIRROR_URL);
             urlString.append(apiKey);
             urlString.append(SERIES_URL);
             urlString.append(id);
@@ -189,7 +164,7 @@ public class TheTVDB {
             logger.severe(tw.getMessage());
             return null;
         }
-        
+
         List<Episode> episodeList = TvdbParser.getAllEpisodes(urlString.toString(), -1);
         if (episodeList.isEmpty()) {
             return null;
@@ -197,7 +172,7 @@ public class TheTVDB {
             return episodeList;
         }
     }
-    
+
     /**
      * Get all the episodes from a specific season for a series.
      * Note: This could be a lot of records
@@ -209,7 +184,7 @@ public class TheTVDB {
     public List<Episode> getSeasonEpisodes(String id, int season, String language) {
         StringBuilder urlString = new StringBuilder();
         try {
-            urlString.append(getXmlMirror());
+            urlString.append(MIRROR_URL);
             urlString.append(apiKey);
             urlString.append(SERIES_URL);
             urlString.append(id);
@@ -221,7 +196,7 @@ public class TheTVDB {
             logger.severe(tw.getMessage());
             return null;
         }
-        
+
         List<Episode> episodeList = TvdbParser.getAllEpisodes(urlString.toString(), season);
         if (episodeList.isEmpty()) {
             return null;
@@ -229,7 +204,7 @@ public class TheTVDB {
             return episodeList;
         }
     }
-    
+
     /**
      * Get a specific episode's information
      * @param seriesId
@@ -243,10 +218,10 @@ public class TheTVDB {
             // Invalid number passed
             return new Episode();
         }
-        
+
         StringBuilder urlString = new StringBuilder();
         try {
-            urlString.append(getXmlMirror());
+            urlString.append(MIRROR_URL);
             urlString.append(apiKey);
             urlString.append(SERIES_URL);
             urlString.append(seriesId);
@@ -277,7 +252,7 @@ public class TheTVDB {
     public Episode getDVDEpisode(String seriesId, int seasonNbr, int episodeNbr, String language) {
         StringBuilder urlString = new StringBuilder();
         try {
-            urlString.append(getXmlMirror());
+            urlString.append(MIRROR_URL);
             urlString.append(apiKey);
             urlString.append(SERIES_URL);
             urlString.append(seriesId);
@@ -296,7 +271,7 @@ public class TheTVDB {
 
         return TvdbParser.getEpisode(urlString.toString());
     }
-    
+
     /**
      * Get a specific absolute episode's information
      * @param seriesId
@@ -308,7 +283,7 @@ public class TheTVDB {
     public Episode getAbsoluteEpisode(String seriesId, int episodeNbr, String language) {
         StringBuilder urlString = new StringBuilder();
         try {
-            urlString.append(getXmlMirror());
+            urlString.append(MIRROR_URL);
             urlString.append(apiKey);
             urlString.append(SERIES_URL);
             urlString.append(seriesId);
@@ -327,7 +302,7 @@ public class TheTVDB {
     }
 
     /**
-     * Get a list of banners for the series id 
+     * Get a list of banners for the series id
      * @param id
      * @return
      */
@@ -337,13 +312,13 @@ public class TheTVDB {
         Episode episode = getEpisode(id, seasonNbr, 1, language);
         if ( (episode != null)  && ((episode.getFirstAired() != null && !episode.getFirstAired().isEmpty())) ) {
             Date date;
-            
+
             try {
                 date = DATE_FORMAT.parse(episode.getFirstAired());
             } catch (ParseException error) {
                 date = null;
             }
-            
+
             if (date != null) {
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(date);
@@ -357,7 +332,7 @@ public class TheTVDB {
     public Banners getBanners(String seriesId) {
         StringBuilder urlString = new StringBuilder();
         try {
-            urlString.append(getXmlMirror());
+            urlString.append(MIRROR_URL);
             urlString.append(apiKey);
             urlString.append(SERIES_URL);
             urlString.append(seriesId);
@@ -369,7 +344,7 @@ public class TheTVDB {
 
         return TvdbParser.getBanners(urlString.toString());
     }
-    
+
     /**
      * Get a list of actors from the series id
      * @param SeriesId
@@ -378,7 +353,7 @@ public class TheTVDB {
     public List<Actor> getActors(String seriesId) {
         StringBuilder urlString = new StringBuilder();
         try {
-            urlString.append(getXmlMirror());
+            urlString.append(MIRROR_URL);
             urlString.append(apiKey);
             urlString.append(SERIES_URL);
             urlString.append(seriesId);
@@ -389,12 +364,12 @@ public class TheTVDB {
         }
         return TvdbParser.getActors(urlString.toString());
     }
-    
+
     public List<Series> searchSeries(String title, String language) {
         StringBuilder urlString = new StringBuilder();
-        
+
         try {
-            urlString.append(getXmlMirror());
+            urlString.append(MIRROR_URL);
             urlString.append("GetSeries.php?seriesname=");
             urlString.append(URLEncoder.encode(title, "UTF-8"));
             if (language != null) {
@@ -407,44 +382,16 @@ public class TheTVDB {
             logger.severe(tw.getMessage());
             return new ArrayList<Series>();
         }
-        
+
         return TvdbParser.getSeriesList(urlString.toString());
     }
-    
-    /**
-     * Get the XML Mirror URL
-     * @return
-     * @throws Throwable 
-     */
-    public static String getXmlMirror() throws Throwable {
-        // Force a load of the mirror information if it doesn't exist
-        getMirrors();
-        return xmlMirror;
-    }
-    
-    /**
-     * Get the Banner Mirror URL
-     * @return
-     * @throws Throwable 
-     */
-    public static String getBannerMirror() {
-        // Force a load of the mirror information if it doesn't exist
-        getMirrors();
-        return bannerMirror;
-    }
-    
+
     private boolean isValidNumber(String number) {
-        try {
-            int test = Integer.parseInt(number);
-            return isValidNumber(test);
-        } catch (NumberFormatException error) {
-            // Not a number
-            return false;
-        }
+        return StringUtils.isNumeric(number);
     }
-    
+
     private boolean isValidNumber(int number) {
         return (number >= 0 ? true : false);
     }
-    
+
 }

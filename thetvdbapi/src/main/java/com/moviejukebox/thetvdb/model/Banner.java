@@ -1,14 +1,14 @@
 /*
  *      Copyright (c) 2004-2012 YAMJ Members
- *      http://code.google.com/p/moviejukebox/people/list 
- *  
+ *      http://code.google.com/p/moviejukebox/people/list
+ *
  *      Web: http://code.google.com/p/moviejukebox/
- *  
+ *
  *      This software is licensed under a Creative Commons License
  *      See this page: http://code.google.com/p/moviejukebox/wiki/License
- *  
- *      For any reuse or distribution, you must make clear to others the 
- *      license terms of this work.  
+ *
+ *      For any reuse or distribution, you must make clear to others the
+ *      license terms of this work.
  */
 package com.moviejukebox.thetvdb.model;
 
@@ -26,6 +26,7 @@ import javax.persistence.Table;
 @Table(name = "BANNER")
 public class Banner implements Serializable {
 
+    private static final long serialVersionUID = 1L; // Default serial UID
     private int id;
     private String url;
     private BannerListType bannerType;
@@ -73,17 +74,17 @@ public class Banner implements Serializable {
         return seriesName;
     }
 
-    @Column(name="THUMB")
+    @Column(name = "THUMB")
     public String getThumb() {
         return thumb;
     }
 
-    @Column(name="BANNER_URL")
+    @Column(name = "BANNER_URL")
     public String getUrl() {
         return url;
     }
 
-    @Column(name="VIGNETTE")
+    @Column(name = "VIGNETTE")
     public String getVignette() {
         return vignette;
     }

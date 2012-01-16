@@ -1,14 +1,14 @@
 /*
  *      Copyright (c) 2004-2012 YAMJ Members
- *      http://code.google.com/p/moviejukebox/people/list 
- *  
+ *      http://code.google.com/p/moviejukebox/people/list
+ *
  *      Web: http://code.google.com/p/moviejukebox/
- *  
+ *
  *      This software is licensed under a Creative Commons License
  *      See this page: http://code.google.com/p/moviejukebox/wiki/License
- *  
- *      For any reuse or distribution, you must make clear to others the 
- *      license terms of this work.  
+ *
+ *      For any reuse or distribution, you must make clear to others the
+ *      license terms of this work.
  */
 package com.moviejukebox.thetvdb.tools;
 
@@ -40,6 +40,8 @@ import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
 import com.moviejukebox.thetvdb.TheTVDB;
+import javax.xml.ws.WebServiceException;
+import org.w3c.dom.DOMException;
 
 /**
  * Generic set of routines to process the DOM model data
@@ -48,7 +50,7 @@ import com.moviejukebox.thetvdb.TheTVDB;
  */
 public class DOMHelper {
     private static final Logger logger = TheTVDB.getLogger();
-    
+
     private static final String YES = "yes";
     private static final String ENCODING = "UTF-8";
     private static final int RETRY_COUNT = 5;
@@ -82,20 +84,19 @@ public class DOMHelper {
      * Get a DOM document from the supplied URL
      * @param url
      * @return
-     * @throws Exception 
+     * @throws Exception
      */
     public static synchronized Document getEventDocFromUrl(String url) {
         String webPage = null;
         InputStream in = null;
         int retryCount = 0;     // Count the number of times we download the web page
         boolean valid = false;  // Is the web page valid
-        
+
         try {
             while (!valid && (retryCount < RETRY_COUNT)) {
                 retryCount++;
-//                logger.fine("Try #" + retryCount + " for " + url);  // XXX DEBUG
                 webPage = WebBrowser.request(url);
-                
+
                 // See if the ID is null
                 if (!webPage.contains("<id>") || webPage.contains("<id></id>")) {
                     // Wait an increasing amount of time the more retries that happen
@@ -108,18 +109,18 @@ public class DOMHelper {
 
             // Couldn't get a valid webPage so, quit.
             if (!valid) {
-                throw new RuntimeException("Failed to download data from " + url);
+                throw new WebServiceException("Failed to download data from " + url);
             }
-            
+
             in = new ByteArrayInputStream(webPage.getBytes(ENCODING));
         } catch (UnsupportedEncodingException error) {
-            throw new RuntimeException("Unable to encode URL: " + url, error);
+            throw new WebServiceException("Unable to encode URL: " + url, error);
         } catch (IOException error) {
-            throw new RuntimeException("Unable to download URL: " + url, error);
+            throw new WebServiceException("Unable to download URL: " + url, error);
         }
-        
+
         Document doc = null;
-        
+
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
@@ -127,11 +128,11 @@ public class DOMHelper {
             doc = db.parse(in);
             doc.getDocumentElement().normalize();
         } catch (ParserConfigurationException error) {
-            throw new RuntimeException("Unable to parse TheTVDb response, please try again later.", error);
+            throw new WebServiceException("Unable to parse TheTVDb response, please try again later.", error);
         } catch (SAXException error) {
-            throw new RuntimeException("Unable to parse TheTVDb response, please try again later.", error);
+            throw new WebServiceException("Unable to parse TheTVDb response, please try again later.", error);
         } catch (IOException error) {
-            throw new RuntimeException("Unable to parse TheTVDb response, please try again later.", error);
+            throw new WebServiceException("Unable to parse TheTVDb response, please try again later.", error);
         } finally {
             if (in != null) {
                 try {
@@ -142,7 +143,7 @@ public class DOMHelper {
                 }
             }
         }
-        
+
         return doc;
     }
 
@@ -164,9 +165,9 @@ public class DOMHelper {
         StreamResult result = new StreamResult(sw);
         DOMSource source = new DOMSource(doc);
         trans.transform(source, result);
-        return sw.toString();    
+        return sw.toString();
     }
-    
+
     /**
      * Write the Document out to a file using nice formatting
      * @param doc   The document to save

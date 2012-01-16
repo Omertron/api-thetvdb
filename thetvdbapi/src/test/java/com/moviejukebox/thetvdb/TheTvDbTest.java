@@ -1,14 +1,14 @@
 /*
  *      Copyright (c) 2004-2012 YAMJ Members
- *      http://code.google.com/p/moviejukebox/people/list 
- *  
+ *      http://code.google.com/p/moviejukebox/people/list
+ *
  *      Web: http://code.google.com/p/moviejukebox/
- *  
+ *
  *      This software is licensed under a Creative Commons License
  *      See this page: http://code.google.com/p/moviejukebox/wiki/License
- *  
- *      For any reuse or distribution, you must make clear to others the 
- *      license terms of this work.  
+ *
+ *      For any reuse or distribution, you must make clear to others the
+ *      license terms of this work.
  */
 package com.moviejukebox.thetvdb;
 
@@ -26,7 +26,7 @@ import com.moviejukebox.thetvdb.model.Episode;
 import com.moviejukebox.thetvdb.model.Series;
 
 /**
- * JUnit tests for TheTvDb class. The tester must enter the API key for these tests to work. 
+ * JUnit tests for TheTvDb class. The tester must enter the API key for these tests to work.
  * Requires JUnit 4.5.
  * @author stuart.boston
  *
@@ -37,7 +37,7 @@ public class TheTvDbTest {
     private TheTVDB tvdb;
     private static final String LANGUAGE = "en";
     private static final String ID_CHUCK = "80348";
-    
+
     @Before
     public void setUp() throws Exception {
         tvdb = new TheTVDB(apikey);
@@ -104,7 +104,7 @@ public class TheTvDbTest {
     public void testSearchSeries() {
         List<Series> seriesList = tvdb.searchSeries("chuck", LANGUAGE);
         assertFalse(seriesList.isEmpty());
-        
+
         boolean found = false;
         for (Series series : seriesList) {
             if (series.getId().equals(ID_CHUCK)) {
@@ -116,14 +116,14 @@ public class TheTvDbTest {
     }
 
     @Test
-    public void testGetXmlMirror() throws Throwable {
-        String mirror = TheTVDB.getXmlMirror();
+    public void testGetMirror() throws Throwable {
+        String mirror = TheTVDB.getMirror();
         assertTrue(mirror.length() > 0);
     }
 
     @Test
     public void testGetBannerMirror() {
-        String mirror = TheTVDB.getBannerMirror();
+        String mirror = TheTVDB.getMirror();
         assertTrue(mirror.length() > 0);
     }
 
