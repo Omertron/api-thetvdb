@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,10 +32,11 @@ import com.moviejukebox.thetvdb.model.BannerType;
 import com.moviejukebox.thetvdb.model.Banners;
 import com.moviejukebox.thetvdb.model.Episode;
 import com.moviejukebox.thetvdb.model.Series;
+import org.apache.log4j.Logger;
 
 public class TvdbParser {
 
-    private static final Logger logger = TheTVDB.getLogger();
+    private static final Logger logger = Logger.getLogger(TheTVDB.class);
     private static final String TYPE_BANNER = "banner";
     private static final String TYPE_FANART = "fanart";
     private static final String TYPE_POSTER = "poster";
@@ -126,10 +125,10 @@ public class TvdbParser {
                 }
             }
         } catch (Exception error) {
-            logger.log(Level.WARNING, "All Episodes error: {0}", error.getMessage());
+            logger.warn("All Episodes error: " + error.getMessage());
         } catch (Throwable tw) {
             // Message is passed to us
-            logger.warning(tw.getMessage());
+            logger.warn(tw.getMessage());
         }
 
         return episodeList;
@@ -163,10 +162,10 @@ public class TvdbParser {
                 }
             }
         } catch (Exception error) {
-            logger.log(Level.WARNING, "Banners error: {0}", error.getMessage());
+            logger.warn("Banners error: " + error.getMessage());
         } catch (Throwable tw) {
             // Message is passed to us
-            logger.warning(tw.getMessage());
+            logger.warn(tw.getMessage());
         }
 
         return banners;
@@ -198,10 +197,10 @@ public class TvdbParser {
                 }
             }
         } catch (Exception error) {
-            logger.log(Level.WARNING, "Series error: {0}", error.getMessage());
+            logger.warn("Series error: " + error.getMessage());
         } catch (Throwable tw) {
             // Message is passed to us
-            logger.warning(tw.getMessage());
+            logger.warn(tw.getMessage());
         }
 
         return episode;

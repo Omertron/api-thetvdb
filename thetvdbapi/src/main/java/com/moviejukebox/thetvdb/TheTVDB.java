@@ -39,7 +39,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class TheTVDB {
     private static String apiKey = null;
-    private static final String MIRROR_URL = "http://thetvdb.com";
+    private static final String MIRROR_URL = "http://thetvdb.com/";
 
     private static final Logger logger = Logger.getLogger("TheTVDB");
     private static LogFormatter logFormatter = new LogFormatter();

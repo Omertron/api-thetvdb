@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.GZIPInputStream;
+import javax.xml.ws.WebServiceException;
 import org.apache.commons.codec.binary.Base64;
 
 /**
@@ -95,26 +97,64 @@ public final class WebBrowser {
 
         BufferedReader in = null;
         URLConnection cnx = null;
+        InputStreamReader isr = null;
+        GZIPInputStream zis = null;
+
         try {
             cnx = openProxiedConnection(url);
 
             sendHeader(cnx);
             readHeader(cnx);
 
-            in = new BufferedReader(new InputStreamReader(cnx.getInputStream(), getCharset(cnx)));
+            // Check the content encoding of the connection. Null content encoding is standard HTTP
+            if (cnx.getContentEncoding() == null) {
+                //in = new BufferedReader(new InputStreamReader(cnx.getInputStream(), getCharset(cnx)));
+                isr = new InputStreamReader(cnx.getInputStream(), "UTF-8");
+            } else if (cnx.getContentEncoding().equalsIgnoreCase("gzip")) {
+                zis = new GZIPInputStream(cnx.getInputStream());
+                isr = new InputStreamReader(zis, "UTF-8");
+            } else {
+                throw new IOException("Unknown content encoding " + cnx.getContentEncoding() + ", aborting");
+            }
+
+            in = new BufferedReader(isr);
+
             String line;
             while ((line = in.readLine()) != null) {
                 content.append(line);
             }
+        } catch (Exception error) {
+            throw new WebServiceException("Error: " + error.getMessage(), error);
         } finally {
             if (in != null) {
-                in.close();
+                try {
+                    in.close();
+                } catch (IOException ex) {
+                    throw new IOException("Failed to close BufferedReader", ex);
+                }
             }
 
-            if ((cnx != null) && (cnx instanceof HttpURLConnection)) {
-                ((HttpURLConnection) cnx).disconnect();
+            if (isr != null) {
+                try {
+                    isr.close();
+                } catch (IOException ex) {
+                    throw new IOException("Failed to close InputStreamReader", ex);
+                }
             }
 
+            if (zis != null) {
+                try {
+                    zis.close();
+                } catch (IOException ex) {
+                    throw new IOException("Failed to close GZIPInputStream", ex);
+                }
+            }
+
+            if (cnx != null) {
+                if (cnx instanceof HttpURLConnection) {
+                    ((HttpURLConnection) cnx).disconnect();
+                }
+            }
         }
         return content.toString();
     }

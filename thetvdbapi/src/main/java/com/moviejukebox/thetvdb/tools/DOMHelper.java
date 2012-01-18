@@ -111,7 +111,7 @@ public class DOMHelper {
             if (!valid) {
                 throw new WebServiceException("Failed to download data from " + url);
             }
-
+            
             in = new ByteArrayInputStream(webPage.getBytes(ENCODING));
         } catch (UnsupportedEncodingException error) {
             throw new WebServiceException("Unable to encode URL: " + url, error);
