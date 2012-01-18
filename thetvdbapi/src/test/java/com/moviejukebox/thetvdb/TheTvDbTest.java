@@ -21,6 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.moviejukebox.thetvdb.model.Actor;
+import com.moviejukebox.thetvdb.model.Banner;
 import com.moviejukebox.thetvdb.model.Banners;
 import com.moviejukebox.thetvdb.model.Episode;
 import com.moviejukebox.thetvdb.model.Series;
@@ -87,7 +88,7 @@ public class TheTvDbTest {
 
     @Test
     public void testGetBanners() {
-        Banners banners = tvdb.getBanners(ID_CHUCK);
+        Banners banners = tvdb.getBanners("72023");
         assertFalse(banners.getFanartList().isEmpty());
         assertFalse(banners.getPosterList().isEmpty());
         assertFalse(banners.getSeasonList().isEmpty());
@@ -116,14 +117,14 @@ public class TheTvDbTest {
     }
 
     @Test
-    public void testGetMirror() throws Throwable {
-        String mirror = TheTVDB.getMirror();
+    public void testGetXmlMirror() throws Throwable {
+        String mirror = TheTVDB.getXmlMirror();
         assertTrue(mirror.length() > 0);
     }
 
     @Test
     public void testGetBannerMirror() {
-        String mirror = TheTVDB.getMirror();
+        String mirror = TheTVDB.getBannerMirror();
         assertTrue(mirror.length() > 0);
     }
 

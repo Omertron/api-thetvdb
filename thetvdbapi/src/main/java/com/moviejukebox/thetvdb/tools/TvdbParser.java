@@ -82,7 +82,7 @@ public class TvdbParser {
                 actor.setId(DOMHelper.getValueFromElement(eActor, "id"));
                 String image = DOMHelper.getValueFromElement(eActor, "Image");
                 if (!image.isEmpty()) {
-                    actor.setImage(TheTVDB.getMirror() + image);
+                    actor.setImage(TheTVDB.getBannerMirror() + image);
                 }
                 actor.setName(DOMHelper.getValueFromElement(eActor, "Name"));
                 actor.setRole(DOMHelper.getValueFromElement(eActor, "Role"));
@@ -315,7 +315,7 @@ public class TvdbParser {
      * @throws Throwable
      */
     private static Banner parseNextBanner(Element eBanner) {
-        String bannerMirror = TheTVDB.getMirror();
+        String bannerMirror = TheTVDB.getBannerMirror();
         Banner banner = new Banner();
         String artwork;
 
@@ -390,7 +390,7 @@ public class TvdbParser {
         episode.setAbsoluteNumber(DOMHelper.getValueFromElement(eEpisode, "absolute_number"));
         String s = DOMHelper.getValueFromElement(eEpisode, "filename");
         if (!s.isEmpty()) {
-            episode.setFilename(TheTVDB.getMirror() + s);
+            episode.setFilename(TheTVDB.getBannerMirror() + s);
         }
         episode.setLastUpdated(DOMHelper.getValueFromElement(eEpisode, "lastupdated"));
         episode.setSeasonId(DOMHelper.getValueFromElement(eEpisode, "seasonid"));
@@ -424,7 +424,7 @@ public class TvdbParser {
      * @throws Throwable
      */
     private static Series parseNextSeries(Element eSeries) {
-        String bannerMirror = TheTVDB.getMirror();
+        String bannerMirror = TheTVDB.getBannerMirror();
 
         Series series = new Series();
 
