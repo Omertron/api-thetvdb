@@ -12,19 +12,14 @@
  */
 package com.moviejukebox.thetvdb;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.moviejukebox.thetvdb.model.Actor;
-import com.moviejukebox.thetvdb.model.Banner;
 import com.moviejukebox.thetvdb.model.Banners;
 import com.moviejukebox.thetvdb.model.Episode;
 import com.moviejukebox.thetvdb.model.Series;
+import java.util.List;
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * JUnit tests for TheTvDb class. The tester must enter the API key for these tests to work.
@@ -34,7 +29,7 @@ import com.moviejukebox.thetvdb.model.Series;
  */
 public class TheTvDbTest {
 
-    private static String apikey = "";
+    private static String apikey = "2805AD2873519EC5";
     private TheTVDB tvdb;
     private static final String LANGUAGE = "en";
     private static final String ID_CHUCK = "80348";
@@ -128,4 +123,16 @@ public class TheTvDbTest {
         assertTrue(mirror.length() > 0);
     }
 
+    /**
+     * Test of getEpisodeById method, of class TheTVDB.
+     */
+    @Test
+    public void testGetEpisodeById() {
+        System.out.println("getEpisodeById");
+        String episodeId = "1534661";
+        String language = "en";
+        Episode result = tvdb.getEpisodeById(episodeId, language);
+        assertEquals(ID_CHUCK, result.getSeriesId());
+        assertEquals("27984", result.getSeasonId());
+    }
 }

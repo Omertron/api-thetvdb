@@ -12,31 +12,23 @@
  */
 package com.moviejukebox.thetvdb.tools;
 
+import com.moviejukebox.thetvdb.TheTVDB;
+import com.moviejukebox.thetvdb.model.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.moviejukebox.thetvdb.TheTVDB;
-import com.moviejukebox.thetvdb.model.Actor;
-import com.moviejukebox.thetvdb.model.Banner;
-import com.moviejukebox.thetvdb.model.BannerListType;
-import com.moviejukebox.thetvdb.model.BannerType;
-import com.moviejukebox.thetvdb.model.Banners;
-import com.moviejukebox.thetvdb.model.Episode;
-import com.moviejukebox.thetvdb.model.Series;
-import org.apache.log4j.Logger;
-
 public class TvdbParser {
 
-    private static final Logger logger = Logger.getLogger(TheTVDB.class);
+    private static final Logger logger = Logger.getLogger(TvdbParser.class);
     private static final String TYPE_BANNER = "banner";
     private static final String TYPE_FANART = "fanart";
     private static final String TYPE_POSTER = "poster";

@@ -12,36 +12,18 @@
  */
 package com.moviejukebox.thetvdb.tools;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import java.io.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
-import org.xml.sax.SAXException;
-
-import com.moviejukebox.thetvdb.TheTVDB;
 import javax.xml.ws.WebServiceException;
-import org.w3c.dom.DOMException;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
 
 /**
  * Generic set of routines to process the DOM model data
@@ -49,7 +31,7 @@ import org.w3c.dom.DOMException;
  *
  */
 public class DOMHelper {
-    private static final Logger logger = TheTVDB.getLogger();
+    private static final Logger logger = Logger.getLogger(DOMHelper.class);
 
     private static final String YES = "yes";
     private static final String ENCODING = "UTF-8";
@@ -139,7 +121,6 @@ public class DOMHelper {
                     in.close();
                 } catch (IOException error) {
                     // Input Stream was already closed or null
-                    in = null;
                 }
             }
         }
@@ -183,12 +164,12 @@ public class DOMHelper {
             trans.transform(new DOMSource(doc), new StreamResult(new File(localFile)));
             return true;
         } catch (TransformerConfigurationException error) {
-            logger.log(Level.WARNING, "Error writing the document to {0}", localFile);
-            logger.log(Level.WARNING, "Message: {0}", error.getMessage());
+            logger.warn("Error writing the document to "+ localFile);
+            logger.warn("Message: "+ error.getMessage());
             return false;
         } catch (TransformerException error) {
-            logger.log(Level.WARNING, "Error writing the document to {0}", localFile);
-            logger.log(Level.WARNING, "Message: {0}", error.getMessage());
+            logger.warn("Error writing the document to "+ localFile);
+            logger.warn("Message: "+ error.getMessage());
             return false;
         }
     }
@@ -205,8 +186,6 @@ public class DOMHelper {
         Text text = doc.createTextNode(elementValue);
         child.appendChild(text);
         parentElement.appendChild(child);
-
-        return;
     }
 
     /**
