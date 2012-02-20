@@ -12,16 +12,14 @@
  */
 package com.moviejukebox.thetvdb.model;
 
+import com.moviejukebox.thetvdb.tools.DOMHelper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import com.moviejukebox.thetvdb.tools.DOMHelper;
 
 /**
  *
@@ -49,11 +47,11 @@ public class Mirrors {
         // Make this synchronized so that only one 
         synchronized (this) {
             String urlString = "http://www.thetvdb.com/api/" + apiKey + "/mirrors.xml";
-            Document doc = null;
+            Document doc;
             
             doc = DOMHelper.getEventDocFromUrl(urlString);
-            int typeMask = 0;
-            String url = null;
+            int typeMask;
+            String url;
             
             NodeList nlMirror = doc.getElementsByTagName("Mirror");
             for (int nodeLoop = 0; nodeLoop < nlMirror.getLength(); nodeLoop++) {

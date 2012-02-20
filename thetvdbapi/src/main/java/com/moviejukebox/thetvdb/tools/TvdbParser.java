@@ -50,8 +50,8 @@ public class TvdbParser {
      */
     public static List<Actor> getActors(String urlString) {
         List<Actor> results = new ArrayList<Actor>();
-        Actor actor = null;
-        Document doc = null;
+        Actor actor;
+        Document doc;
         NodeList nlActor;
         Node nActor;
         Element eActor;
@@ -97,7 +97,7 @@ public class TvdbParser {
      */
     public static List<Episode> getAllEpisodes(String urlString, int season) {
         List<Episode> episodeList = new ArrayList<Episode>();
-        Episode episode = null;
+        Episode episode;
         NodeList nlEpisode;
         Node nEpisode;
         Element eEpisode;
@@ -133,7 +133,7 @@ public class TvdbParser {
      */
     public static Banners getBanners(String urlString) {
         Banners banners = new Banners();
-        Banner banner = null;
+        Banner banner;
 
         NodeList nlBanners;
         Node nBanner;
@@ -206,12 +206,12 @@ public class TvdbParser {
      */
     public static List<Series> getSeriesList(String urlString) {
         List<Series> seriesList = new ArrayList<Series>();
-        Series series = null;
+        Series series;
         NodeList nlSeries;
         Node nSeries;
         Element eSeries;
 
-        Document doc = null;
+        Document doc;
 
         try {
             doc = DOMHelper.getEventDocFromUrl(urlString);
