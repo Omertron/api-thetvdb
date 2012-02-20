@@ -56,80 +56,99 @@ public class Episode implements Serializable {
     private String seasonId;
 
     @Id
+    @Column(name="EPISODE_ID")
     public String getId() {
         return id;
     }
 
+    @Column(name="ABSOLUTE_NUMBER")
     public String getAbsoluteNumber() {
         return absoluteNumber;
     }
 
+    @Column(name="AIRS_AFTER_SEASON")
     public int getAirsAfterSeason() {
         return airsAfterSeason;
     }
 
+    @Column(name="AIRS_BEFORE_EPISODE")
     public int getAirsBeforeEpisode() {
         return airsBeforeEpisode;
     }
 
+    @Column(name="AIRS_BEFORE_SEASON")
     public int getAirsBeforeSeason() {
         return airsBeforeSeason;
     }
 
+    @Column(name="COMBINED_EPISODE_NUMBER")
     public String getCombinedEpisodeNumber() {
         return combinedEpisodeNumber;
     }
 
+    @Column(name="COMBINED_SEASON")
     public String getCombinedSeason() {
         return combinedSeason;
     }
 
     @ElementCollection
+    @Column(name="DIRECTORS")
     public List<String> getDirectors() {
         return directors;
     }
 
+    @Column(name="DVD_CHAPTER")
     public String getDvdChapter() {
         return dvdChapter;
     }
 
+    @Column(name="DVD_DISC_ID")
     public String getDvdDiscId() {
         return dvdDiscId;
     }
 
+    @Column(name="DVD_EPISODE_NUMBER")
     public String getDvdEpisodeNumber() {
         return dvdEpisodeNumber;
     }
 
+    @Column(name="DVD_SEASON")
     public String getDvdSeason() {
         return dvdSeason;
     }
 
+    @Column(name="EPISODE_IMAGE_FLAG")
     public String getEpImgFlag() {
         return epImgFlag;
     }
 
+    @Column(name="EPISODE_NAME")
     public String getEpisodeName() {
         return episodeName;
     }
 
+    @Column(name="EPISODE_NUMBER")
     public int getEpisodeNumber() {
         return episodeNumber;
     }
 
+    @Column(name="FILENAME")
     public String getFilename() {
         return filename;
     }
 
+    @Column(name="FIRST_AIRED")
     public String getFirstAired() {
         return firstAired;
     }
 
     @ElementCollection
+    @Column(name="GUEST_STARS")
     public List<String> getGuestStars() {
         return guestStars;
     }
 
+    @Column(name="IMDB_ID")
     public String getImdbId() {
         return imdbId;
     }
@@ -139,35 +158,43 @@ public class Episode implements Serializable {
         return language;
     }
 
+    @Column(name="LAST_UPDATED")
     public String getLastUpdated() {
         return lastUpdated;
     }
 
+    @Column(name="OVERVIEW")
     public String getOverview() {
         return overview;
     }
 
+    @Column(name="PRODUCTION_CODE")
     public String getProductionCode() {
         return productionCode;
     }
 
+    @Column(name="RATING")
     public String getRating() {
         return rating;
     }
 
+    @Column(name="SEASON_ID")
     public String getSeasonId() {
         return seasonId;
     }
 
+    @Column(name="SEASON_NUMBER")
     public int getSeasonNumber() {
         return seasonNumber;
     }
 
+    @Column(name="SERIES_ID")
     public String getSeriesId() {
         return seriesId;
     }
 
     @ElementCollection
+    @Column(name="WRITERS")
     public List<String> getWriters() {
         return writers;
     }
