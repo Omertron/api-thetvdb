@@ -16,6 +16,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -26,7 +27,7 @@ import javax.persistence.*;
 public class Banners implements Serializable {
 
     private static final long serialVersionUID = 1L; // Default serial UID
-    private int seriesId = 0;
+    private String seriesId = "";
     private List<Banner> seriesList = new ArrayList<Banner>();
     private List<Banner> seasonList = new ArrayList<Banner>();
     private List<Banner> posterList = new ArrayList<Banner>();
@@ -34,7 +35,7 @@ public class Banners implements Serializable {
 
     @Id
     @Column(name = "SERIES_ID")
-    public int getSeriesId() {
+    public String getSeriesId() {
         return seriesId;
     }
 
@@ -62,7 +63,7 @@ public class Banners implements Serializable {
         return fanartList;
     }
 
-    public void setSeriesId(int seriesId) {
+    public void setSeriesId(String seriesId) {
         this.seriesId = seriesId;
     }
 
@@ -100,8 +101,8 @@ public class Banners implements Serializable {
 
     public void addBanner(Banner banner) {
         if (banner != null) {
-            if (seriesId == 0) {
-                seriesId = banner.getId();
+            if (StringUtils.isBlank(seriesId)) {
+                seriesId = String.valueOf(banner.getId());
             }
 
             if (banner.getBannerType() == BannerListType.series) {
@@ -119,6 +120,8 @@ public class Banners implements Serializable {
     @Override
     public String toString() {
         StringBuilder banners = new StringBuilder("[Banners ");
+
+        banners.append("[seriesId=").append(seriesId).append("]");
 
         banners.append("[seriesList=");
         for (Banner banner : seriesList) {
