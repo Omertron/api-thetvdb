@@ -13,10 +13,7 @@
 package com.moviejukebox.thetvdb.model;
 
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  *
@@ -45,11 +42,13 @@ public class Banner implements Serializable {
     }
 
     @Column(name = "BANNER_TYPE")
+    @Enumerated(EnumType.STRING)
     public BannerListType getBannerType() {
         return bannerType;
     }
 
     @Column(name = "BANNER_TYPE2")
+    @Enumerated(EnumType.STRING)
     public BannerType getBannerType2() {
         return bannerType2;
     }
@@ -69,7 +68,7 @@ public class Banner implements Serializable {
         return season;
     }
 
-    @Column(name = "iS_SERIES_NAME")
+    @Column(name = "IS_SERIES_NAME")
     public boolean isSeriesName() {
         return seriesName;
     }
