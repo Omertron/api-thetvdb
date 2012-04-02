@@ -355,6 +355,8 @@ public class TvdbParser {
         episode.setEpisodeName(DOMHelper.getValueFromElement(eEpisode, "EpisodeName"));
         try {
             episode.setEpisodeNumber(Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, "EpisodeNumber")));
+        } catch (NumberFormatException ex) {
+            episode.setEpisodeNumber(0);
         } catch (WebServiceException ex) {
             episode.setEpisodeNumber(0);
         }
@@ -367,6 +369,8 @@ public class TvdbParser {
         episode.setRating(DOMHelper.getValueFromElement(eEpisode, "Rating"));
         try {
             episode.setSeasonNumber(Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, "SeasonNumber")));
+        } catch (NumberFormatException ex) {
+            episode.setSeasonNumber(0);
         } catch (WebServiceException ex) {
             episode.setSeasonNumber(0);
         }
@@ -382,18 +386,24 @@ public class TvdbParser {
 
         try {
             episode.setAirsAfterSeason(Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, "airsafter_season")));
+        } catch (NumberFormatException ex) {
+            episode.setAirsAfterSeason(0);
         } catch (WebServiceException ex) {
             episode.setAirsAfterSeason(0);
         }
 
         try {
             episode.setAirsBeforeEpisode(Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, "airsbefore_episode")));
+        } catch (NumberFormatException ex) {
+            episode.setAirsBeforeEpisode(0);
         } catch (WebServiceException ex) {
             episode.setAirsBeforeEpisode(0);
         }
 
         try {
             episode.setAirsBeforeSeason(Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, "airsbefore_season")));
+        } catch (NumberFormatException ex) {
+            episode.setAirsBeforeSeason(0);
         } catch (WebServiceException ex) {
             episode.setAirsBeforeSeason(0);
         }
