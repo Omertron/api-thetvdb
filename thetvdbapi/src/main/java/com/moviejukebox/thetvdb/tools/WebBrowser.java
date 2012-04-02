@@ -34,7 +34,7 @@ import org.apache.commons.codec.binary.Base64;
  */
 public final class WebBrowser {
 
-    private static Map<String, String> browserProperties = new HashMap<String, String>();
+    private static final Map<String, String> browserProperties = new HashMap<String, String>();
     private static Map<String, Map<String, String>> cookies = new HashMap<String, Map<String, String>>();
     private static String proxyHost = null;
     private static String proxyPort = null;
@@ -45,17 +45,15 @@ public final class WebBrowser {
     private static int webTimeoutRead = 90000;      // 90 second timeout
 
     /**
-     * Constructor for WebBrowser.
-     * Does instantiates the browser properties.
+     * Constructor for WebBrowser. Does instantiates the browser properties.
      */
-    public WebBrowser() {
-        if (browserProperties.isEmpty()) {
-            browserProperties.put("User-Agent", "Mozilla/5.25 Netscape/5.0 (Windows; I; Win95)");
-        }
+    protected WebBrowser() {
+        throw new UnsupportedOperationException("WebBrowser can not be instantiated!");
     }
 
     /**
      * Request the web page at the specified URL
+     *
      * @param url
      * @return
      * @throws IOException
@@ -66,6 +64,7 @@ public final class WebBrowser {
 
     /**
      * Open a connection using proxy parameters if they exist.
+     *
      * @param url
      * @return
      * @throws IOException
@@ -88,6 +87,7 @@ public final class WebBrowser {
 
     /**
      * Request the web page at the specified URL
+     *
      * @param url
      * @return
      * @throws IOException
@@ -161,9 +161,14 @@ public final class WebBrowser {
 
     /**
      * Set the header information for the connection
+     *
      * @param cnx
      */
     private static void sendHeader(URLConnection cnx) {
+        if (browserProperties.isEmpty()) {
+            browserProperties.put("User-Agent", "Mozilla/5.25 Netscape/5.0 (Windows; I; Win95)");
+        }
+
         // send browser properties
         for (Map.Entry<String, String> browserProperty : browserProperties.entrySet()) {
             cnx.setRequestProperty(browserProperty.getKey(), browserProperty.getValue());
@@ -177,6 +182,7 @@ public final class WebBrowser {
 
     /**
      * Create the cookies for the header
+     *
      * @param cnx
      * @return
      */
@@ -202,6 +208,7 @@ public final class WebBrowser {
 
     /**
      * Read the header information into the cookies
+     *
      * @param cnx
      */
     private static void readHeader(URLConnection cnx) {
@@ -242,6 +249,7 @@ public final class WebBrowser {
 
     /**
      * Determine the charset for the connection
+     *
      * @param cnx
      * @return
      */
@@ -270,6 +278,7 @@ public final class WebBrowser {
 
     /**
      * Return the proxy host name
+     *
      * @return
      */
     public static String getProxyHost() {
@@ -278,6 +287,7 @@ public final class WebBrowser {
 
     /**
      * Set the proxy host name
+     *
      * @param tvdbProxyHost
      */
     public static void setProxyHost(String tvdbProxyHost) {
@@ -286,6 +296,7 @@ public final class WebBrowser {
 
     /**
      * Get the proxy port
+     *
      * @return
      */
     public static String getProxyPort() {
@@ -294,6 +305,7 @@ public final class WebBrowser {
 
     /**
      * Set the proxy port
+     *
      * @param proxyPort
      */
     public static void setProxyPort(String proxyPort) {
@@ -302,6 +314,7 @@ public final class WebBrowser {
 
     /**
      * Get the proxy username
+     *
      * @return
      */
     public static String getProxyUsername() {
@@ -310,6 +323,7 @@ public final class WebBrowser {
 
     /**
      * Set the proxy username
+     *
      * @param proxyUsername
      */
     public static void setProxyUsername(String proxyUsername) {
@@ -318,6 +332,7 @@ public final class WebBrowser {
 
     /**
      * Get the proxy password
+     *
      * @return
      */
     public static String getProxyPassword() {
@@ -325,8 +340,8 @@ public final class WebBrowser {
     }
 
     /**
-     * Set the proxy password.
-     * Note this will automatically encode the password
+     * Set the proxy password. Note this will automatically encode the password
+     *
      * @param proxyPassword
      */
     public static void setProxyPassword(String proxyPassword) {
@@ -340,6 +355,7 @@ public final class WebBrowser {
 
     /**
      * Get the current web connect timeout value
+     *
      * @return
      */
     public static int getWebTimeoutConnect() {
@@ -348,6 +364,7 @@ public final class WebBrowser {
 
     /**
      * Get the current web read timeout value
+     *
      * @return
      */
     public static int getWebTimeoutRead() {
@@ -356,6 +373,7 @@ public final class WebBrowser {
 
     /**
      * Set the web connect timeout value
+     *
      * @param webTimeoutConnect
      */
     public static void setWebTimeoutConnect(int webTimeoutConnect) {
@@ -364,6 +382,7 @@ public final class WebBrowser {
 
     /**
      * Set the web read timeout value
+     *
      * @param webTimeoutRead
      */
     public static void setWebTimeoutRead(int webTimeoutRead) {

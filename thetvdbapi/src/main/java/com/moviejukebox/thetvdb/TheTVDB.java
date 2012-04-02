@@ -1,14 +1,14 @@
 /*
  *      Copyright (c) 2004-2012 YAMJ Members
- *      http://code.google.com/p/moviejukebox/people/list 
- *  
+ *      http://code.google.com/p/moviejukebox/people/list
+ *
  *      Web: http://code.google.com/p/moviejukebox/
- *  
+ *
  *      This software is licensed under a Creative Commons License
  *      See this page: http://code.google.com/p/moviejukebox/wiki/License
- *  
- *      For any reuse or distribution, you must make clear to others the 
- *      license terms of this work.  
+ *
+ *      For any reuse or distribution, you must make clear to others the
+ *      license terms of this work.
  */
 package com.moviejukebox.thetvdb;
 
@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import javax.xml.ws.WebServiceException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -65,7 +66,7 @@ public class TheTVDB {
      *
      * @return True if everything is OK, false otherwise.
      */
-    private static void getMirrors() {
+    private static void getMirrors() throws WebServiceException {
         // If we don't need to get the mirrors, then just return
         if (xmlMirror != null && bannerMirror != null) {
             return;
@@ -76,13 +77,13 @@ public class TheTVDB {
         bannerMirror = mirrors.getMirror(Mirrors.TYPE_BANNER);
 
         if (xmlMirror == null) {
-            throw new RuntimeException("There is a problem getting the xmlMirror data from TheTVDB, this means it is likely to be down.");
+            throw new WebServiceException("There is a problem getting the xmlMirror data from TheTVDB, this means it is likely to be down.");
         } else {
             xmlMirror += "/api/";
         }
 
         if (bannerMirror == null) {
-            throw new RuntimeException("There is a problem getting the bannerMirror data from TheTVDB, this means it is likely to be down.");
+            throw new WebServiceException("There is a problem getting the bannerMirror data from TheTVDB, this means it is likely to be down.");
         } else {
             bannerMirror += "/banners/";
         }
@@ -134,8 +135,8 @@ public class TheTVDB {
             if (language != null) {
                 urlString.append(language).append(XML_EXTENSION);
             }
-        } catch (Throwable tw) {
-            logger.warn(tw.getMessage());
+        } catch (WebServiceException ex) {
+            logger.warn(ex.getMessage());
             return null;
         }
 
@@ -156,7 +157,6 @@ public class TheTVDB {
      */
     public List<Episode> getAllEpisodes(String id, String language) {
         if (!isValidNumber(id)) {
-            System.out.println("Invalid number: " + id);    // XXX DEBUG
             return new ArrayList<Episode>();
         }
 
@@ -170,8 +170,8 @@ public class TheTVDB {
             if (language != null) {
                 urlString.append(language).append(XML_EXTENSION);
             }
-        } catch (Throwable tw) {
-            logger.warn(tw.getMessage());
+        } catch (WebServiceException ex) {
+            logger.warn(ex.getMessage());
             return null;
         }
 
@@ -203,8 +203,8 @@ public class TheTVDB {
             if (language != null) {
                 urlString.append(language).append(XML_EXTENSION);
             }
-        } catch (Throwable tw) {
-            logger.warn(tw.getMessage());
+        } catch (WebServiceException ex) {
+            logger.warn(ex.getMessage());
             return null;
         }
 
@@ -245,8 +245,8 @@ public class TheTVDB {
             if (language != null) {
                 urlString.append(language).append(XML_EXTENSION);
             }
-        } catch (Throwable tw) {
-            logger.warn(tw.getMessage());
+        } catch (WebServiceException ex) {
+            logger.warn(ex.getMessage());
             return new Episode();
         }
 
@@ -277,8 +277,8 @@ public class TheTVDB {
             if (language != null) {
                 urlString.append(language).append(XML_EXTENSION);
             }
-        } catch (Throwable tw) {
-            logger.warn(tw.getMessage());
+        } catch (WebServiceException ex) {
+            logger.warn(ex.getMessage());
             return new Episode();
         }
 
@@ -307,8 +307,8 @@ public class TheTVDB {
             if (language != null) {
                 urlString.append(language).append(XML_EXTENSION);
             }
-        } catch (Throwable tw) {
-            logger.warn(tw.getMessage());
+        } catch (WebServiceException ex) {
+            logger.warn(ex.getMessage());
             return new Episode();
         }
 
@@ -352,8 +352,8 @@ public class TheTVDB {
             urlString.append(SERIES_URL);
             urlString.append(seriesId);
             urlString.append("/banners.xml");
-        } catch (Throwable tw) {
-            logger.warn(tw.getMessage());
+        } catch (WebServiceException ex) {
+            logger.warn(ex.getMessage());
             return new Banners();
         }
 
@@ -374,8 +374,8 @@ public class TheTVDB {
             urlString.append(SERIES_URL);
             urlString.append(seriesId);
             urlString.append("/actors.xml");
-        } catch (Throwable tw) {
-            logger.warn(tw.getMessage());
+        } catch (WebServiceException ex) {
+            logger.warn(ex.getMessage());
             return new ArrayList<Actor>();
         }
         return TvdbParser.getActors(urlString.toString());
@@ -394,8 +394,8 @@ public class TheTVDB {
         } catch (UnsupportedEncodingException e) {
             // Try and use the raw title
             urlString.append(title);
-        } catch (Throwable tw) {
-            logger.warn(tw.getMessage());
+        } catch (WebServiceException ex) {
+            logger.warn(ex.getMessage());
             return new ArrayList<Series>();
         }
 
@@ -422,11 +422,11 @@ public class TheTVDB {
                 urlString.append(language);
                 urlString.append(XML_EXTENSION);
             }
-        } catch (Throwable tw) {
-            logger.warn(tw.getMessage());
+        } catch (WebServiceException ex) {
+            logger.warn(ex.getMessage());
             return new Episode();
         }
-        System.out.println("URL: " + urlString.toString()); // XXX DEBUG
+        logger.debug("URL: " + urlString.toString());
         return TvdbParser.getEpisode(urlString.toString());
     }
 
@@ -434,9 +434,8 @@ public class TheTVDB {
      * Get the XML Mirror URL
      *
      * @return
-     * @throws Throwable
      */
-    public static String getXmlMirror() throws Throwable {
+    public static String getXmlMirror() {
         // Force a load of the mirror information if it doesn't exist
         getMirrors();
         return xmlMirror;
@@ -446,7 +445,6 @@ public class TheTVDB {
      * Get the Banner Mirror URL
      *
      * @return
-     * @throws Throwable
      */
     public static String getBannerMirror() {
         // Force a load of the mirror information if it doesn't exist

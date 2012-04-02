@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.xml.ws.WebServiceException;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -58,7 +59,7 @@ public class TvdbParser {
 
         try {
             doc = DOMHelper.getEventDocFromUrl(urlString);
-        } catch (Throwable tw) {
+        } catch (WebServiceException ex) {
             return results;
         }
 
@@ -116,11 +117,8 @@ public class TvdbParser {
                     }
                 }
             }
-        } catch (Exception error) {
-            logger.warn("All Episodes error: " + error.getMessage());
-        } catch (Throwable tw) {
-            // Message is passed to us
-            logger.warn(tw.getMessage());
+        } catch (WebServiceException ex) {
+            logger.warn("All Episodes error: " + ex.getMessage());
         }
 
         return episodeList;
@@ -153,11 +151,8 @@ public class TvdbParser {
                     }
                 }
             }
-        } catch (Exception error) {
-            logger.warn("Banners error: " + error.getMessage());
-        } catch (Throwable tw) {
-            // Message is passed to us
-            logger.warn(tw.getMessage());
+        } catch (WebServiceException ex) {
+            logger.warn("Banners error: " + ex.getMessage());
         }
 
         return banners;
@@ -188,11 +183,8 @@ public class TvdbParser {
                     }
                 }
             }
-        } catch (Exception error) {
-            logger.warn("Series error: " + error.getMessage());
-        } catch (Throwable tw) {
-            // Message is passed to us
-            logger.warn(tw.getMessage());
+        } catch (WebServiceException ex) {
+            logger.warn("Series error: " + ex.getMessage());
         }
 
         return episode;
@@ -215,7 +207,7 @@ public class TvdbParser {
 
         try {
             doc = DOMHelper.getEventDocFromUrl(urlString);
-        } catch (Throwable tw) {
+        } catch (WebServiceException ex) {
             return seriesList;
         }
 
@@ -335,7 +327,7 @@ public class TvdbParser {
 
         try {
             banner.setSeriesName(Boolean.parseBoolean(DOMHelper.getValueFromElement(eBanner, "SeriesName")));
-        } catch (Exception error) {
+        } catch (WebServiceException ex) {
             banner.setSeriesName(false);
         }
 
@@ -363,7 +355,7 @@ public class TvdbParser {
         episode.setEpisodeName(DOMHelper.getValueFromElement(eEpisode, "EpisodeName"));
         try {
             episode.setEpisodeNumber(Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, "EpisodeNumber")));
-        } catch (Exception ignore) {
+        } catch (WebServiceException ex) {
             episode.setEpisodeNumber(0);
         }
         episode.setFirstAired(DOMHelper.getValueFromElement(eEpisode, "FirstAired"));
@@ -375,7 +367,7 @@ public class TvdbParser {
         episode.setRating(DOMHelper.getValueFromElement(eEpisode, "Rating"));
         try {
             episode.setSeasonNumber(Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, "SeasonNumber")));
-        } catch (Exception ignore) {
+        } catch (WebServiceException ex) {
             episode.setSeasonNumber(0);
         }
         episode.setWriters(parseList(DOMHelper.getValueFromElement(eEpisode, "Writer"), "|,"));
@@ -390,19 +382,19 @@ public class TvdbParser {
 
         try {
             episode.setAirsAfterSeason(Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, "airsafter_season")));
-        } catch (Exception ignore) {
+        } catch (WebServiceException ex) {
             episode.setAirsAfterSeason(0);
         }
 
         try {
             episode.setAirsBeforeEpisode(Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, "airsbefore_episode")));
-        } catch (Exception ignore) {
+        } catch (WebServiceException ex) {
             episode.setAirsBeforeEpisode(0);
         }
 
         try {
             episode.setAirsBeforeSeason(Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, "airsbefore_season")));
-        } catch (Exception ignore) {
+        } catch (WebServiceException ex) {
             episode.setAirsBeforeSeason(0);
         }
 

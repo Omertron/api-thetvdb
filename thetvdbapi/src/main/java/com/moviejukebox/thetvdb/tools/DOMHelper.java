@@ -67,7 +67,7 @@ public class DOMHelper {
      * @return
      * @throws Exception
      */
-    public static synchronized Document getEventDocFromUrl(String url) {
+    public static synchronized Document getEventDocFromUrl(String url) throws WebServiceException {
         String webPage = null;
         InputStream in = null;
         int retryCount = 0;     // Count the number of times we download the web page
@@ -92,7 +92,7 @@ public class DOMHelper {
             if (!valid) {
                 throw new WebServiceException("Failed to download data from " + url);
             }
-            
+
             in = new ByteArrayInputStream(webPage.getBytes(ENCODING));
         } catch (UnsupportedEncodingException error) {
             throw new WebServiceException("Unable to encode URL: " + url, error);
