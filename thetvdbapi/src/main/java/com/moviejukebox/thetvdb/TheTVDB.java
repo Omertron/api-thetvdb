@@ -37,7 +37,7 @@ public class TheTVDB {
     private static String apiKey = null;
     private static String xmlMirror = null;
     private static String bannerMirror = null;
-    private static final Logger logger = Logger.getLogger(TheTVDB.class);
+    private static final Logger LOGGER = Logger.getLogger(TheTVDB.class);
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private static final String XML_EXTENSION = ".xml";
     private static final String SERIES_URL = "/series/";
@@ -53,12 +53,31 @@ public class TheTVDB {
     }
 
     /**
+     * Output the API version information to the debug log
+     */
+    public static void showVersion() {
+        String apiTitle = TheTVDB.class.getPackage().getSpecificationTitle();
+
+        if (StringUtils.isNotBlank(apiTitle)) {
+            String apiVersion = TheTVDB.class.getPackage().getSpecificationVersion();
+            String apiRevision = TheTVDB.class.getPackage().getImplementationVersion();
+            StringBuilder sv = new StringBuilder();
+            sv.append(apiTitle).append(" ");
+            sv.append(apiVersion).append(" r");
+            sv.append(apiRevision);
+            LOGGER.debug(sv.toString());
+        } else {
+            LOGGER.debug("API-TheTVDB version/revision information not available");
+        }
+    }
+
+    /**
      * Return the logger information
      *
      * @return
      */
     public static Logger getLogger() {
-        return logger;
+        return LOGGER;
     }
 
     /**
@@ -136,7 +155,7 @@ public class TheTVDB {
                 urlString.append(language).append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
-            logger.warn(ex.getMessage());
+            LOGGER.warn(ex.getMessage());
             return null;
         }
 
@@ -171,7 +190,7 @@ public class TheTVDB {
                 urlString.append(language).append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
-            logger.warn(ex.getMessage());
+            LOGGER.warn(ex.getMessage());
             return null;
         }
 
@@ -204,7 +223,7 @@ public class TheTVDB {
                 urlString.append(language).append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
-            logger.warn(ex.getMessage());
+            LOGGER.warn(ex.getMessage());
             return null;
         }
 
@@ -246,7 +265,7 @@ public class TheTVDB {
                 urlString.append(language).append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
-            logger.warn(ex.getMessage());
+            LOGGER.warn(ex.getMessage());
             return new Episode();
         }
 
@@ -278,7 +297,7 @@ public class TheTVDB {
                 urlString.append(language).append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
-            logger.warn(ex.getMessage());
+            LOGGER.warn(ex.getMessage());
             return new Episode();
         }
 
@@ -308,7 +327,7 @@ public class TheTVDB {
                 urlString.append(language).append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
-            logger.warn(ex.getMessage());
+            LOGGER.warn(ex.getMessage());
             return new Episode();
         }
 
@@ -353,7 +372,7 @@ public class TheTVDB {
             urlString.append(seriesId);
             urlString.append("/banners.xml");
         } catch (WebServiceException ex) {
-            logger.warn(ex.getMessage());
+            LOGGER.warn(ex.getMessage());
             return new Banners();
         }
 
@@ -375,7 +394,7 @@ public class TheTVDB {
             urlString.append(seriesId);
             urlString.append("/actors.xml");
         } catch (WebServiceException ex) {
-            logger.warn(ex.getMessage());
+            LOGGER.warn(ex.getMessage());
             return new ArrayList<Actor>();
         }
         return TvdbParser.getActors(urlString.toString());
@@ -395,7 +414,7 @@ public class TheTVDB {
             // Try and use the raw title
             urlString.append(title);
         } catch (WebServiceException ex) {
-            logger.warn(ex.getMessage());
+            LOGGER.warn(ex.getMessage());
             return new ArrayList<Series>();
         }
 
@@ -423,10 +442,10 @@ public class TheTVDB {
                 urlString.append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
-            logger.warn(ex.getMessage());
+            LOGGER.warn(ex.getMessage());
             return new Episode();
         }
-        logger.debug("URL: " + urlString.toString());
+        LOGGER.debug("URL: " + urlString.toString());
         return TvdbParser.getEpisode(urlString.toString());
     }
 
