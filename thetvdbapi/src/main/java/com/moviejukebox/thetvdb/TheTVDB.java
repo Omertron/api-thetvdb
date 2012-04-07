@@ -34,10 +34,10 @@ import org.apache.log4j.Logger;
  */
 public class TheTVDB {
 
+    private static final Logger LOGGER = Logger.getLogger(TheTVDB.class);
     private static String apiKey = null;
     private static String xmlMirror = null;
     private static String bannerMirror = null;
-    private static final Logger LOGGER = Logger.getLogger(TheTVDB.class);
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private static final String XML_EXTENSION = ".xml";
     private static final String SERIES_URL = "/series/";
@@ -69,15 +69,6 @@ public class TheTVDB {
         } else {
             LOGGER.debug("API-TheTVDB version/revision information not available");
         }
-    }
-
-    /**
-     * Return the logger information
-     *
-     * @return
-     */
-    public static Logger getLogger() {
-        return LOGGER;
     }
 
     /**
@@ -144,22 +135,22 @@ public class TheTVDB {
      * @return
      */
     public Series getSeries(String id, String language) {
-        StringBuilder urlString = new StringBuilder();
+        StringBuilder urlBuilder = new StringBuilder();
         try {
-            urlString.append(getXmlMirror());
-            urlString.append(apiKey);
-            urlString.append(SERIES_URL);
-            urlString.append(id);
-            urlString.append("/");
+            urlBuilder.append(getXmlMirror());
+            urlBuilder.append(apiKey);
+            urlBuilder.append(SERIES_URL);
+            urlBuilder.append(id);
+            urlBuilder.append("/");
             if (language != null) {
-                urlString.append(language).append(XML_EXTENSION);
+                urlBuilder.append(language).append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
             LOGGER.warn(ex.getMessage());
             return null;
         }
-
-        List<Series> seriesList = TvdbParser.getSeriesList(urlString.toString());
+        
+        List<Series> seriesList = TvdbParser.getSeriesList(urlBuilder.toString());
         if (seriesList.isEmpty()) {
             return null;
         } else {
@@ -179,22 +170,22 @@ public class TheTVDB {
             return new ArrayList<Episode>();
         }
 
-        StringBuilder urlString = new StringBuilder();
+        StringBuilder urlBuilder = new StringBuilder();
         try {
-            urlString.append(getXmlMirror());
-            urlString.append(apiKey);
-            urlString.append(SERIES_URL);
-            urlString.append(id);
-            urlString.append(ALL_URL);
+            urlBuilder.append(getXmlMirror());
+            urlBuilder.append(apiKey);
+            urlBuilder.append(SERIES_URL);
+            urlBuilder.append(id);
+            urlBuilder.append(ALL_URL);
             if (language != null) {
-                urlString.append(language).append(XML_EXTENSION);
+                urlBuilder.append(language).append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
             LOGGER.warn(ex.getMessage());
             return null;
         }
 
-        List<Episode> episodeList = TvdbParser.getAllEpisodes(urlString.toString(), -1);
+        List<Episode> episodeList = TvdbParser.getAllEpisodes(urlBuilder.toString(), -1);
         if (episodeList.isEmpty()) {
             return null;
         } else {
@@ -212,22 +203,22 @@ public class TheTVDB {
      * @return
      */
     public List<Episode> getSeasonEpisodes(String id, int season, String language) {
-        StringBuilder urlString = new StringBuilder();
+        StringBuilder urlBuilder = new StringBuilder();
         try {
-            urlString.append(getXmlMirror());
-            urlString.append(apiKey);
-            urlString.append(SERIES_URL);
-            urlString.append(id);
-            urlString.append(ALL_URL);
+            urlBuilder.append(getXmlMirror());
+            urlBuilder.append(apiKey);
+            urlBuilder.append(SERIES_URL);
+            urlBuilder.append(id);
+            urlBuilder.append(ALL_URL);
             if (language != null) {
-                urlString.append(language).append(XML_EXTENSION);
+                urlBuilder.append(language).append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
             LOGGER.warn(ex.getMessage());
             return null;
         }
 
-        List<Episode> episodeList = TvdbParser.getAllEpisodes(urlString.toString(), season);
+        List<Episode> episodeList = TvdbParser.getAllEpisodes(urlBuilder.toString(), season);
         if (episodeList.isEmpty()) {
             return null;
         } else {
@@ -250,26 +241,26 @@ public class TheTVDB {
             return new Episode();
         }
 
-        StringBuilder urlString = new StringBuilder();
+        StringBuilder urlBuilder = new StringBuilder();
         try {
-            urlString.append(getXmlMirror());
-            urlString.append(apiKey);
-            urlString.append(SERIES_URL);
-            urlString.append(seriesId);
-            urlString.append("/default/");
-            urlString.append(seasonNbr);
-            urlString.append("/");
-            urlString.append(episodeNbr);
-            urlString.append("/");
+            urlBuilder.append(getXmlMirror());
+            urlBuilder.append(apiKey);
+            urlBuilder.append(SERIES_URL);
+            urlBuilder.append(seriesId);
+            urlBuilder.append("/default/");
+            urlBuilder.append(seasonNbr);
+            urlBuilder.append("/");
+            urlBuilder.append(episodeNbr);
+            urlBuilder.append("/");
             if (language != null) {
-                urlString.append(language).append(XML_EXTENSION);
+                urlBuilder.append(language).append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
             LOGGER.warn(ex.getMessage());
             return new Episode();
         }
 
-        return TvdbParser.getEpisode(urlString.toString());
+        return TvdbParser.getEpisode(urlBuilder.toString());
     }
 
     /**
@@ -282,26 +273,26 @@ public class TheTVDB {
      * @return
      */
     public Episode getDVDEpisode(String seriesId, int seasonNbr, int episodeNbr, String language) {
-        StringBuilder urlString = new StringBuilder();
+        StringBuilder urlBuilder = new StringBuilder();
         try {
-            urlString.append(getXmlMirror());
-            urlString.append(apiKey);
-            urlString.append(SERIES_URL);
-            urlString.append(seriesId);
-            urlString.append("/dvd/");
-            urlString.append(seasonNbr);
-            urlString.append("/");
-            urlString.append(episodeNbr);
-            urlString.append("/");
+            urlBuilder.append(getXmlMirror());
+            urlBuilder.append(apiKey);
+            urlBuilder.append(SERIES_URL);
+            urlBuilder.append(seriesId);
+            urlBuilder.append("/dvd/");
+            urlBuilder.append(seasonNbr);
+            urlBuilder.append("/");
+            urlBuilder.append(episodeNbr);
+            urlBuilder.append("/");
             if (language != null) {
-                urlString.append(language).append(XML_EXTENSION);
+                urlBuilder.append(language).append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
             LOGGER.warn(ex.getMessage());
             return new Episode();
         }
 
-        return TvdbParser.getEpisode(urlString.toString());
+        return TvdbParser.getEpisode(urlBuilder.toString());
     }
 
     /**
@@ -314,24 +305,24 @@ public class TheTVDB {
      * @return
      */
     public Episode getAbsoluteEpisode(String seriesId, int episodeNbr, String language) {
-        StringBuilder urlString = new StringBuilder();
+        StringBuilder urlBuilder = new StringBuilder();
         try {
-            urlString.append(getXmlMirror());
-            urlString.append(apiKey);
-            urlString.append(SERIES_URL);
-            urlString.append(seriesId);
-            urlString.append("/absolute/");
-            urlString.append(episodeNbr);
-            urlString.append("/");
+            urlBuilder.append(getXmlMirror());
+            urlBuilder.append(apiKey);
+            urlBuilder.append(SERIES_URL);
+            urlBuilder.append(seriesId);
+            urlBuilder.append("/absolute/");
+            urlBuilder.append(episodeNbr);
+            urlBuilder.append("/");
             if (language != null) {
-                urlString.append(language).append(XML_EXTENSION);
+                urlBuilder.append(language).append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
             LOGGER.warn(ex.getMessage());
             return new Episode();
         }
 
-        return TvdbParser.getEpisode(urlString.toString());
+        return TvdbParser.getEpisode(urlBuilder.toString());
     }
 
     /**
@@ -364,19 +355,19 @@ public class TheTVDB {
     }
 
     public Banners getBanners(String seriesId) {
-        StringBuilder urlString = new StringBuilder();
+        StringBuilder urlBuilder = new StringBuilder();
         try {
-            urlString.append(getXmlMirror());
-            urlString.append(apiKey);
-            urlString.append(SERIES_URL);
-            urlString.append(seriesId);
-            urlString.append("/banners.xml");
+            urlBuilder.append(getXmlMirror());
+            urlBuilder.append(apiKey);
+            urlBuilder.append(SERIES_URL);
+            urlBuilder.append(seriesId);
+            urlBuilder.append("/banners.xml");
         } catch (WebServiceException ex) {
             LOGGER.warn(ex.getMessage());
             return new Banners();
         }
 
-        return TvdbParser.getBanners(urlString.toString());
+        return TvdbParser.getBanners(urlBuilder.toString());
     }
 
     /**
@@ -386,39 +377,39 @@ public class TheTVDB {
      * @return
      */
     public List<Actor> getActors(String seriesId) {
-        StringBuilder urlString = new StringBuilder();
+        StringBuilder urlBuilder = new StringBuilder();
         try {
-            urlString.append(getXmlMirror());
-            urlString.append(apiKey);
-            urlString.append(SERIES_URL);
-            urlString.append(seriesId);
-            urlString.append("/actors.xml");
+            urlBuilder.append(getXmlMirror());
+            urlBuilder.append(apiKey);
+            urlBuilder.append(SERIES_URL);
+            urlBuilder.append(seriesId);
+            urlBuilder.append("/actors.xml");
         } catch (WebServiceException ex) {
             LOGGER.warn(ex.getMessage());
             return new ArrayList<Actor>();
         }
-        return TvdbParser.getActors(urlString.toString());
+        return TvdbParser.getActors(urlBuilder.toString());
     }
 
     public List<Series> searchSeries(String title, String language) {
-        StringBuilder urlString = new StringBuilder();
+        StringBuilder urlBuilder = new StringBuilder();
 
         try {
-            urlString.append(getXmlMirror());
-            urlString.append("GetSeries.php?seriesname=");
-            urlString.append(URLEncoder.encode(title, "UTF-8"));
+            urlBuilder.append(getXmlMirror());
+            urlBuilder.append("GetSeries.php?seriesname=");
+            urlBuilder.append(URLEncoder.encode(title, "UTF-8"));
             if (language != null) {
-                urlString.append("&language=").append(language);
+                urlBuilder.append("&language=").append(language);
             }
         } catch (UnsupportedEncodingException e) {
             // Try and use the raw title
-            urlString.append(title);
+            urlBuilder.append(title);
         } catch (WebServiceException ex) {
             LOGGER.warn(ex.getMessage());
             return new ArrayList<Series>();
         }
 
-        return TvdbParser.getSeriesList(urlString.toString());
+        return TvdbParser.getSeriesList(urlBuilder.toString());
     }
 
     /**
@@ -429,24 +420,24 @@ public class TheTVDB {
      * @return
      */
     public Episode getEpisodeById(String episodeId, String language) {
-        StringBuilder urlString = new StringBuilder();
+        StringBuilder urlBuilder = new StringBuilder();
 
         try {
-            urlString.append(getXmlMirror());
-            urlString.append(apiKey);
-            urlString.append("/episodes/");
-            urlString.append(episodeId);
-            urlString.append("/");
+            urlBuilder.append(getXmlMirror());
+            urlBuilder.append(apiKey);
+            urlBuilder.append("/episodes/");
+            urlBuilder.append(episodeId);
+            urlBuilder.append("/");
             if (StringUtils.isNotBlank(language)) {
-                urlString.append(language);
-                urlString.append(XML_EXTENSION);
+                urlBuilder.append(language);
+                urlBuilder.append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
             LOGGER.warn(ex.getMessage());
             return new Episode();
         }
-        LOGGER.debug("URL: " + urlString.toString());
-        return TvdbParser.getEpisode(urlString.toString());
+        LOGGER.debug("URL: " + urlBuilder.toString());
+        return TvdbParser.getEpisode(urlBuilder.toString());
     }
 
     /**
