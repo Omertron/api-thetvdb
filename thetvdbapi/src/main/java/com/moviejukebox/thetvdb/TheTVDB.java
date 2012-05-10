@@ -38,7 +38,6 @@ public class TheTVDB {
     private static String apiKey = null;
     private static String xmlMirror = null;
     private static String bannerMirror = null;
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private static final String XML_EXTENSION = ".xml";
     private static final String SERIES_URL = "/series/";
     private static final String ALL_URL = "/all/";
@@ -149,7 +148,7 @@ public class TheTVDB {
             LOGGER.warn(ex.getMessage());
             return null;
         }
-        
+
         List<Series> seriesList = TvdbParser.getSeriesList(urlBuilder.toString());
         if (seriesList.isEmpty()) {
             return null;
@@ -339,7 +338,8 @@ public class TheTVDB {
             Date date;
 
             try {
-                date = DATE_FORMAT.parse(episode.getFirstAired());
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                date = dateFormat.parse(episode.getFirstAired());
             } catch (ParseException error) {
                 date = null;
             }
@@ -347,7 +347,7 @@ public class TheTVDB {
             if (date != null) {
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(date);
-                year = "" + cal.get(Calendar.YEAR);
+                year = String.valueOf(cal.get(Calendar.YEAR));
             }
         }
 
