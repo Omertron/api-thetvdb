@@ -12,7 +12,6 @@
  */
 package com.moviejukebox.thetvdb.tools;
 
-import com.moviejukebox.thetvdb.TheTVDB;
 import com.moviejukebox.thetvdb.model.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,10 +45,11 @@ public class TvdbParser {
 
     /**
      * Get a list of the actors from the URL
+     *
      * @param urlString
      * @return
      */
-    public static List<Actor> getActors(String urlString) {
+    public static List<Actor> getActors(String urlString, String bannerMirror) {
         List<Actor> results = new ArrayList<Actor>();
         Actor actor;
         Document doc;
@@ -75,7 +75,7 @@ public class TvdbParser {
                 actor.setId(DOMHelper.getValueFromElement(eActor, "id"));
                 String image = DOMHelper.getValueFromElement(eActor, "Image");
                 if (!image.isEmpty()) {
-                    actor.setImage(TheTVDB.getBannerMirror() + image);
+                    actor.setImage(bannerMirror + image);
                 }
                 actor.setName(DOMHelper.getValueFromElement(eActor, "Name"));
                 actor.setRole(DOMHelper.getValueFromElement(eActor, "Role"));
@@ -92,11 +92,12 @@ public class TvdbParser {
 
     /**
      * Get all the episodes from the URL
+     *
      * @param urlString
      * @param season
      * @return
      */
-    public static List<Episode> getAllEpisodes(String urlString, int season) {
+    public static List<Episode> getAllEpisodes(String urlString, int season, String bannerMirror) {
         List<Episode> episodeList = new ArrayList<Episode>();
         Episode episode;
         NodeList nlEpisode;
@@ -110,7 +111,7 @@ public class TvdbParser {
                 nEpisode = nlEpisode.item(loop);
                 if (nEpisode.getNodeType() == Node.ELEMENT_NODE) {
                     eEpisode = (Element) nEpisode;
-                    episode = parseNextEpisode(eEpisode);
+                    episode = parseNextEpisode(eEpisode, bannerMirror);
                     if ((episode != null) && (season == -1 || episode.getSeasonNumber() == season)) {
                         // Add the episode only if the season is -1 (all seasons) or matches the season
                         episodeList.add(episode);
@@ -126,10 +127,11 @@ public class TvdbParser {
 
     /**
      * Get a list of banners from the URL
+     *
      * @param urlString
      * @return
      */
-    public static Banners getBanners(String urlString) {
+    public static Banners getBanners(String urlString, String bannerMirror) {
         Banners banners = new Banners();
         Banner banner;
 
@@ -145,7 +147,7 @@ public class TvdbParser {
                 nBanner = nlBanners.item(loop);
                 if (nBanner.getNodeType() == Node.ELEMENT_NODE) {
                     eBanner = (Element) nBanner;
-                    banner = parseNextBanner(eBanner);
+                    banner = parseNextBanner(eBanner, bannerMirror);
                     if (banner != null) {
                         banners.addBanner(banner);
                     }
@@ -160,10 +162,11 @@ public class TvdbParser {
 
     /**
      * Get the episode information from the URL
+     *
      * @param urlString
      * @return
      */
-    public static Episode getEpisode(String urlString) {
+    public static Episode getEpisode(String urlString, String bannerMirror) {
         Episode episode = null;
         NodeList nlEpisode;
         Node nEpisode;
@@ -176,7 +179,7 @@ public class TvdbParser {
                 nEpisode = nlEpisode.item(loop);
                 if (nEpisode.getNodeType() == Node.ELEMENT_NODE) {
                     eEpisode = (Element) nEpisode;
-                    episode = parseNextEpisode(eEpisode);
+                    episode = parseNextEpisode(eEpisode, bannerMirror);
                     if (episode != null) {
                         // We only need the first episode
                         break;
@@ -193,10 +196,11 @@ public class TvdbParser {
 
     /**
      * Get a list of series from the URL
+     *
      * @param urlString
      * @return
      */
-    public static List<Series> getSeriesList(String urlString) {
+    public static List<Series> getSeriesList(String urlString, String bannerMirror) {
         List<Series> seriesList = new ArrayList<Series>();
         Series series;
         NodeList nlSeries;
@@ -216,7 +220,7 @@ public class TvdbParser {
             nSeries = nlSeries.item(loop);
             if (nSeries.getNodeType() == Node.ELEMENT_NODE) {
                 eSeries = (Element) nSeries;
-                series = parseNextSeries(eSeries);
+                series = parseNextSeries(eSeries, bannerMirror);
                 if (series != null) {
                     seriesList.add(series);
                 }
@@ -228,6 +232,7 @@ public class TvdbParser {
 
     /**
      * Parse the error message to return a more user friendly message
+     *
      * @param errorMessage
      * @return
      */
@@ -274,6 +279,7 @@ public class TvdbParser {
 
     /**
      * Create a List from a delimited string
+     *
      * @param input
      * @param delim
      * @return
@@ -294,12 +300,12 @@ public class TvdbParser {
 
     /**
      * Parse the banner record from the document
+     *
      * @param eBanner
      * @return
      * @throws Throwable
      */
-    private static Banner parseNextBanner(Element eBanner) {
-        String bannerMirror = TheTVDB.getBannerMirror();
+    private static Banner parseNextBanner(Element eBanner, String bannerMirror) {
         Banner banner = new Banner();
         String artwork;
 
@@ -336,11 +342,12 @@ public class TvdbParser {
 
     /**
      * Parse the document for episode information
+     *
      * @param doc
      * @return
      * @throws Throwable
      */
-    private static Episode parseNextEpisode(Element eEpisode) {
+    private static Episode parseNextEpisode(Element eEpisode, String bannerMirror) {
         Episode episode = new Episode();
 
         episode.setId(DOMHelper.getValueFromElement(eEpisode, "id"));
@@ -378,7 +385,7 @@ public class TvdbParser {
         episode.setAbsoluteNumber(DOMHelper.getValueFromElement(eEpisode, "absolute_number"));
         String s = DOMHelper.getValueFromElement(eEpisode, "filename");
         if (!s.isEmpty()) {
-            episode.setFilename(TheTVDB.getBannerMirror() + s);
+            episode.setFilename(bannerMirror + s);
         }
         episode.setLastUpdated(DOMHelper.getValueFromElement(eEpisode, "lastupdated"));
         episode.setSeasonId(DOMHelper.getValueFromElement(eEpisode, "seasonid"));
@@ -413,13 +420,12 @@ public class TvdbParser {
 
     /**
      * Parse the series record from the document
+     *
      * @param eSeries
      * @return
      * @throws Throwable
      */
-    private static Series parseNextSeries(Element eSeries) {
-        String bannerMirror = TheTVDB.getBannerMirror();
-
+    private static Series parseNextSeries(Element eSeries, String bannerMirror) {
         Series series = new Series();
 
         series.setId(DOMHelper.getValueFromElement(eSeries, "id"));

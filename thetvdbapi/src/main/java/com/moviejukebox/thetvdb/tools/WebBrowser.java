@@ -18,13 +18,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.charset.Charset;
-import java.nio.charset.UnsupportedCharsetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import javax.xml.ws.WebServiceException;
 import org.apache.commons.codec.binary.Base64;
@@ -245,35 +241,6 @@ public final class WebBrowser {
                 }
             }
         }
-    }
-
-    /**
-     * Determine the charset for the connection
-     *
-     * @param cnx
-     * @return
-     */
-    private static Charset getCharset(URLConnection cnx) {
-        Charset charset = null;
-        // content type will be string like "text/html; charset=UTF-8" or "text/html"
-        String contentType = cnx.getContentType();
-        if (contentType != null) {
-            // changed 'charset' to 'harset' in regexp because some sites send 'Charset'
-            Matcher m = Pattern.compile("harset *=[ '\"]*([^ ;'\"]+)[ ;'\"]*").matcher(contentType);
-            if (m.find()) {
-                String encoding = m.group(1);
-                try {
-                    charset = Charset.forName(encoding);
-                } catch (UnsupportedCharsetException e) {
-                    // there will be used default charset
-                }
-            }
-        }
-        if (charset == null) {
-            charset = Charset.defaultCharset();
-        }
-
-        return charset;
     }
 
     /**

@@ -32,7 +32,7 @@ import org.junit.Test;
 public class TheTvDbTest {
 
     private static final Logger LOGGER = Logger.getLogger(TheTvDbTest.class);
-    private static String apikey = "2805AD2873519EC5";
+    private static String apiKey = "2805AD2873519EC5";
     private TheTVDB tvdb;
     private static final String LANGUAGE = "en";
     private static final String TVDBID = "80348";
@@ -49,7 +49,7 @@ public class TheTvDbTest {
 
     @Before
     public void setUp() throws Exception {
-        tvdb = new TheTVDB(apikey);
+        tvdb = new TheTVDB(apiKey);
     }
 
     @Test
@@ -137,14 +137,14 @@ public class TheTvDbTest {
     @Test
     public void testGetXmlMirror() throws Throwable {
         LOGGER.info("testGetXmlMirror");
-        String mirror = TheTVDB.getXmlMirror();
+        String mirror = TheTVDB.getXmlMirror(apiKey);
         assertTrue(mirror.length() > 0);
     }
 
     @Test
     public void testGetBannerMirror() {
         LOGGER.info("testGetBannerMirror");
-        String mirror = TheTVDB.getBannerMirror();
+        String mirror = TheTVDB.getBannerMirror(apiKey);
         assertTrue(mirror.length() > 0);
     }
 
