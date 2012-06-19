@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
 public final class WebBrowser {
 
     private static final Logger LOGGER = Logger.getLogger(WebBrowser.class);
-    private static final Map<String, String> browserProperties = new HashMap<String, String>();
+    private static final Map<String, String> BROWSER_PROPERTIES = new HashMap<String, String>();
     private static Map<String, Map<String, String>> cookies = new HashMap<String, Map<String, String>>();
     private static String proxyHost = null;
     private static String proxyPort = null;
@@ -146,10 +146,8 @@ public final class WebBrowser {
                 }
             }
 
-            if (cnx != null) {
-                if (cnx instanceof HttpURLConnection) {
-                    ((HttpURLConnection) cnx).disconnect();
-                }
+            if (cnx != null && cnx instanceof HttpURLConnection) {
+                ((HttpURLConnection) cnx).disconnect();
             }
         }
         return content.toString();
@@ -161,12 +159,12 @@ public final class WebBrowser {
      * @param cnx
      */
     private static void sendHeader(URLConnection cnx) {
-        if (browserProperties.isEmpty()) {
-            browserProperties.put("User-Agent", "Mozilla/5.25 Netscape/5.0 (Windows; I; Win95)");
+        if (BROWSER_PROPERTIES.isEmpty()) {
+            BROWSER_PROPERTIES.put("User-Agent", "Mozilla/5.25 Netscape/5.0 (Windows; I; Win95)");
         }
 
         // send browser properties
-        for (Map.Entry<String, String> browserProperty : browserProperties.entrySet()) {
+        for (Map.Entry<String, String> browserProperty : BROWSER_PROPERTIES.entrySet()) {
             cnx.setRequestProperty(browserProperty.getKey(), browserProperty.getValue());
         }
         // send cookies

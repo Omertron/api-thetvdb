@@ -32,7 +32,7 @@ import org.xml.sax.SAXException;
  */
 public class DOMHelper {
 
-    private static final Logger logger = Logger.getLogger(DOMHelper.class);
+    private static final Logger LOGGER = Logger.getLogger(DOMHelper.class);
     private static final String YES = "yes";
     private static final String ENCODING = "UTF-8";
     private static final int RETRY_COUNT = 5;
@@ -167,12 +167,12 @@ public class DOMHelper {
             trans.transform(new DOMSource(doc), new StreamResult(new File(localFile)));
             return true;
         } catch (TransformerConfigurationException error) {
-            logger.warn("Error writing the document to " + localFile);
-            logger.warn("Message: " + error.getMessage());
+            LOGGER.warn("Error writing the document to " + localFile);
+            LOGGER.warn("Message: " + error.getMessage());
             return false;
         } catch (TransformerException error) {
-            logger.warn("Error writing the document to " + localFile);
-            logger.warn("Message: " + error.getMessage());
+            LOGGER.warn("Error writing the document to " + localFile);
+            LOGGER.warn("Message: " + error.getMessage());
             return false;
         }
     }

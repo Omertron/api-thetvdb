@@ -1,14 +1,14 @@
 /*
  *      Copyright (c) 2004-2012 YAMJ Members
- *      http://code.google.com/p/moviejukebox/people/list 
- *  
+ *      http://code.google.com/p/moviejukebox/people/list
+ *
  *      Web: http://code.google.com/p/moviejukebox/
- *  
+ *
  *      This software is licensed under a Creative Commons License
  *      See this page: http://code.google.com/p/moviejukebox/wiki/License
- *  
- *      For any reuse or distribution, you must make clear to others the 
- *      license terms of this work.  
+ *
+ *      For any reuse or distribution, you must make clear to others the
+ *      license terms of this work.
  */
 package com.moviejukebox.thetvdb.model;
 
@@ -27,13 +27,13 @@ public enum BannerType {
     FanartSD("1280x720"),
     Poster("680x1000"),
     Artwork("artwork");
-    
+
     private String type;
-    
+
     private BannerType(String type) {
         this.type = type;
     }
-    
+
     public String getType() {
         return this.type;
     }
@@ -52,7 +52,7 @@ public enum BannerType {
                         return bannerType;
                     }
                 }
-                
+
                 // If we've not found the type, then try a generic Artwork for the 1920x1080, 1280x720 or 680x1000 values
                 if (type.toLowerCase().contains("x")) {
                     return BannerType.Artwork;
@@ -61,7 +61,7 @@ public enum BannerType {
                 if (type.toLowerCase().contains("x")) {
                     return BannerType.Artwork;
                 } else {
-                    throw new IllegalArgumentException("BannerType '" + type + "' does not exist");
+                    throw new IllegalArgumentException("BannerType '" + type + "' does not exist", ex);
                 }
             }
         }
