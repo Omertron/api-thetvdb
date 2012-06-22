@@ -57,7 +57,14 @@ public class DOMHelper {
             return "";
         } else {
             Element tagElement = (Element) elementNodeList.item(0);
+            if (tagElement == null) {
+                return "";
+            }
+
             NodeList tagNodeList = tagElement.getChildNodes();
+            if (tagNodeList == null || tagNodeList.getLength() == 0) {
+                return "";
+            }
             return ((Node) tagNodeList.item(0)).getNodeValue();
         }
     }
