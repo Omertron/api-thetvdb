@@ -1,4 +1,5 @@
-Written by: altman.matthew (sTyLeS)
+Originally written by: altman.matthew (sTyLeS)
+Maintained by: Stuart Boston (Omertron AT Gmail DOT com)
 
 Originally written for use by YetAnotherMovieJukebox (YAMJ) http://code.google.com/p/moviejukebox/
 But anyone can feel free to use it for other projects as well.

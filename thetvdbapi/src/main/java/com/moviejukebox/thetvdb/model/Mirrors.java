@@ -1,14 +1,11 @@
 /*
- *      Copyright (c) 2004-2012 YAMJ Members
- *      http://code.google.com/p/moviejukebox/people/list 
- *  
- *      Web: http://code.google.com/p/moviejukebox/
- *  
+ *      Copyright (c) 2004-2012 Matthew Altman & Stuart Boston
+ *
  *      This software is licensed under a Creative Commons License
- *      See this page: http://code.google.com/p/moviejukebox/wiki/License
- *  
- *      For any reuse or distribution, you must make clear to others the 
- *      license terms of this work.  
+ *      See the LICENCE.txt file included in this package
+ *
+ *      For any reuse or distribution, you must make clear to others the
+ *      license terms of this work.
  */
 package com.moviejukebox.thetvdb.model;
 
@@ -35,28 +32,28 @@ public class Mirrors {
     private static final int MASK_XML = 1;
     private static final int MASK_BANNER = 2;
     private static final int MASK_ZIP = 4;
-    
-    
+
+
     private static final Random RNDM = new Random();
-    
+
     private List<String> xmlList = new ArrayList<String>();
     private List<String> bannerList = new ArrayList<String>();
     private List<String> zipList = new ArrayList<String>();
-    
+
     public Mirrors(String apiKey) {
-        // Make this synchronized so that only one 
+        // Make this synchronized so that only one
         synchronized (this) {
             String urlString = "http://www.thetvdb.com/api/" + apiKey + "/mirrors.xml";
             Document doc;
-            
+
             doc = DOMHelper.getEventDocFromUrl(urlString);
             int typeMask;
             String url;
-            
+
             NodeList nlMirror = doc.getElementsByTagName("Mirror");
             for (int nodeLoop = 0; nodeLoop < nlMirror.getLength(); nodeLoop++) {
                 Node nMirror = nlMirror.item(nodeLoop);
-                
+
                 if (nMirror.getNodeType() == Node.ELEMENT_NODE) {
                     Element eMirror = (Element) nMirror;
                     url = DOMHelper.getValueFromElement(eMirror, "mirrorpath");
@@ -66,7 +63,7 @@ public class Mirrors {
             }
         }
     }
-    
+
     public String getMirror(String type) {
         String url = null;
         if (type.equals(TYPE_XML) && !xmlList.isEmpty()) {
@@ -78,16 +75,16 @@ public class Mirrors {
         }
         return url;
     }
-    
+
     private void addMirror(int typeMask, String url) {
         switch (typeMask) {
             case MASK_XML:
                 xmlList.add(url);
                 break;
-            case MASK_BANNER: 
+            case MASK_BANNER:
                 bannerList.add(url);
                 break;
-            case (MASK_XML + MASK_BANNER): 
+            case (MASK_XML + MASK_BANNER):
                 xmlList.add(url);
                 bannerList.add(url);
                 break;
@@ -98,11 +95,11 @@ public class Mirrors {
                 xmlList.add(url);
                 zipList.add(url);
                 break;
-            case (MASK_BANNER + MASK_ZIP): 
+            case (MASK_BANNER + MASK_ZIP):
                 bannerList.add(url);
                 zipList.add(url);
                 break;
-            case (MASK_XML + MASK_BANNER + MASK_ZIP): 
+            case (MASK_XML + MASK_BANNER + MASK_ZIP):
                 xmlList.add(url);
                 bannerList.add(url);
                 zipList.add(url);
