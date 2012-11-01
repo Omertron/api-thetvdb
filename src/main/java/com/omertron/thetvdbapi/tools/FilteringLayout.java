@@ -7,7 +7,7 @@
  *      For any reuse or distribution, you must make clear to others the
  *      license terms of this work.
  */
-package com.moviejukebox.thetvdb.tools;
+package com.omertron.thetvdbapi.tools;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

@@ -7,9 +7,15 @@
  *      For any reuse or distribution, you must make clear to others the
  *      license terms of this work.
  */
-package com.moviejukebox.thetvdb.tools;
+package com.omertron.thetvdbapi.tools;
 
-import com.moviejukebox.thetvdb.model.*;
+import com.omertron.thetvdbapi.model.Actor;
+import com.omertron.thetvdbapi.model.Banner;
+import com.omertron.thetvdbapi.model.BannerListType;
+import com.omertron.thetvdbapi.model.BannerType;
+import com.omertron.thetvdbapi.model.Banners;
+import com.omertron.thetvdbapi.model.Episode;
+import com.omertron.thetvdbapi.model.Series;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

@@ -7,12 +7,16 @@
  *      For any reuse or distribution, you must make clear to others the
  *      license terms of this work.
  */
-package com.moviejukebox.thetvdb;
+package com.omertron.thetvdbapi;
 
-import com.moviejukebox.thetvdb.model.*;
-import com.moviejukebox.thetvdb.tools.FilteringLayout;
-import com.moviejukebox.thetvdb.tools.TvdbParser;
-import com.moviejukebox.thetvdb.tools.WebBrowser;
+import com.omertron.thetvdbapi.model.Actor;
+import com.omertron.thetvdbapi.model.Banners;
+import com.omertron.thetvdbapi.model.Episode;
+import com.omertron.thetvdbapi.model.Mirrors;
+import com.omertron.thetvdbapi.model.Series;
+import com.omertron.thetvdbapi.tools.FilteringLayout;
+import com.omertron.thetvdbapi.tools.TvdbParser;
+import com.omertron.thetvdbapi.tools.WebBrowser;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.ParseException;
@@ -29,9 +33,9 @@ import org.apache.log4j.Logger;
  * @author altman.matthew
  * @author stuart.boston
  */
-public class TheTVDB {
+public class TheTVDBApi {
 
-    private static final Logger LOGGER = Logger.getLogger(TheTVDB.class);
+    private static final Logger LOGGER = Logger.getLogger(TheTVDBApi.class);
     private String apiKey = null;
     private static String xmlMirror = null;
     private static String bannerMirror = null;
@@ -39,7 +43,7 @@ public class TheTVDB {
     private static final String SERIES_URL = "/series/";
     private static final String ALL_URL = "/all/";
 
-    public TheTVDB(String apiKey) {
+    public TheTVDBApi(String apiKey) {
         if (apiKey == null) {
             return;
         }
@@ -52,11 +56,11 @@ public class TheTVDB {
      * Output the API version information to the debug log
      */
     public static void showVersion() {
-        String apiTitle = TheTVDB.class.getPackage().getSpecificationTitle();
+        String apiTitle = TheTVDBApi.class.getPackage().getSpecificationTitle();
 
         if (StringUtils.isNotBlank(apiTitle)) {
-            String apiVersion = TheTVDB.class.getPackage().getSpecificationVersion();
-            String apiRevision = TheTVDB.class.getPackage().getImplementationVersion();
+            String apiVersion = TheTVDBApi.class.getPackage().getSpecificationVersion();
+            String apiRevision = TheTVDBApi.class.getPackage().getImplementationVersion();
             StringBuilder sv = new StringBuilder();
             sv.append(apiTitle).append(" ");
             sv.append(apiVersion).append(" r");

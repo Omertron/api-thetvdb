@@ -7,7 +7,7 @@
  *      For any reuse or distribution, you must make clear to others the
  *      license terms of this work.
  */
-package com.moviejukebox.thetvdb.model;
+package com.omertron.thetvdbapi.model;
 
 /**
  * Describes the list of possible banner types stored in the "BannerType" field returned from TheTVDB

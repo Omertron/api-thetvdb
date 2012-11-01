@@ -7,9 +7,9 @@
  *      For any reuse or distribution, you must make clear to others the
  *      license terms of this work.
  */
-package com.moviejukebox.thetvdb.model;
+package com.omertron.thetvdbapi.model;
 
-import com.moviejukebox.thetvdb.tools.DOMHelper;
+import com.omertron.thetvdbapi.tools.DOMHelper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

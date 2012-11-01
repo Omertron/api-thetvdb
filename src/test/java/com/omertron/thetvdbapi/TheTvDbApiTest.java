@@ -7,12 +7,13 @@
  *      For any reuse or distribution, you must make clear to others the
  *      license terms of this work.
  */
-package com.moviejukebox.thetvdb;
+package com.omertron.thetvdbapi;
 
-import com.moviejukebox.thetvdb.model.Actor;
-import com.moviejukebox.thetvdb.model.Banners;
-import com.moviejukebox.thetvdb.model.Episode;
-import com.moviejukebox.thetvdb.model.Series;
+import com.omertron.thetvdbapi.TheTVDBApi;
+import com.omertron.thetvdbapi.model.Actor;
+import com.omertron.thetvdbapi.model.Banners;
+import com.omertron.thetvdbapi.model.Episode;
+import com.omertron.thetvdbapi.model.Series;
 import java.util.List;
 import org.apache.log4j.Logger;
 import static org.junit.Assert.*;
@@ -26,11 +27,11 @@ import org.junit.Test;
  * @author stuart.boston
  *
  */
-public class TheTvDbTest {
+public class TheTvDbApiTest {
 
-    private static final Logger LOGGER = Logger.getLogger(TheTvDbTest.class);
+    private static final Logger LOGGER = Logger.getLogger(TheTvDbApiTest.class);
     private static String apiKey = "2805AD2873519EC5";
-    private TheTVDB tvdb;
+    private TheTVDBApi tvdb;
     private static final String LANGUAGE = "en";
     private static final String TVDBID = "80348";
     private static final String SERIES_NAME = "Chuck";
@@ -46,7 +47,7 @@ public class TheTvDbTest {
 
     @Before
     public void setUp() throws Exception {
-        tvdb = new TheTVDB(apiKey);
+        tvdb = new TheTVDBApi(apiKey);
     }
 
     @Test
@@ -134,19 +135,19 @@ public class TheTvDbTest {
     @Test
     public void testGetXmlMirror() throws Throwable {
         LOGGER.info("testGetXmlMirror");
-        String mirror = TheTVDB.getXmlMirror(apiKey);
+        String mirror = TheTVDBApi.getXmlMirror(apiKey);
         assertTrue(mirror.length() > 0);
     }
 
     @Test
     public void testGetBannerMirror() {
         LOGGER.info("testGetBannerMirror");
-        String mirror = TheTVDB.getBannerMirror(apiKey);
+        String mirror = TheTVDBApi.getBannerMirror(apiKey);
         assertTrue(mirror.length() > 0);
     }
 
     /**
-     * Test of getEpisodeById method, of class TheTVDB.
+     * Test of getEpisodeById method, of class TheTVDBApi.
      */
     @Test
     public void testGetEpisodeById() {

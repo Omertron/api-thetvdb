@@ -1,6 +1,6 @@
-<?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
@@ -11,28 +11,12 @@
         <maven>3.0.3</maven>
     </prerequisites>
 
-    <groupId>com.moviejukebox</groupId>
+    <groupId>com.omertron</groupId>
     <artifactId>thetvdbapi</artifactId>
     <version>1.5-SNAPSHOT</version>
     <name>API-TheTVDB</name>
-
+    <packaging>jar</packaging>
     <description>API for TheTVDB.com website</description>
-
-    <issueManagement>
-        <system>Google Code</system>
-        <url>http://code.google.com/p/javatvdbapi/issues/list</url>
-    </issueManagement>
-
-    <ciManagement>
-        <system>Jenkins CI</system>
-        <url>http://jenkins.omertron.com/job/API-TheTVDb/</url>
-    </ciManagement>
-
-    <scm>
-        <connection>scm:svn:http://javatvdbapi.googlecode.com/svn/trunk/thetvdbapi</connection>
-        <developerConnection>scm:svn:https://javatvdbapi.googlecode.com/svn/trunk/thetvdbapi</developerConnection>
-        <url>http://code.google.com/p/javatvdbapi/source/browse/trunk/thetvdbapi</url>
-    </scm>
 
     <properties>
         <skipTests>false</skipTests>
@@ -41,33 +25,55 @@
         <distribution.format>zip</distribution.format>
     </properties>
 
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/Omertron/api-thetvdb/issues</url>
+    </issueManagement>
+
+    <ciManagement>
+        <system>Jenkins CI</system>
+        <url>http://jenkins.omertron.com/job/API-TheTVDb/</url>
+    </ciManagement>
+
+    <scm>
+        <url>scm:git:git@github.com:Omertron/api-thetvdb.git</url>
+        <connection>scm:git:git@github.com:Omertron/api-thetvdb.git</connection>
+        <developerConnection>scm:git:git@github.com:Omertron/api-thetvdb.git</developerConnection>
+    </scm>
+
     <dependencies>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.10</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>1.7</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.1</version>
         </dependency>
+
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.17</version>
         </dependency>
+
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.0-api</artifactId>
             <version>1.0.1.Final</version>
         </dependency>
+
     </dependencies>
 
     <profiles>
