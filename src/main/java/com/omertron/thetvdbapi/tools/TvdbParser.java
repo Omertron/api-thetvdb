@@ -13,9 +13,13 @@ import com.omertron.thetvdbapi.model.Actor;
 import com.omertron.thetvdbapi.model.Banner;
 import com.omertron.thetvdbapi.model.BannerListType;
 import com.omertron.thetvdbapi.model.BannerType;
+import com.omertron.thetvdbapi.model.BannerUpdate;
 import com.omertron.thetvdbapi.model.Banners;
 import com.omertron.thetvdbapi.model.Episode;
+import com.omertron.thetvdbapi.model.EpisodeUpdate;
 import com.omertron.thetvdbapi.model.Series;
+import com.omertron.thetvdbapi.model.SeriesUpdate;
+import com.omertron.thetvdbapi.model.TVDBUpdates;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -231,6 +235,52 @@ public class TvdbParser {
         }
 
         return seriesList;
+    }
+
+    /**
+     * Get a list of updates from the URL
+     *
+     * @param urlString
+     * @return
+     */
+    public static TVDBUpdates getUpdates(String urlString) {
+        TVDBUpdates updates = new TVDBUpdates();
+
+        Document doc;
+
+        try {
+            doc = DOMHelper.getEventDocFromUrl(urlString);
+        } catch (WebServiceException ex) {
+            return updates;
+        }
+
+        Node root = doc.getChildNodes().item(0);
+        List<SeriesUpdate> seriesUpdates = new ArrayList<SeriesUpdate>();
+        List<EpisodeUpdate> episodeUpdates = new ArrayList<EpisodeUpdate>();
+        List<BannerUpdate> bannerUpdates = new ArrayList<BannerUpdate>();
+
+        NodeList updateNodes = root.getChildNodes();
+        Node updateNode;
+        for (int i = 0; i < updateNodes.getLength(); i++) {
+            updateNode = updateNodes.item(i);
+            if (updateNode.getNodeName().equals("Series")) {
+
+                seriesUpdates.add(parseNextSeriesUpdate((Element) updateNode));
+            } else if (updateNode.getNodeName().equals("Episode")) {
+
+                episodeUpdates.add(parseNextEpisodeUpdate((Element) updateNode));
+            } else if (updateNode.getNodeName().equals("Banner")) {
+
+                bannerUpdates.add(parseNextBannerUpdate((Element) updateNode));
+            }
+        }
+
+        updates.setTime(DOMHelper.getValueFromElement((Element) root, "time"));
+        updates.setSeriesUpdates(seriesUpdates);
+        updates.setEpisodeUpdates(episodeUpdates);
+        updates.setBannerUpdates(bannerUpdates);
+
+        return updates;
     }
 
     /**
@@ -470,4 +520,56 @@ public class TvdbParser {
 
         return series;
     }
+
+    /**
+     * Parse the series update record from the document
+     *
+     * @param element
+     * @return
+     */
+    private static SeriesUpdate parseNextSeriesUpdate(Element element) {
+        SeriesUpdate seriesUpdate = new SeriesUpdate();
+
+        seriesUpdate.setId(DOMHelper.getValueFromElement(element, "id"));
+        seriesUpdate.setTime(DOMHelper.getValueFromElement(element, "time"));
+
+        return seriesUpdate;
+    }
+
+    /**
+     * Parse the episode update record from the document
+     *
+     * @param element
+     * @return
+     */
+    private static EpisodeUpdate parseNextEpisodeUpdate(Element element) {
+        EpisodeUpdate episodeUpdate = new EpisodeUpdate();
+
+        episodeUpdate.setId(DOMHelper.getValueFromElement(element, "id"));
+        episodeUpdate.setSeries(DOMHelper.getValueFromElement(element, "Series"));
+        episodeUpdate.setTime(DOMHelper.getValueFromElement(element, "time"));
+
+        return episodeUpdate;
+    }
+
+    /**
+     * Parse the banner update record from the document
+     *
+     * @param element
+     * @return
+     */
+    private static BannerUpdate parseNextBannerUpdate(Element element) {
+        BannerUpdate bannerUpdate = new BannerUpdate();
+
+        bannerUpdate.setSeasonNum(DOMHelper.getValueFromElement(element, "SeasonNum"));
+        bannerUpdate.setSeries(DOMHelper.getValueFromElement(element, "Series"));
+        bannerUpdate.setFormat(DOMHelper.getValueFromElement(element, "format"));
+        bannerUpdate.setLanguage(DOMHelper.getValueFromElement(element, "language"));
+        bannerUpdate.setPath(DOMHelper.getValueFromElement(element, "path"));
+        bannerUpdate.setTime(DOMHelper.getValueFromElement(element, "time"));
+        bannerUpdate.setType(DOMHelper.getValueFromElement(element, "type"));
+
+        return bannerUpdate;
+    }
+
 }

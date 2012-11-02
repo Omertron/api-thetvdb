@@ -14,6 +14,7 @@ import com.omertron.thetvdbapi.model.Banners;
 import com.omertron.thetvdbapi.model.Episode;
 import com.omertron.thetvdbapi.model.Mirrors;
 import com.omertron.thetvdbapi.model.Series;
+import com.omertron.thetvdbapi.model.TVDBUpdates;
 import com.omertron.thetvdbapi.tools.FilteringLayout;
 import com.omertron.thetvdbapi.tools.TvdbParser;
 import com.omertron.thetvdbapi.tools.WebBrowser;
@@ -42,6 +43,7 @@ public class TheTVDBApi {
     private static final String XML_EXTENSION = ".xml";
     private static final String SERIES_URL = "/series/";
     private static final String ALL_URL = "/all/";
+    private static final String WEEKLY_UPDATES_URL = "/updates/updates_week.xml";
 
     public TheTVDBApi(String apiKey) {
         if (apiKey == null) {
@@ -194,7 +196,8 @@ public class TheTVDBApi {
     }
 
     /**
-     * Get all the episodes from a specific season for a series. Note: This could be a lot of records
+     * Get all the episodes from a specific season for a series. Note: This
+     * could be a lot of records
      *
      * @param id
      * @param season
@@ -438,6 +441,17 @@ public class TheTVDBApi {
         }
         LOGGER.debug("URL: " + urlBuilder.toString());
         return TvdbParser.getEpisode(urlBuilder.toString(), getBannerMirror(apiKey));
+    }
+
+    public TVDBUpdates getWeeklyUpdates() {
+        StringBuilder urlBuilder = new StringBuilder();
+
+        urlBuilder.append(getXmlMirror(apiKey));
+        urlBuilder.append(apiKey);
+        urlBuilder.append(WEEKLY_UPDATES_URL);
+
+        LOGGER.debug("URL: " + urlBuilder.toString());
+        return TvdbParser.getUpdates(urlBuilder.toString());
     }
 
     /**
