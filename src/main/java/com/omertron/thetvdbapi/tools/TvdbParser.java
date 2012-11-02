@@ -333,6 +333,8 @@ public class TvdbParser {
         banner.setLanguage(DOMHelper.getValueFromElement(eBanner, "Language"));
         banner.setSeason(DOMHelper.getValueFromElement(eBanner, "Season"));
         banner.setColours(DOMHelper.getValueFromElement(eBanner, "Colors"));
+        banner.setRating(DOMHelper.getValueFromElement(eBanner, "Rating"));
+        banner.setRatingCount(DOMHelper.getValueFromElement(eBanner, "RatingCount"));
 
         try {
             banner.setSeriesName(Boolean.parseBoolean(DOMHelper.getValueFromElement(eBanner, "SeriesName")));

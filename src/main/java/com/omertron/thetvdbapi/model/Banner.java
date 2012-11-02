@@ -26,6 +26,8 @@ public class Banner implements Serializable {
     private BannerListType bannerType;
     private BannerType bannerType2;
     private String colours;
+    private Float rating;
+    private int ratingCount;
     private String language;
     private boolean seriesName;
     private String thumb;
@@ -48,6 +50,16 @@ public class Banner implements Serializable {
     @Enumerated(EnumType.STRING)
     public BannerType getBannerType2() {
         return bannerType2;
+    }
+
+    @Column(name = "RATING")
+    public Float getRating() {
+        return rating;
+    }
+
+    @Column(name = "RATINGCOUNT")
+    public int getRatingCount() {
+        return ratingCount;
     }
 
     @Column(name = "COLORS")
@@ -137,6 +149,22 @@ public class Banner implements Serializable {
         this.colours = colours;
     }
 
+    public void setRating(String rating) {
+        try {
+            this.rating = Float.parseFloat(rating);
+        } catch (Exception ignore) {
+            this.rating = 0f;
+        }
+    }
+
+    public void setRatingCount(String ratingCount) {
+        try {
+            this.ratingCount = Integer.parseInt(ratingCount);
+        } catch (Exception ignore) {
+            this.ratingCount = 0;
+        }
+    }
+
     public void setSeriesName(boolean seriesName) {
         this.seriesName = seriesName;
     }
@@ -164,6 +192,10 @@ public class Banner implements Serializable {
         builder.append(vignette);
         builder.append("], [season=");
         builder.append(season);
+        builder.append("], [rating=");
+        builder.append(rating);
+        builder.append("], [ratingCount=");
+        builder.append(ratingCount);
         builder.append("]]");
         return builder.toString();
     }
