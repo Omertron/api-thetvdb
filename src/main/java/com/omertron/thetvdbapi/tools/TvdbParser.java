@@ -43,6 +43,9 @@ public class TvdbParser {
     private static final String VIGNETTE_PATH = "VignettePath";
     private static final String THUMBNAIL_PATH = "ThumbnailPath";
     private static final int MAX_EPISODE = 24;  // The anticipated largest episode number
+    // Literals
+    private static final String SERIES = "Series";
+    private static final String TIME = "time";
 
     // Hide the constructor
     protected TvdbParser() {
@@ -222,7 +225,7 @@ public class TvdbParser {
             return seriesList;
         }
 
-        nlSeries = doc.getElementsByTagName("Series");
+        nlSeries = doc.getElementsByTagName(SERIES);
         for (int loop = 0; loop < nlSeries.getLength(); loop++) {
             nSeries = nlSeries.item(loop);
             if (nSeries.getNodeType() == Node.ELEMENT_NODE) {
@@ -263,7 +266,7 @@ public class TvdbParser {
         Node updateNode;
         for (int i = 0; i < updateNodes.getLength(); i++) {
             updateNode = updateNodes.item(i);
-            if (updateNode.getNodeName().equals("Series")) {
+            if (updateNode.getNodeName().equals(SERIES)) {
 
                 seriesUpdates.add(parseNextSeriesUpdate((Element) updateNode));
             } else if (updateNode.getNodeName().equals("Episode")) {
@@ -275,7 +278,7 @@ public class TvdbParser {
             }
         }
 
-        updates.setTime(DOMHelper.getValueFromElement((Element) root, "time"));
+        updates.setTime(DOMHelper.getValueFromElement((Element) root, TIME));
         updates.setSeriesUpdates(seriesUpdates);
         updates.setEpisodeUpdates(episodeUpdates);
         updates.setBannerUpdates(bannerUpdates);
@@ -531,7 +534,7 @@ public class TvdbParser {
         SeriesUpdate seriesUpdate = new SeriesUpdate();
 
         seriesUpdate.setId(DOMHelper.getValueFromElement(element, "id"));
-        seriesUpdate.setTime(DOMHelper.getValueFromElement(element, "time"));
+        seriesUpdate.setTime(DOMHelper.getValueFromElement(element, TIME));
 
         return seriesUpdate;
     }
@@ -546,8 +549,8 @@ public class TvdbParser {
         EpisodeUpdate episodeUpdate = new EpisodeUpdate();
 
         episodeUpdate.setId(DOMHelper.getValueFromElement(element, "id"));
-        episodeUpdate.setSeries(DOMHelper.getValueFromElement(element, "Series"));
-        episodeUpdate.setTime(DOMHelper.getValueFromElement(element, "time"));
+        episodeUpdate.setSeries(DOMHelper.getValueFromElement(element, SERIES));
+        episodeUpdate.setTime(DOMHelper.getValueFromElement(element, TIME));
 
         return episodeUpdate;
     }
@@ -562,14 +565,13 @@ public class TvdbParser {
         BannerUpdate bannerUpdate = new BannerUpdate();
 
         bannerUpdate.setSeasonNum(DOMHelper.getValueFromElement(element, "SeasonNum"));
-        bannerUpdate.setSeries(DOMHelper.getValueFromElement(element, "Series"));
+        bannerUpdate.setSeries(DOMHelper.getValueFromElement(element, SERIES));
         bannerUpdate.setFormat(DOMHelper.getValueFromElement(element, "format"));
         bannerUpdate.setLanguage(DOMHelper.getValueFromElement(element, "language"));
         bannerUpdate.setPath(DOMHelper.getValueFromElement(element, "path"));
-        bannerUpdate.setTime(DOMHelper.getValueFromElement(element, "time"));
+        bannerUpdate.setTime(DOMHelper.getValueFromElement(element, TIME));
         bannerUpdate.setType(DOMHelper.getValueFromElement(element, "type"));
 
         return bannerUpdate;
     }
-
 }
