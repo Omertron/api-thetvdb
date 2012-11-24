@@ -35,7 +35,7 @@ import org.w3c.dom.NodeList;
 
 public class TvdbParser {
 
-    private static final Logger LOGGER = Logger.getLogger(TvdbParser.class);
+    private static final Logger logger = Logger.getLogger(TvdbParser.class);
     private static final String TYPE_BANNER = "banner";
     private static final String TYPE_FANART = "fanart";
     private static final String TYPE_POSTER = "poster";
@@ -129,7 +129,7 @@ public class TvdbParser {
                 }
             }
         } catch (WebServiceException ex) {
-            LOGGER.warn("All Episodes error: " + ex.getMessage());
+            logger.warn("All Episodes error: " + ex.getMessage());
         }
 
         return episodeList;
@@ -164,7 +164,7 @@ public class TvdbParser {
                 }
             }
         } catch (WebServiceException ex) {
-            LOGGER.warn("Banners error: " + ex.getMessage());
+            logger.warn("Banners error: " + ex.getMessage());
         }
 
         return banners;
@@ -197,7 +197,7 @@ public class TvdbParser {
                 }
             }
         } catch (WebServiceException ex) {
-            LOGGER.warn("Series error: " + ex.getMessage());
+            logger.warn("Series error: " + ex.getMessage());
         }
 
         return episode;

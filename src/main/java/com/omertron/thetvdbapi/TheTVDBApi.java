@@ -36,7 +36,7 @@ import org.apache.log4j.Logger;
  */
 public class TheTVDBApi {
 
-    private static final Logger LOGGER = Logger.getLogger(TheTVDBApi.class);
+    private static final Logger logger = Logger.getLogger(TheTVDBApi.class);
     private String apiKey = null;
     private static String xmlMirror = null;
     private static String bannerMirror = null;
@@ -52,25 +52,6 @@ public class TheTVDBApi {
 
         this.apiKey = apiKey;
         FilteringLayout.addApiKey(apiKey);
-    }
-
-    /**
-     * Output the API version information to the debug log
-     */
-    public static void showVersion() {
-        String apiTitle = TheTVDBApi.class.getPackage().getSpecificationTitle();
-
-        if (StringUtils.isNotBlank(apiTitle)) {
-            String apiVersion = TheTVDBApi.class.getPackage().getSpecificationVersion();
-            String apiRevision = TheTVDBApi.class.getPackage().getImplementationVersion();
-            StringBuilder sv = new StringBuilder();
-            sv.append(apiTitle).append(" ");
-            sv.append(apiVersion).append(" r");
-            sv.append(apiRevision);
-            LOGGER.debug(sv.toString());
-        } else {
-            LOGGER.debug("API-TheTVDB version/revision information not available");
-        }
     }
 
     /**
@@ -148,7 +129,7 @@ public class TheTVDBApi {
                 urlBuilder.append(language).append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
-            LOGGER.warn(ex.getMessage());
+            logger.warn(ex.getMessage());
             return null;
         }
 
@@ -183,7 +164,7 @@ public class TheTVDBApi {
                 urlBuilder.append(language).append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
-            LOGGER.warn(ex.getMessage());
+            logger.warn(ex.getMessage());
             return null;
         }
 
@@ -216,7 +197,7 @@ public class TheTVDBApi {
                 urlBuilder.append(language).append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
-            LOGGER.warn(ex.getMessage());
+            logger.warn(ex.getMessage());
             return null;
         }
 
@@ -258,7 +239,7 @@ public class TheTVDBApi {
                 urlBuilder.append(language).append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
-            LOGGER.warn(ex.getMessage());
+            logger.warn(ex.getMessage());
             return new Episode();
         }
 
@@ -290,7 +271,7 @@ public class TheTVDBApi {
                 urlBuilder.append(language).append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
-            LOGGER.warn(ex.getMessage());
+            logger.warn(ex.getMessage());
             return new Episode();
         }
 
@@ -320,7 +301,7 @@ public class TheTVDBApi {
                 urlBuilder.append(language).append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
-            LOGGER.warn(ex.getMessage());
+            logger.warn(ex.getMessage());
             return new Episode();
         }
 
@@ -366,7 +347,7 @@ public class TheTVDBApi {
             urlBuilder.append(seriesId);
             urlBuilder.append("/banners.xml");
         } catch (WebServiceException ex) {
-            LOGGER.warn(ex.getMessage());
+            logger.warn(ex.getMessage());
             return new Banners();
         }
 
@@ -388,7 +369,7 @@ public class TheTVDBApi {
             urlBuilder.append(seriesId);
             urlBuilder.append("/actors.xml");
         } catch (WebServiceException ex) {
-            LOGGER.warn(ex.getMessage());
+            logger.warn(ex.getMessage());
             return new ArrayList<Actor>();
         }
         return TvdbParser.getActors(urlBuilder.toString(), getBannerMirror(apiKey));
@@ -408,7 +389,7 @@ public class TheTVDBApi {
             // Try and use the raw title
             urlBuilder.append(title);
         } catch (WebServiceException ex) {
-            LOGGER.warn(ex.getMessage());
+            logger.warn(ex.getMessage());
             return new ArrayList<Series>();
         }
 
@@ -436,10 +417,10 @@ public class TheTVDBApi {
                 urlBuilder.append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
-            LOGGER.warn(ex.getMessage());
+            logger.warn(ex.getMessage());
             return new Episode();
         }
-        LOGGER.debug("URL: " + urlBuilder.toString());
+        logger.debug("URL: " + urlBuilder.toString());
         return TvdbParser.getEpisode(urlBuilder.toString(), getBannerMirror(apiKey));
     }
 
@@ -450,7 +431,7 @@ public class TheTVDBApi {
         urlBuilder.append(apiKey);
         urlBuilder.append(WEEKLY_UPDATES_URL);
 
-        LOGGER.debug("URL: " + urlBuilder.toString());
+        logger.debug("URL: " + urlBuilder.toString());
         return TvdbParser.getUpdates(urlBuilder.toString());
     }
 

@@ -27,7 +27,7 @@ import org.apache.log4j.Logger;
  */
 public final class WebBrowser {
 
-    private static final Logger LOGGER = Logger.getLogger(WebBrowser.class);
+    private static final Logger logger = Logger.getLogger(WebBrowser.class);
     private static final Map<String, String> BROWSER_PROPERTIES = new HashMap<String, String>();
     private static Map<String, Map<String, String>> cookies = new HashMap<String, Map<String, String>>();
     private static String proxyHost = null;
@@ -108,7 +108,7 @@ public final class WebBrowser {
                 zis = new GZIPInputStream(cnx.getInputStream());
                 isr = new InputStreamReader(zis, "UTF-8");
             } else {
-                LOGGER.warn("Unknown content encoding " + cnx.getContentEncoding() + ", aborting");
+                logger.warn("Unknown content encoding " + cnx.getContentEncoding() + ", aborting");
                 return "";
             }
 
@@ -123,7 +123,7 @@ public final class WebBrowser {
                 try {
                     in.close();
                 } catch (IOException ex) {
-                    LOGGER.debug("Failed to close BufferedReader: " + ex.getMessage());
+                    logger.debug("Failed to close BufferedReader: " + ex.getMessage());
                 }
             }
 
@@ -131,7 +131,7 @@ public final class WebBrowser {
                 try {
                     isr.close();
                 } catch (IOException ex) {
-                    LOGGER.debug("Failed to close InputStreamReader: " + ex.getMessage());
+                    logger.debug("Failed to close InputStreamReader: " + ex.getMessage());
                 }
             }
 
@@ -139,7 +139,7 @@ public final class WebBrowser {
                 try {
                     zis.close();
                 } catch (IOException ex) {
-                    LOGGER.debug("Failed to close GZIPInputStream: " + ex.getMessage());
+                    logger.debug("Failed to close GZIPInputStream: " + ex.getMessage());
                 }
             }
 
