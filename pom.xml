@@ -13,7 +13,7 @@
 
     <groupId>com.omertron</groupId>
     <artifactId>thetvdbapi</artifactId>
-    <version>1.5-SNAPSHOT</version>
+    <version>1.5</version>
     <name>API-TheTVDB</name>
     <packaging>jar</packaging>
     <description>API for TheTVDB.com website</description>
