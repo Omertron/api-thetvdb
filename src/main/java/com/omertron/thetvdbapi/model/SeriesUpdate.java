@@ -1,5 +1,5 @@
 /*
- *      Copyright (c) 2004-2012 Matthew Altman & Stuart Boston
+ *      Copyright (c) 2004-2013 Matthew Altman & Stuart Boston
  *
  *      This file is part of TheTVDB API.
  *
