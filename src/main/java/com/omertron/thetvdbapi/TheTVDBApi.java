@@ -61,7 +61,7 @@ public class TheTVDBApi {
         }
 
         this.apiKey = apiKey;
-        FilteringLayout.addApiKey(apiKey);
+        FilteringLayout.addReplacementString(apiKey);
     }
 
     /**

@@ -23,15 +23,18 @@ import com.omertron.thetvdbapi.model.Actor;
 import com.omertron.thetvdbapi.model.Banners;
 import com.omertron.thetvdbapi.model.Episode;
 import com.omertron.thetvdbapi.model.Series;
+import com.omertron.thetvdbapi.tools.FilteringLayout;
 import java.util.List;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.junit.AfterClass;
 import static org.junit.Assert.*;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * JUnit tests for TheTvDb class. The tester must enter the API key for these
- * tests to work. Requires JUnit 4.5.
+ * JUnit tests for TheTvDb class. The tester must enter the API key for these tests to work. Requires JUnit 4.5.
  *
  * @author stuart.boston
  *
@@ -44,7 +47,7 @@ public class TheTvDbApiTest {
     private static final String LANGUAGE = "en";
     private static final String TVDBID = "80348";
     private static final String SERIES_NAME = "Chuck";
-    private static final String EPISODE_ID="1534661";
+    private static final String EPISODE_ID = "1534661";
     private static final String SEASON_ID = "27984";
     private static final String SEASON_YEAR = "2007";
 //    private static final String LANGUAGE = "he";
@@ -54,9 +57,24 @@ public class TheTvDbApiTest {
 //    private static final String SEASON_ID = "34304";
 //    private static final String SEASON_YEAR = "2008";
 
+    public TheTvDbApiTest() {
+        tvdb = new TheTVDBApi(apiKey);
+    }
+
+    @BeforeClass
+    public static void setUpClass() throws Exception {
+        // Set the logger level to TRACE
+        Logger.getRootLogger().setLevel(Level.TRACE);
+    }
+
+    @AfterClass
+    public static void tearDownClass() throws Exception {
+    }
+
     @Before
     public void setUp() throws Exception {
-        tvdb = new TheTVDBApi(apiKey);
+        // Make sure the filter isn't applied to the test output
+        FilteringLayout.addReplacementString("DO_NOT_MATCH");
     }
 
     @Test
