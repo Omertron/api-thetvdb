@@ -1,3 +1,5 @@
+The TVDB API
+============
 Originally written by: altman.matthew (sTyLeS)
 Maintained by: Stuart Boston (Omertron AT Gmail DOT com)
 
@@ -5,6 +7,7 @@ Originally written for use by YetAnotherMovieJukebox (YAMJ) http://code.google.c
 But anyone can feel free to use it for other projects as well.
 
 This uses TheTVDB.com API as specified here http://www.thetvdb.com/wiki/index.php/Programmers_API
+
 TheTVDB.com is an awesome open database for television content. I encourage you to check it out and contribute to keep it growing.
 http://www.thetvdb.com
 
@@ -41,4 +44,6 @@ Banners banners = tvDB.getBanners("73739");
 // getActors(String id)
 List<Actor> actors = tvDB.getActors("73739");
 
-
+Project Documentation
+---------------------
+The automatically generated documentation can be found [HERE](http://omertron.github.com/api-thetvdb/)
