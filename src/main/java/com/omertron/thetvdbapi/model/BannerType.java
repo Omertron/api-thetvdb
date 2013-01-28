@@ -49,7 +49,6 @@ public enum BannerType {
      * Set the banner type from a string.
      * If the banner type isn't found, but the type contains an "x" as in 1920x1080 then the type will be set to Artwork
      * @param type
-     * @return
      */
     public static BannerType fromString(String type) {
         if (type != null) {

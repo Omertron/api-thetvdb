@@ -59,7 +59,6 @@ public final class WebBrowser {
      * Request the web page at the specified URL
      *
      * @param url
-     * @return
      * @throws IOException
      */
     public static String request(String url) throws IOException {
@@ -70,7 +69,6 @@ public final class WebBrowser {
      * Open a connection using proxy parameters if they exist.
      *
      * @param url
-     * @return
      * @throws IOException
      */
     public static URLConnection openProxiedConnection(URL url) throws IOException {
@@ -93,7 +91,6 @@ public final class WebBrowser {
      * Request the web page at the specified URL
      *
      * @param url
-     * @return
      * @throws IOException
      */
     public static String request(URL url) throws IOException {
@@ -185,7 +182,6 @@ public final class WebBrowser {
      * Create the cookies for the header
      *
      * @param cnx
-     * @return
      */
     private static String createCookieHeader(URLConnection cnx) {
         String host = cnx.getURL().getHost();
@@ -251,7 +247,6 @@ public final class WebBrowser {
     /**
      * Return the proxy host name
      *
-     * @return
      */
     public static String getProxyHost() {
         return proxyHost;
@@ -269,7 +264,6 @@ public final class WebBrowser {
     /**
      * Get the proxy port
      *
-     * @return
      */
     public static String getProxyPort() {
         return proxyPort;
@@ -287,7 +281,6 @@ public final class WebBrowser {
     /**
      * Get the proxy username
      *
-     * @return
      */
     public static String getProxyUsername() {
         return proxyUsername;
@@ -305,7 +298,6 @@ public final class WebBrowser {
     /**
      * Get the proxy password
      *
-     * @return
      */
     public static String getProxyPassword() {
         return proxyPassword;
@@ -328,7 +320,6 @@ public final class WebBrowser {
     /**
      * Get the current web connect timeout value
      *
-     * @return
      */
     public static int getWebTimeoutConnect() {
         return webTimeoutConnect;
@@ -337,7 +328,6 @@ public final class WebBrowser {
     /**
      * Get the current web read timeout value
      *
-     * @return
      */
     public static int getWebTimeoutRead() {
         return webTimeoutRead;

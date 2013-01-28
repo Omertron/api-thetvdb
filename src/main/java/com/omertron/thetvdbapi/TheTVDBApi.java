@@ -125,7 +125,7 @@ public class TheTVDBApi {
      *
      * @param id
      * @param language
-     * @return
+     *
      */
     public Series getSeries(String id, String language) {
         StringBuilder urlBuilder = new StringBuilder();
@@ -156,7 +156,6 @@ public class TheTVDBApi {
      *
      * @param id
      * @param language
-     * @return
      */
     public List<Episode> getAllEpisodes(String id, String language) {
         if (!isValidNumber(id)) {
@@ -187,13 +186,11 @@ public class TheTVDBApi {
     }
 
     /**
-     * Get all the episodes from a specific season for a series. Note: This
-     * could be a lot of records
+     * Get all the episodes from a specific season for a series. Note: This could be a lot of records
      *
      * @param id
      * @param season
      * @param language
-     * @return
      */
     public List<Episode> getSeasonEpisodes(String id, int season, String language) {
         StringBuilder urlBuilder = new StringBuilder();
@@ -226,7 +223,6 @@ public class TheTVDBApi {
      * @param seasonNbr
      * @param episodeNbr
      * @param language
-     * @return
      */
     public Episode getEpisode(String seriesId, int seasonNbr, int episodeNbr, String language) {
         if (!isValidNumber(seriesId) || !isValidNumber(seasonNbr) || !isValidNumber(episodeNbr)) {
@@ -263,7 +259,6 @@ public class TheTVDBApi {
      * @param seasonNbr
      * @param episodeNbr
      * @param language
-     * @return
      */
     public Episode getDVDEpisode(String seriesId, int seasonNbr, int episodeNbr, String language) {
         StringBuilder urlBuilder = new StringBuilder();
@@ -292,10 +287,8 @@ public class TheTVDBApi {
      * Get a specific absolute episode's information
      *
      * @param seriesId
-     * @param seasonNbr
      * @param episodeNbr
      * @param language
-     * @return
      */
     public Episode getAbsoluteEpisode(String seriesId, int episodeNbr, String language) {
         StringBuilder urlBuilder = new StringBuilder();
@@ -322,7 +315,6 @@ public class TheTVDBApi {
      * Get a list of banners for the series id
      *
      * @param id
-     * @return
      */
     public String getSeasonYear(String id, int seasonNbr, String language) {
         String year = null;
@@ -367,8 +359,7 @@ public class TheTVDBApi {
     /**
      * Get a list of actors from the series id
      *
-     * @param SeriesId
-     * @return
+     * @param seriesId 
      */
     public List<Actor> getActors(String seriesId) {
         StringBuilder urlBuilder = new StringBuilder();
@@ -411,7 +402,6 @@ public class TheTVDBApi {
      *
      * @param episodeId
      * @param language
-     * @return
      */
     public Episode getEpisodeById(String episodeId, String language) {
         StringBuilder urlBuilder = new StringBuilder();
@@ -448,7 +438,6 @@ public class TheTVDBApi {
     /**
      * Get the XML Mirror URL
      *
-     * @return
      */
     public static String getXmlMirror(String apiKey) {
         // Force a load of the mirror information if it doesn't exist
@@ -459,7 +448,6 @@ public class TheTVDBApi {
     /**
      * Get the Banner Mirror URL
      *
-     * @return
      */
     public static String getBannerMirror(String apiKey) {
         // Force a load of the mirror information if it doesn't exist
