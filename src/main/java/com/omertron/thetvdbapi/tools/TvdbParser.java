@@ -37,7 +37,8 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.xml.ws.WebServiceException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -45,7 +46,7 @@ import org.w3c.dom.NodeList;
 
 public class TvdbParser {
 
-    private static final Logger logger = Logger.getLogger(TvdbParser.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TvdbParser.class);
     private static final String TYPE_BANNER = "banner";
     private static final String TYPE_FANART = "fanart";
     private static final String TYPE_POSTER = "poster";
@@ -137,7 +138,7 @@ public class TvdbParser {
                 }
             }
         } catch (WebServiceException ex) {
-            logger.warn("All Episodes error: " + ex.getMessage());
+            LOG.warn("All Episodes error: " + ex.getMessage());
         }
 
         return episodeList;
@@ -171,7 +172,7 @@ public class TvdbParser {
                 }
             }
         } catch (WebServiceException ex) {
-            logger.warn("Banners error: " + ex.getMessage());
+            LOG.warn("Banners error: " + ex.getMessage());
         }
 
         return banners;
@@ -203,7 +204,7 @@ public class TvdbParser {
                 }
             }
         } catch (WebServiceException ex) {
-            logger.warn("Series error: " + ex.getMessage());
+            LOG.warn("Series error: " + ex.getMessage());
         }
 
         return episode;

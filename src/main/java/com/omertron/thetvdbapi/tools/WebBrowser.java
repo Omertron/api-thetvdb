@@ -30,14 +30,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Web browser with simple cookies support
  */
 public final class WebBrowser {
 
-    private static final Logger logger = Logger.getLogger(WebBrowser.class);
+    private static final Logger LOG = LoggerFactory.getLogger(WebBrowser.class);
     private static final Map<String, String> BROWSER_PROPERTIES = new HashMap<String, String>();
     private static Map<String, Map<String, String>> cookies = new HashMap<String, Map<String, String>>();
     private static String proxyHost = null;
@@ -115,7 +116,7 @@ public final class WebBrowser {
                 zis = new GZIPInputStream(cnx.getInputStream());
                 isr = new InputStreamReader(zis, "UTF-8");
             } else {
-                logger.warn("Unknown content encoding " + cnx.getContentEncoding() + ", aborting");
+                LOG.warn("Unknown content encoding " + cnx.getContentEncoding() + ", aborting");
                 return "";
             }
 
@@ -130,7 +131,7 @@ public final class WebBrowser {
                 try {
                     in.close();
                 } catch (IOException ex) {
-                    logger.debug("Failed to close BufferedReader: " + ex.getMessage());
+                    LOG.debug("Failed to close BufferedReader: " + ex.getMessage());
                 }
             }
 
@@ -138,7 +139,7 @@ public final class WebBrowser {
                 try {
                     isr.close();
                 } catch (IOException ex) {
-                    logger.debug("Failed to close InputStreamReader: " + ex.getMessage());
+                    LOG.debug("Failed to close InputStreamReader: " + ex.getMessage());
                 }
             }
 
@@ -146,7 +147,7 @@ public final class WebBrowser {
                 try {
                     zis.close();
                 } catch (IOException ex) {
-                    logger.debug("Failed to close GZIPInputStream: " + ex.getMessage());
+                    LOG.debug("Failed to close GZIPInputStream: " + ex.getMessage());
                 }
             }
 

@@ -27,7 +27,8 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.ws.WebServiceException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
@@ -39,7 +40,7 @@ import org.xml.sax.SAXException;
  */
 public class DOMHelper {
 
-    private static final Logger logger = Logger.getLogger(DOMHelper.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DOMHelper.class);
     private static final String YES = "yes";
     private static final String ENCODING = "UTF-8";
     private static final int RETRY_COUNT = 5;
@@ -177,12 +178,12 @@ public class DOMHelper {
             trans.transform(new DOMSource(doc), new StreamResult(new File(localFile)));
             return true;
         } catch (TransformerConfigurationException error) {
-            logger.warn("Error writing the document to " + localFile);
-            logger.warn("Message: " + error.getMessage());
+            LOG.warn("Error writing the document to " + localFile);
+            LOG.warn("Message: " + error.getMessage());
             return false;
         } catch (TransformerException error) {
-            logger.warn("Error writing the document to " + localFile);
-            logger.warn("Message: " + error.getMessage());
+            LOG.warn("Error writing the document to " + localFile);
+            LOG.warn("Message: " + error.getMessage());
             return false;
         }
     }
