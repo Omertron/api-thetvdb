@@ -20,14 +20,11 @@
 package com.omertron.thetvdbapi.model;
 
 import java.io.Serializable;
-import javax.persistence.*;
 
 /**
  *
  * @author altman.matthew
  */
-@Entity
-@Table(name = "BANNER")
 public class Banner implements Serializable {
 
     private static final long serialVersionUID = 1L; // Default serial UID
@@ -44,65 +41,50 @@ public class Banner implements Serializable {
     private String vignette;
     private int season = 0;
 
-    @Id
-    @Column(name = "BANNER_ID")
     public int getId() {
         return id;
     }
 
-    @Column(name = "BANNER_TYPE")
-    @Enumerated(EnumType.STRING)
     public BannerListType getBannerType() {
         return bannerType;
     }
 
-    @Column(name = "BANNER_TYPE2")
-    @Enumerated(EnumType.STRING)
     public BannerType getBannerType2() {
         return bannerType2;
     }
 
-    @Column(name = "RATING")
     public Float getRating() {
         return rating;
     }
 
-    @Column(name = "RATINGCOUNT")
     public int getRatingCount() {
         return ratingCount;
     }
 
-    @Column(name = "COLORS")
     public String getColours() {
         return colours;
     }
 
-    @Column(name = "BANNER_LANGUAGE")
     public String getLanguage() {
         return language;
     }
 
-    @Column(name = "SEASON")
     public int getSeason() {
         return season;
     }
 
-    @Column(name = "IS_SERIES_NAME")
     public boolean isSeriesName() {
         return seriesName;
     }
 
-    @Column(name = "THUMB")
     public String getThumb() {
         return thumb;
     }
 
-    @Column(name = "BANNER_URL")
     public String getUrl() {
         return url;
     }
 
-    @Column(name = "VIGNETTE")
     public String getVignette() {
         return vignette;
     }

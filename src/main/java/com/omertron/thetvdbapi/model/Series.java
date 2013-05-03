@@ -22,14 +22,11 @@ package com.omertron.thetvdbapi.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.*;
 
 /**
  *
  * @author altman.matthew
  */
-@Entity
-@Table(name = "SERIES")
 public class Series implements Serializable {
 
     private static final long serialVersionUID = 1L; // Default serial UID
@@ -55,109 +52,86 @@ public class Series implements Serializable {
     private String lastUpdated;
     private String poster;
 
-    @Id
-    @Column(name = "TVDB_ID")
     public String getId() {
         return id;
     }
 
-    @ElementCollection
     public List<String> getActors() {
         return actors;
     }
 
-    @Column(name = "AIRS_DAY_OF_WEEK")
     public String getAirsDayOfWeek() {
         return airsDayOfWeek;
     }
 
-    @Column(name = "AIRS_TIME")
     public String getAirsTime() {
         return airsTime;
     }
 
-    @Column(name = "BANNER")
     public String getBanner() {
         return banner;
     }
 
-    @Column(name = "CONTENT_RATING")
     public String getContentRating() {
         return contentRating;
     }
 
-    @Column(name = "FANART")
     public String getFanart() {
         return fanart;
     }
 
-    @Column(name = "FIRST_AIRED")
     public String getFirstAired() {
         return firstAired;
     }
 
-    @ElementCollection
-    @Column(name = "GENRES")
     public List<String> getGenres() {
         return genres;
     }
 
-    @Column(name = "IMDB_ID")
     public String getImdbId() {
         return imdbId;
     }
 
-    @Column(name = "SERIES_LANGUAGE")
     public String getLanguage() {
         return language;
     }
 
-    @Column(name = "LAST_UPDATED")
     public String getLastUpdated() {
         return lastUpdated;
     }
 
-    @Column(name = "NETWORK")
     public String getNetwork() {
         return network;
     }
 
-    @Column(name = "OVERVIEW")
     public String getOverview() {
         return overview;
     }
 
-    @Column(name = "POSTER")
     public String getPoster() {
         return poster;
     }
 
-    @Column(name = "RATING")
     public String getRating() {
         return rating;
     }
 
-    @Column(name="RUNTIME")
     public String getRuntime() {
         return runtime;
     }
 
-    @Column(name="SERIES_ID")
     public String getSeriesId() {
         return seriesId;
     }
 
-    @Column(name="SERIES_NAME")
     public String getSeriesName() {
         return seriesName;
     }
 
-    @Column(name="STATUS")
     public String getStatus() {
         return status;
     }
 
-    @Column(name="ZAP2IT_ID")
     public String getZap2ItId() {
         return zap2ItId;
     }

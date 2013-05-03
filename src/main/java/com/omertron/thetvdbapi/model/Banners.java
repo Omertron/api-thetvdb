@@ -22,14 +22,11 @@ package com.omertron.thetvdbapi.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.*;
 
 /**
  *
  * @author matthew.altman
  */
-@Entity
-@Table(name = "BANNERS")
 public class Banners implements Serializable {
 
     private static final long serialVersionUID = 1L; // Default serial UID
@@ -39,32 +36,22 @@ public class Banners implements Serializable {
     private List<Banner> posterList = new ArrayList<Banner>();
     private List<Banner> fanartList = new ArrayList<Banner>();
 
-    @Id
-    @Column(name = "SERIES_ID")
     public int getSeriesId() {
         return seriesId;
     }
 
-    @ElementCollection
-    @OneToMany
     public List<Banner> getSeriesList() {
         return seriesList;
     }
 
-    @ElementCollection
-    @OneToMany
     public List<Banner> getSeasonList() {
         return seasonList;
     }
 
-    @ElementCollection
-    @OneToMany
     public List<Banner> getPosterList() {
         return posterList;
     }
 
-    @ElementCollection
-    @OneToMany
     public List<Banner> getFanartList() {
         return fanartList;
     }

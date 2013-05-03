@@ -20,17 +20,11 @@
 package com.omertron.thetvdbapi.model;
 
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 /**
  *
  * @author matthew.altman
  */
-@Entity
-@Table(name = "ACTOR")
 public class Actor implements Comparable<Actor>, Serializable {
 
     private static final long serialVersionUID = 1L; // Default serial UID
@@ -40,28 +34,22 @@ public class Actor implements Comparable<Actor>, Serializable {
     private String image;
     private int sortOrder = 0;
 
-    @Id
-    @Column(name = "ACTOR_ID")
     public int getId() {
         return id;
     }
 
-    @Column(name = "NAME")
     public String getName() {
         return name;
     }
 
-    @Column(name = "ACTOR_ROLE")
     public String getRole() {
         return role;
     }
 
-    @Column(name = "IMAGE_URL")
     public String getImage() {
         return image;
     }
 
-    @Column(name = "SORT_ORDER")
     public int getSortOrder() {
         return sortOrder;
     }
