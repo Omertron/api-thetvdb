@@ -19,12 +19,14 @@
  */
 package com.omertron.thetvdbapi;
 
+import com.moviejukebox.api.common.http.CommonHttpClient;
 import com.omertron.thetvdbapi.model.Actor;
 import com.omertron.thetvdbapi.model.Banners;
 import com.omertron.thetvdbapi.model.Episode;
 import com.omertron.thetvdbapi.model.Mirrors;
 import com.omertron.thetvdbapi.model.Series;
 import com.omertron.thetvdbapi.model.TVDBUpdates;
+import com.omertron.thetvdbapi.tools.DOMHelper;
 import com.omertron.thetvdbapi.tools.TvdbParser;
 import com.omertron.thetvdbapi.tools.WebBrowser;
 import java.io.UnsupportedEncodingException;
@@ -48,6 +50,7 @@ public class TheTVDBApi {
 
     private static final Logger LOG = LoggerFactory.getLogger(TheTVDBApi.class);
     private String apiKey = null;
+    private CommonHttpClient httpClient;
     private static String xmlMirror = null;
     private static String bannerMirror = null;
     private static final String XML_EXTENSION = ".xml";
@@ -55,12 +58,29 @@ public class TheTVDBApi {
     private static final String ALL_URL = "/all/";
     private static final String WEEKLY_UPDATES_URL = "/updates/updates_week.xml";
 
+    /**
+     * Create an API object with the passed API Key
+     *
+     * @param apiKey Must not be null or empty
+     */
     public TheTVDBApi(String apiKey) {
-        if (apiKey == null) {
+        this(apiKey, null);
+    }
+
+    /**
+     * Create an API object with the passed API key and using the supplied HttpClient
+     *
+     * @param apiKey Must not be null or empty
+     * @param httpClient
+     */
+    public TheTVDBApi(String apiKey, CommonHttpClient httpClient) {
+        if (StringUtils.isBlank(apiKey)) {
             return;
         }
 
         this.apiKey = apiKey;
+        this.httpClient = httpClient;
+        DOMHelper.setHttpClient(this.httpClient);
     }
 
     /**
@@ -102,6 +122,11 @@ public class TheTVDBApi {
      * @param password
      */
     public void setProxy(String host, String port, String username, String password) {
+        // should be set in HTTP client already
+        if (httpClient != null) {
+            return;
+        }
+
         WebBrowser.setProxyHost(host);
         WebBrowser.setProxyPort(port);
         WebBrowser.setProxyUsername(username);
@@ -115,6 +140,11 @@ public class TheTVDBApi {
      * @param webTimeoutRead
      */
     public void setTimeout(int webTimeoutConnect, int webTimeoutRead) {
+        // should be set in HTTP client already
+        if (httpClient != null) {
+            return;
+        }
+
         WebBrowser.setWebTimeoutConnect(webTimeoutConnect);
         WebBrowser.setWebTimeoutRead(webTimeoutRead);
     }

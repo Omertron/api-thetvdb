@@ -19,7 +19,11 @@
  */
 package com.omertron.thetvdbapi.tools;
 
+import com.moviejukebox.api.common.http.CommonHttpClient;
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -27,6 +31,8 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.ws.WebServiceException;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.methods.HttpGet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
@@ -45,11 +51,16 @@ public class DOMHelper {
     private static final String ENCODING = "UTF-8";
     private static final int RETRY_COUNT = 5;
     private static final int RETRY_TIME = 250;  // Milliseconds to retry
+    private static CommonHttpClient httpClient = null;
 
     // Hide the constructor
     protected DOMHelper() {
         // prevents calls from subclass
         throw new UnsupportedOperationException();
+    }
+
+    public static void setHttpClient(CommonHttpClient newHttpClient) {
+        httpClient = newHttpClient;
     }
 
     /**
@@ -83,7 +94,7 @@ public class DOMHelper {
      * @throws Exception
      */
     public static synchronized Document getEventDocFromUrl(String url) throws WebServiceException {
-        String webPage = null;
+        String webPage;
         InputStream in = null;
         int retryCount = 0;     // Count the number of times we download the web page
         boolean valid = false;  // Is the web page valid
@@ -91,28 +102,31 @@ public class DOMHelper {
         try {
             while (!valid && (retryCount < RETRY_COUNT)) {
                 retryCount++;
-                webPage = WebBrowser.request(url);
-
-                // See if the ID is null
-                if (!webPage.contains("<id>") || webPage.contains("<id></id>")) {
-                    // Wait an increasing amount of time the more retries that happen
-                    waiting(retryCount * RETRY_TIME);
-                    continue;
-                } else {
-                    valid = true;
+                webPage = requestWebPage(url);
+                if (StringUtils.isNotBlank(webPage)) {
+                    // See if the ID is null
+                    if (!webPage.contains("<id>") || webPage.contains("<id></id>")) {
+                        // Wait an increasing amount of time the more retries that happen
+                        waiting(retryCount * RETRY_TIME);
+                        continue;
+                    } else {
+                        valid = true;
+                    }
                 }
-            }
 
-            // Couldn't get a valid webPage so, quit.
-            if (!valid) {
-                throw new WebServiceException("Failed to download data from " + url);
-            }
+                // Couldn't get a valid webPage so, quit.
+                if (!valid) {
+                    throw new WebServiceException("Failed to download data from " + url);
+                }
 
-            in = new ByteArrayInputStream(webPage.getBytes(ENCODING));
-        } catch (UnsupportedEncodingException error) {
-            throw new WebServiceException("Unable to encode URL: " + url, error);
-        } catch (IOException error) {
-            throw new WebServiceException("Unable to download URL: " + url, error);
+                in = new ByteArrayInputStream(webPage.getBytes(ENCODING));
+            }
+        } catch (UnsupportedEncodingException ex) {
+            throw new WebServiceException("Unable to encode URL: " + url, ex);
+        } catch (IOException ex) {
+            throw new WebServiceException("Unable to download URL: " + url, ex);
+        } catch (URISyntaxException ex) {
+            throw new WebServiceException("Unable to encode URL: " + url, ex);
         }
 
         Document doc = null;
@@ -214,5 +228,20 @@ public class DOMHelper {
         do {
             t1 = System.currentTimeMillis();
         } while ((t1 - t0) < milliseconds);
+    }
+
+    private static String requestWebPage(String url) throws MalformedURLException, IOException, URISyntaxException {
+        return requestWebPage(new URL(url));
+    }
+
+    private static String requestWebPage(URL url) throws IOException, URISyntaxException {
+        // use HTTP client implementation
+        if (httpClient != null) {
+            HttpGet httpGet = new HttpGet(url.toURI());
+            return httpClient.requestContent(httpGet);
+        }
+
+        // use web browser
+        return WebBrowser.request(url);
     }
 }
