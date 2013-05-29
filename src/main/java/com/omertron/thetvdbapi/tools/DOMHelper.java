@@ -129,6 +129,10 @@ public class DOMHelper {
             throw new WebServiceException("Unable to encode URL: " + url, ex);
         }
 
+        if (in == null) {
+            return null;
+        }
+        
         Document doc = null;
 
         try {

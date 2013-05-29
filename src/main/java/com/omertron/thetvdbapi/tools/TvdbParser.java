@@ -79,6 +79,9 @@ public class TvdbParser {
 
         try {
             doc = DOMHelper.getEventDocFromUrl(urlString);
+            if (doc == null) {
+                return results;
+            }
         } catch (WebServiceException ex) {
             return results;
         }
