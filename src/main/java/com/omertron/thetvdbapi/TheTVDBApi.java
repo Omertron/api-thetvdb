@@ -19,7 +19,6 @@
  */
 package com.omertron.thetvdbapi;
 
-import com.moviejukebox.api.common.http.CommonHttpClient;
 import com.omertron.thetvdbapi.model.Actor;
 import com.omertron.thetvdbapi.model.Banners;
 import com.omertron.thetvdbapi.model.Episode;
@@ -41,6 +40,7 @@ import javax.xml.ws.WebServiceException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yamj.api.common.http.CommonHttpClient;
 
 /**
  * @author altman.matthew

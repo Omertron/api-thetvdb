@@ -92,7 +92,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.moviejukebox</groupId>
+            <groupId>org.yamj</groupId>
             <artifactId>api-common</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
@@ -101,11 +101,28 @@
     <build>
         <finalName>${project.artifactId}-${project.version}-r${buildNumber}</finalName>
 
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>buildnumber-maven-plugin</artifactId>
+                    <version>1.2</version>
+                </plugin>            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                </plugin>            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>buildnumber-maven-plugin</artifactId>
-                <version>1.2</version>
                 <configuration>
                     <shortRevisionLength>10</shortRevisionLength>
                     <doCheck>false</doCheck>
@@ -124,7 +141,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.0</version>
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
@@ -135,7 +151,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
                 <configuration>
                     <archive>
                         <manifestEntries>

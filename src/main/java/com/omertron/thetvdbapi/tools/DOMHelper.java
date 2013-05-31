@@ -19,7 +19,6 @@
  */
 package com.omertron.thetvdbapi.tools;
 
-import com.moviejukebox.api.common.http.CommonHttpClient;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -37,6 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
+import org.yamj.api.common.http.CommonHttpClient;
 
 /**
  * Generic set of routines to process the DOM model data
@@ -132,7 +132,7 @@ public class DOMHelper {
         if (in == null) {
             return null;
         }
-        
+
         Document doc = null;
 
         try {
