@@ -127,6 +127,8 @@ public class DOMHelper {
             throw new WebServiceException("Unable to download URL: " + url, ex);
         } catch (URISyntaxException ex) {
             throw new WebServiceException("Unable to encode URL: " + url, ex);
+        } catch (RuntimeException ex) {
+            throw new WebServiceException("Unable to downlaod URL: " + url, ex);
         }
 
         if (in == null) {
@@ -234,11 +236,11 @@ public class DOMHelper {
         } while ((t1 - t0) < milliseconds);
     }
 
-    private static String requestWebPage(String url) throws MalformedURLException, IOException, URISyntaxException {
+    private static String requestWebPage(String url) throws MalformedURLException, IOException, URISyntaxException, RuntimeException {
         return requestWebPage(new URL(url));
     }
 
-    private static String requestWebPage(URL url) throws IOException, URISyntaxException {
+    private static String requestWebPage(URL url) throws IOException, URISyntaxException, RuntimeException {
         // use HTTP client implementation
         if (httpClient != null) {
             HttpGet httpGet = new HttpGet(url.toURI());
