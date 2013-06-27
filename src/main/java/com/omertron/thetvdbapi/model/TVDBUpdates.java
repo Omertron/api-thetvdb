@@ -21,11 +21,12 @@ package com.omertron.thetvdbapi.model;
 
 import java.io.Serializable;
 import java.util.List;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class TVDBUpdates implements Serializable {
 
     private static final long serialVersionUID = 1L; // Default serial UID
-
     private String time;
     private List<SeriesUpdate> seriesUpdates;
     private List<EpisodeUpdate> episodeUpdates;
@@ -63,4 +64,8 @@ public class TVDBUpdates implements Serializable {
         this.bannerUpdates = bannerUpdates;
     }
 
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
 }

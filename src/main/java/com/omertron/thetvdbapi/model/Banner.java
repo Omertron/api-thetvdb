@@ -20,6 +20,8 @@
 package com.omertron.thetvdbapi.model;
 
 import java.io.Serializable;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  *
@@ -163,32 +165,6 @@ public class Banner implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("[Banner=[id=");
-        builder.append(id);
-        builder.append("], [url=");
-        builder.append(url);
-        builder.append("], [bannerType=");
-        builder.append(bannerType);
-        builder.append("], [bannerType2=");
-        builder.append(bannerType2);
-        builder.append("], [colours=");
-        builder.append(colours);
-        builder.append("], [language=");
-        builder.append(language);
-        builder.append("], [seriesName=");
-        builder.append(seriesName);
-        builder.append("], [thumb=");
-        builder.append(thumb);
-        builder.append("], [vignette=");
-        builder.append(vignette);
-        builder.append("], [season=");
-        builder.append(season);
-        builder.append("], [rating=");
-        builder.append(rating);
-        builder.append("], [ratingCount=");
-        builder.append(ratingCount);
-        builder.append("]]");
-        return builder.toString();
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

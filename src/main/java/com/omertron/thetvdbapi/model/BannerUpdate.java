@@ -20,11 +20,12 @@
 package com.omertron.thetvdbapi.model;
 
 import java.io.Serializable;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class BannerUpdate implements Serializable {
 
     private static final long serialVersionUID = 1L; // Default serial UID
-
     private String seasonNum;
     private String series;
     private String format;
@@ -89,4 +90,8 @@ public class BannerUpdate implements Serializable {
         this.type = type;
     }
 
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
 }

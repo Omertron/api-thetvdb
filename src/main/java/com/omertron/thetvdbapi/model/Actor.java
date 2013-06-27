@@ -20,6 +20,8 @@
 package com.omertron.thetvdbapi.model;
 
 import java.io.Serializable;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  *
@@ -97,14 +99,7 @@ public class Actor implements Comparable<Actor>, Serializable {
 
     @Override
     public String toString() {
-        StringBuilder actor = new StringBuilder("[Actor ");
-        actor.append("[id=").append(id).append("]");
-        actor.append("[name=").append(name).append("]");
-        actor.append("[role=").append(role).append("]");
-        actor.append("[image=").append(image).append("]");
-        actor.append("[sortOrder=").append(sortOrder).append("]");
-        actor.append("]");
-        return actor.toString();
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 
     @Override
