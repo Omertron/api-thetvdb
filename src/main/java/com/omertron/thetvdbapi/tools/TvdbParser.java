@@ -163,14 +163,16 @@ public class TvdbParser {
         try {
             Document doc = DOMHelper.getEventDocFromUrl(urlString);
 
-            nlBanners = doc.getElementsByTagName("Banner");
-            for (int loop = 0; loop < nlBanners.getLength(); loop++) {
-                nBanner = nlBanners.item(loop);
-                if (nBanner.getNodeType() == Node.ELEMENT_NODE) {
-                    eBanner = (Element) nBanner;
-                    banner = parseNextBanner(eBanner, bannerMirror);
-                    if (banner != null) {
-                        banners.addBanner(banner);
+            if (doc != null) {
+                nlBanners = doc.getElementsByTagName("Banner");
+                for (int loop = 0; loop < nlBanners.getLength(); loop++) {
+                    nBanner = nlBanners.item(loop);
+                    if (nBanner.getNodeType() == Node.ELEMENT_NODE) {
+                        eBanner = (Element) nBanner;
+                        banner = parseNextBanner(eBanner, bannerMirror);
+                        if (banner != null) {
+                            banners.addBanner(banner);
+                        }
                     }
                 }
             }
@@ -187,22 +189,25 @@ public class TvdbParser {
      * @param urlString
      */
     public static Episode getEpisode(String urlString, String bannerMirror) {
-        Episode episode = null;
+        Episode episode = new Episode();
         NodeList nlEpisode;
         Node nEpisode;
         Element eEpisode;
 
         try {
             Document doc = DOMHelper.getEventDocFromUrl(urlString);
-            nlEpisode = doc.getElementsByTagName("Episode");
-            for (int loop = 0; loop < nlEpisode.getLength(); loop++) {
-                nEpisode = nlEpisode.item(loop);
-                if (nEpisode.getNodeType() == Node.ELEMENT_NODE) {
-                    eEpisode = (Element) nEpisode;
-                    episode = parseNextEpisode(eEpisode, bannerMirror);
-                    if (episode != null) {
-                        // We only need the first episode
-                        break;
+
+            if (doc != null) {
+                nlEpisode = doc.getElementsByTagName("Episode");
+                for (int loop = 0; loop < nlEpisode.getLength(); loop++) {
+                    nEpisode = nlEpisode.item(loop);
+                    if (nEpisode.getNodeType() == Node.ELEMENT_NODE) {
+                        eEpisode = (Element) nEpisode;
+                        episode = parseNextEpisode(eEpisode, bannerMirror);
+                        if (episode != null) {
+                            // We only need the first episode
+                            break;
+                        }
                     }
                 }
             }
@@ -234,14 +239,16 @@ public class TvdbParser {
             return seriesList;
         }
 
-        nlSeries = doc.getElementsByTagName(SERIES);
-        for (int loop = 0; loop < nlSeries.getLength(); loop++) {
-            nSeries = nlSeries.item(loop);
-            if (nSeries.getNodeType() == Node.ELEMENT_NODE) {
-                eSeries = (Element) nSeries;
-                series = parseNextSeries(eSeries, bannerMirror);
-                if (series != null) {
-                    seriesList.add(series);
+        if (doc != null) {
+            nlSeries = doc.getElementsByTagName(SERIES);
+            for (int loop = 0; loop < nlSeries.getLength(); loop++) {
+                nSeries = nlSeries.item(loop);
+                if (nSeries.getNodeType() == Node.ELEMENT_NODE) {
+                    eSeries = (Element) nSeries;
+                    series = parseNextSeries(eSeries, bannerMirror);
+                    if (series != null) {
+                        seriesList.add(series);
+                    }
                 }
             }
         }
@@ -265,31 +272,33 @@ public class TvdbParser {
             return updates;
         }
 
-        Node root = doc.getChildNodes().item(0);
-        List<SeriesUpdate> seriesUpdates = new ArrayList<SeriesUpdate>();
-        List<EpisodeUpdate> episodeUpdates = new ArrayList<EpisodeUpdate>();
-        List<BannerUpdate> bannerUpdates = new ArrayList<BannerUpdate>();
+        if (doc != null) {
+            Node root = doc.getChildNodes().item(0);
+            List<SeriesUpdate> seriesUpdates = new ArrayList<SeriesUpdate>();
+            List<EpisodeUpdate> episodeUpdates = new ArrayList<EpisodeUpdate>();
+            List<BannerUpdate> bannerUpdates = new ArrayList<BannerUpdate>();
 
-        NodeList updateNodes = root.getChildNodes();
-        Node updateNode;
-        for (int i = 0; i < updateNodes.getLength(); i++) {
-            updateNode = updateNodes.item(i);
-            if (updateNode.getNodeName().equals(SERIES)) {
+            NodeList updateNodes = root.getChildNodes();
+            Node updateNode;
+            for (int i = 0; i < updateNodes.getLength(); i++) {
+                updateNode = updateNodes.item(i);
+                if (updateNode.getNodeName().equals(SERIES)) {
 
-                seriesUpdates.add(parseNextSeriesUpdate((Element) updateNode));
-            } else if (updateNode.getNodeName().equals("Episode")) {
+                    seriesUpdates.add(parseNextSeriesUpdate((Element) updateNode));
+                } else if (updateNode.getNodeName().equals("Episode")) {
 
-                episodeUpdates.add(parseNextEpisodeUpdate((Element) updateNode));
-            } else if (updateNode.getNodeName().equals("Banner")) {
+                    episodeUpdates.add(parseNextEpisodeUpdate((Element) updateNode));
+                } else if (updateNode.getNodeName().equals("Banner")) {
 
-                bannerUpdates.add(parseNextBannerUpdate((Element) updateNode));
+                    bannerUpdates.add(parseNextBannerUpdate((Element) updateNode));
+                }
             }
-        }
 
-        updates.setTime(DOMHelper.getValueFromElement((Element) root, TIME));
-        updates.setSeriesUpdates(seriesUpdates);
-        updates.setEpisodeUpdates(episodeUpdates);
-        updates.setBannerUpdates(bannerUpdates);
+            updates.setTime(DOMHelper.getValueFromElement((Element) root, TIME));
+            updates.setSeriesUpdates(seriesUpdates);
+            updates.setEpisodeUpdates(episodeUpdates);
+            updates.setBannerUpdates(bannerUpdates);
+        }
 
         return updates;
     }
