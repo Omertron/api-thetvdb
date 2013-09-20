@@ -6,7 +6,9 @@ __Maintained by__: Stuart Boston (Omertron AT Gmail DOT com)
 
 Originally written for use by Yet Another Movie Jukebox [(YAMJ)](http://code.google.com/p/moviejukebox/), but anyone can use it for other projects as well.
 
-This uses [TheTVDB.com API](http://www.thetvdb.com/wiki/index.php/Programmers_API)
+This API uses [TheTVDB.com API](http://www.thetvdb.com/wiki/index.php/Programmers_API)
+
+[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=Omertron&url=https://github.com/Omertron/api-thetvdb&title=TheTVDB API&language=&tags=github&category=software)
 ***
 ### TheTVDB.com 
 TheTVDB.com is an awesome open database for television content. 
