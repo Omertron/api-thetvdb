@@ -74,6 +74,20 @@ public class TheTvDbApiTest {
     }
 
     @Test
+    public void testNaming() {
+        LOG.info("testNaming");
+        String seriesName = "Agents of Shield";
+        List<Series> seriesList = tvdb.searchSeries(seriesName, null);
+        LOG.info("Found {} matched for '{}'", seriesList.size(), seriesName);
+        assertTrue("No series found for " + seriesName, seriesList.size() > 0);
+
+        seriesName = "Agents of S.h.i.e.l.d.";
+        seriesList = tvdb.searchSeries(seriesName, null);
+        LOG.info("Found {} matched for '{}'", seriesList.size(), seriesName);
+        assertTrue("No series found for " + seriesName, seriesList.size() > 0);
+    }
+
+    @Test
     public void testGetSeries() {
         LOG.info("testGetSeries");
         Series series = tvdb.getSeries(TVDBID, LANGUAGE_ENGLISH);
