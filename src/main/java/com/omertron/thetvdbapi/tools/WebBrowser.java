@@ -40,7 +40,7 @@ public final class WebBrowser {
 
     private static final Logger LOG = LoggerFactory.getLogger(WebBrowser.class);
     private static final Map<String, String> BROWSER_PROPERTIES = new HashMap<String, String>();
-    private static Map<String, Map<String, String>> cookies = new HashMap<String, Map<String, String>>();
+    private static final Map<String, Map<String, String>> COOKIES = new HashMap<String, Map<String, String>>();
     private static String proxyHost = null;
     private static String proxyPort = null;
     private static String proxyUsername = null;
@@ -60,6 +60,7 @@ public final class WebBrowser {
      * Request the web page at the specified URL
      *
      * @param url
+     * @return
      * @throws IOException
      */
     public static String request(String url) throws IOException {
@@ -70,6 +71,7 @@ public final class WebBrowser {
      * Open a connection using proxy parameters if they exist.
      *
      * @param url
+     * @return
      * @throws IOException
      */
     public static URLConnection openProxiedConnection(URL url) throws IOException {
@@ -92,6 +94,7 @@ public final class WebBrowser {
      * Request the web page at the specified URL
      *
      * @param url
+     * @return
      * @throws IOException
      */
     public static String request(URL url) throws IOException {
@@ -187,7 +190,7 @@ public final class WebBrowser {
     private static String createCookieHeader(URLConnection cnx) {
         String host = cnx.getURL().getHost();
         StringBuilder cookiesHeader = new StringBuilder();
-        for (Map.Entry<String, Map<String, String>> domainCookies : cookies.entrySet()) {
+        for (Map.Entry<String, Map<String, String>> domainCookies : COOKIES.entrySet()) {
             if (host.endsWith(domainCookies.getKey())) {
                 for (Map.Entry<String, String> cookie : domainCookies.getValue().entrySet()) {
                     cookiesHeader.append(cookie.getKey());
@@ -232,10 +235,10 @@ public final class WebBrowser {
                             // if domain isn't set take current host
                             cookieDomain = cnx.getURL().getHost();
                         }
-                        Map<String, String> domainCookies = cookies.get(cookieDomain);
+                        Map<String, String> domainCookies = COOKIES.get(cookieDomain);
                         if (domainCookies == null) {
                             domainCookies = new HashMap<String, String>();
-                            cookies.put(cookieDomain, domainCookies);
+                            COOKIES.put(cookieDomain, domainCookies);
                         }
                         // add or replace cookie
                         domainCookies.put(cookieName, cookieValue);
@@ -248,6 +251,7 @@ public final class WebBrowser {
     /**
      * Return the proxy host name
      *
+     * @return
      */
     public static String getProxyHost() {
         return proxyHost;
@@ -265,6 +269,7 @@ public final class WebBrowser {
     /**
      * Get the proxy port
      *
+     * @return
      */
     public static String getProxyPort() {
         return proxyPort;
@@ -282,6 +287,7 @@ public final class WebBrowser {
     /**
      * Get the proxy username
      *
+     * @return
      */
     public static String getProxyUsername() {
         return proxyUsername;
@@ -299,6 +305,7 @@ public final class WebBrowser {
     /**
      * Get the proxy password
      *
+     * @return
      */
     public static String getProxyPassword() {
         return proxyPassword;
@@ -321,6 +328,7 @@ public final class WebBrowser {
     /**
      * Get the current web connect timeout value
      *
+     * @return
      */
     public static int getWebTimeoutConnect() {
         return webTimeoutConnect;
@@ -329,6 +337,7 @@ public final class WebBrowser {
     /**
      * Get the current web read timeout value
      *
+     * @return
      */
     public static int getWebTimeoutRead() {
         return webTimeoutRead;

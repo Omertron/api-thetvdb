@@ -41,8 +41,8 @@ import org.slf4j.LoggerFactory;
 public class TheTvDbApiTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(TheTvDbApiTest.class);
-    private static String apiKey = "2805AD2873519EC5";
-    private TheTVDBApi tvdb;
+    private static final String API_KEY = "2805AD2873519EC5";
+    private final TheTVDBApi tvdb;
     private static final String LANGUAGE_ENGLISH = "en";
     private static final String TVDBID = "80348";
     private static final String SERIES_NAME = "Chuck";
@@ -57,7 +57,7 @@ public class TheTvDbApiTest {
 //    private static final String SEASON_YEAR = "2008";
 
     public TheTvDbApiTest() {
-        tvdb = new TheTVDBApi(apiKey);
+        tvdb = new TheTVDBApi(API_KEY);
     }
 
     @BeforeClass
@@ -172,14 +172,14 @@ public class TheTvDbApiTest {
     @Test
     public void testGetXmlMirror() throws Throwable {
         LOG.info("testGetXmlMirror");
-        String mirror = TheTVDBApi.getXmlMirror(apiKey);
+        String mirror = TheTVDBApi.getXmlMirror(API_KEY);
         assertTrue(mirror.length() > 0);
     }
 
     @Test
     public void testGetBannerMirror() {
         LOG.info("testGetBannerMirror");
-        String mirror = TheTVDBApi.getBannerMirror(apiKey);
+        String mirror = TheTVDBApi.getBannerMirror(API_KEY);
         assertTrue(mirror.length() > 0);
     }
 

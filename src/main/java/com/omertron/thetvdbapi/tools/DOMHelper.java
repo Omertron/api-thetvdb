@@ -20,7 +20,6 @@
 package com.omertron.thetvdbapi.tools;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import javax.xml.parsers.DocumentBuilder;
@@ -68,6 +67,7 @@ public class DOMHelper {
      *
      * @param element
      * @param tagName
+     * @return
      */
     public static String getValueFromElement(Element element, String tagName) {
         NodeList elementNodeList = element.getElementsByTagName(tagName);
@@ -91,9 +91,9 @@ public class DOMHelper {
      * Get a DOM document from the supplied URL
      *
      * @param url
-     * @throws Exception
+     * @return
      */
-    public static synchronized Document getEventDocFromUrl(String url) throws WebServiceException {
+    public static synchronized Document getEventDocFromUrl(String url) {
         String webPage;
         InputStream in = null;
         int retryCount = 0;     // Count the number of times we download the web page
@@ -127,8 +127,6 @@ public class DOMHelper {
             throw new WebServiceException("Unable to download URL: " + url, ex);
         } catch (URISyntaxException ex) {
             throw new WebServiceException("Unable to encode URL: " + url, ex);
-        } catch (RuntimeException ex) {
-            throw new WebServiceException("Unable to downlaod URL: " + url, ex);
         }
 
         if (in == null) {
@@ -150,12 +148,10 @@ public class DOMHelper {
         } catch (IOException error) {
             throw new WebServiceException("Unable to parse TheTVDb response, please try again later.", error);
         } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException error) {
-                    // Input Stream was already closed or null
-                }
+            try {
+                in.close();
+            } catch (IOException ex) {
+                // Input Stream was already closed or null
             }
         }
 
@@ -166,6 +162,7 @@ public class DOMHelper {
      * Convert a DOM document to a string
      *
      * @param doc
+     * @return
      * @throws TransformerException
      */
     public static String convertDocToString(Document doc) throws TransformerException {
@@ -188,6 +185,7 @@ public class DOMHelper {
      *
      * @param doc The document to save
      * @param localFile The file to write to
+     * @return
      */
     public static boolean writeDocumentToFile(Document doc, String localFile) {
         try {
@@ -236,7 +234,7 @@ public class DOMHelper {
         } while ((t1 - t0) < milliseconds);
     }
 
-    private static String requestWebPage(String url) throws MalformedURLException, IOException, URISyntaxException, RuntimeException {
+    private static String requestWebPage(String url) throws IOException, URISyntaxException {
         return requestWebPage(new URL(url));
     }
 

@@ -68,6 +68,8 @@ public class TvdbParser {
      * Get a list of the actors from the URL
      *
      * @param urlString
+     * @param bannerMirror
+     * @return
      */
     public static List<Actor> getActors(String urlString, String bannerMirror) {
         List<Actor> results = new ArrayList<Actor>();
@@ -118,6 +120,8 @@ public class TvdbParser {
      *
      * @param urlString
      * @param season
+     * @param bannerMirror
+     * @return
      */
     public static List<Episode> getAllEpisodes(String urlString, int season, String bannerMirror) {
         List<Episode> episodeList = new ArrayList<Episode>();
@@ -151,6 +155,8 @@ public class TvdbParser {
      * Get a list of banners from the URL
      *
      * @param urlString
+     * @param bannerMirror
+     * @return
      */
     public static Banners getBanners(String urlString, String bannerMirror) {
         Banners banners = new Banners();
@@ -187,6 +193,8 @@ public class TvdbParser {
      * Get the episode information from the URL
      *
      * @param urlString
+     * @param bannerMirror
+     * @return
      */
     public static Episode getEpisode(String urlString, String bannerMirror) {
         Episode episode = new Episode();
@@ -223,6 +231,8 @@ public class TvdbParser {
      * Get a list of series from the URL
      *
      * @param urlString
+     * @param bannerMirror
+     * @return
      */
     public static List<Series> getSeriesList(String urlString, String bannerMirror) {
         List<Series> seriesList = new ArrayList<Series>();
@@ -260,6 +270,7 @@ public class TvdbParser {
      * Get a list of updates from the URL
      *
      * @param urlString
+     * @return
      */
     public static TVDBUpdates getUpdates(String urlString) {
         TVDBUpdates updates = new TVDBUpdates();
@@ -307,6 +318,7 @@ public class TvdbParser {
      * Parse the error message to return a more user friendly message
      *
      * @param errorMessage
+     * @return
      */
     public static String parseErrorMessage(String errorMessage) {
         StringBuilder response = new StringBuilder();
