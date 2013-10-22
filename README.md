@@ -9,9 +9,12 @@ Originally written for use by Yet Another Movie Jukebox [(YAMJ)](http://code.goo
 This API uses [TheTVDB.com API](http://www.thetvdb.com/wiki/index.php/Programmers_API)
 
 [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=Omertron&url=https://github.com/Omertron/api-thetvdb&title=TheTVDB API&language=&tags=github&category=software)
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Omertron/api-thetvdb/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
 ***
-### TheTVDB.com 
-TheTVDB.com is an awesome open database for television content. 
+### TheTVDB.com
+TheTVDB.com is an awesome open database for television content.
 
 I *strongly* encourage you to check it out and contribute to keep it growing.
 
@@ -40,44 +43,44 @@ __Example__
 May use the series.getId() method from the previous search
 The language is optional and will default to english if null, but if present the resulting descriptions will be in that language
 
-__Syntax__ 
+__Syntax__
 
 `getSeries(String id, String language)`
 
-__Example__ 
+__Example__
 
 `Series series = tvDB.getSeries("73739", "en");`
 
 ### Obtain detailed Episode data
 The language is optional and will default to english if null, but will return details in that language if present
 
-__Syntax__ 
+__Syntax__
 
 `getEpisode(String id, int seasonNbr, int episodeNbr, String language)`
 
-__Example__ 
+__Example__
 
 `Episode episode = tvDB.getEpisode("73739", 2, 3, "en");`
 
 ### Obtain image references
 Returns a Banners object which contains separate lists for series, season, poster, and fanart images
 
-__Syntax__ 
+__Syntax__
 
 `getBanners(String id)`
 
-__Example__ 
+__Example__
 
 `Banners banners = tvDB.getBanners("73739");`
 
 ### Obtain list of more detailed Actor data
 The Series object does contain a list of actor names, but the Actor object has more details including roles and image references
 
-__Syntax__ 
+__Syntax__
 
 `getActors(String id)`
 
-__Example__ 
+__Example__
 
 `List<Actor> actors = tvDB.getActors("73739");`
 
