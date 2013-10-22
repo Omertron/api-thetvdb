@@ -238,7 +238,7 @@ public class DOMHelper {
         return requestWebPage(new URL(url));
     }
 
-    private static String requestWebPage(URL url) throws IOException, URISyntaxException, RuntimeException {
+    private static String requestWebPage(URL url) throws IOException, URISyntaxException {
         // use HTTP client implementation
         if (httpClient != null) {
             HttpGet httpGet = new HttpGet(url.toURI());
