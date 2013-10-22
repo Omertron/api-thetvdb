@@ -37,6 +37,7 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.xml.ws.WebServiceException;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -443,13 +444,7 @@ public class TvdbParser {
         episode.setDirectors(parseList(DOMHelper.getValueFromElement(eEpisode, "Director"), "|,"));
         episode.setEpImgFlag(DOMHelper.getValueFromElement(eEpisode, "EpImgFlag"));
         episode.setEpisodeName(DOMHelper.getValueFromElement(eEpisode, "EpisodeName"));
-        try {
-            episode.setEpisodeNumber(Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, "EpisodeNumber")));
-        } catch (NumberFormatException ex) {
-            episode.setEpisodeNumber(0);
-        } catch (WebServiceException ex) {
-            episode.setEpisodeNumber(0);
-        }
+        episode.setEpisodeNumber(getEpisodeValue(eEpisode, "EpisodeNumber"));
         episode.setFirstAired(DOMHelper.getValueFromElement(eEpisode, "FirstAired"));
         episode.setGuestStars(parseList(DOMHelper.getValueFromElement(eEpisode, "GuestStars"), "|,"));
         episode.setImdbId(DOMHelper.getValueFromElement(eEpisode, "IMDB_ID"));
@@ -457,48 +452,45 @@ public class TvdbParser {
         episode.setOverview(DOMHelper.getValueFromElement(eEpisode, "Overview"));
         episode.setProductionCode(DOMHelper.getValueFromElement(eEpisode, "ProductionCode"));
         episode.setRating(DOMHelper.getValueFromElement(eEpisode, "Rating"));
-        try {
-            episode.setSeasonNumber(Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, "SeasonNumber")));
-        } catch (NumberFormatException ex) {
-            episode.setSeasonNumber(0);
-        } catch (WebServiceException ex) {
-            episode.setSeasonNumber(0);
-        }
+
+        episode.setSeasonNumber(getEpisodeValue(eEpisode, "SeasonNumber"));
+
         episode.setWriters(parseList(DOMHelper.getValueFromElement(eEpisode, "Writer"), "|,"));
         episode.setAbsoluteNumber(DOMHelper.getValueFromElement(eEpisode, "absolute_number"));
-        String s = DOMHelper.getValueFromElement(eEpisode, "filename");
-        if (!s.isEmpty()) {
-            episode.setFilename(bannerMirror + s);
+        String filename = DOMHelper.getValueFromElement(eEpisode, "filename");
+        if (StringUtils.isNotBlank(filename)) {
+            episode.setFilename(bannerMirror + filename);
         }
+
         episode.setLastUpdated(DOMHelper.getValueFromElement(eEpisode, "lastupdated"));
         episode.setSeasonId(DOMHelper.getValueFromElement(eEpisode, "seasonid"));
         episode.setSeriesId(DOMHelper.getValueFromElement(eEpisode, "seriesid"));
 
-        try {
-            episode.setAirsAfterSeason(Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, "airsafter_season")));
-        } catch (NumberFormatException ex) {
-            episode.setAirsAfterSeason(0);
-        } catch (WebServiceException ex) {
-            episode.setAirsAfterSeason(0);
-        }
-
-        try {
-            episode.setAirsBeforeEpisode(Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, "airsbefore_episode")));
-        } catch (NumberFormatException ex) {
-            episode.setAirsBeforeEpisode(0);
-        } catch (WebServiceException ex) {
-            episode.setAirsBeforeEpisode(0);
-        }
-
-        try {
-            episode.setAirsBeforeSeason(Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, "airsbefore_season")));
-        } catch (NumberFormatException ex) {
-            episode.setAirsBeforeSeason(0);
-        } catch (WebServiceException ex) {
-            episode.setAirsBeforeSeason(0);
-        }
+        episode.setAirsAfterSeason(getEpisodeValue(eEpisode, "airsafter_season"));
+        episode.setAirsBeforeEpisode(getEpisodeValue(eEpisode, "airsbefore_episode"));
+        episode.setAirsBeforeSeason(getEpisodeValue(eEpisode, "airsbefore_season"));
 
         return episode;
+    }
+
+    /**
+     * Process the "key" from the element into an integer.
+     *
+     * @param eEpisode
+     * @param key
+     * @return the value, 0 if not found or an error.
+     */
+    private static int getEpisodeValue(Element eEpisode, String key) {
+        int episodeValue;
+        try {
+            episodeValue = Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, key));
+        } catch (NumberFormatException ex) {
+            episodeValue = 0;
+        } catch (WebServiceException ex) {
+            episodeValue = 0;
+        }
+
+        return episodeValue;
     }
 
     /**
