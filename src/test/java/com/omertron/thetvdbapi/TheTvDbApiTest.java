@@ -91,7 +91,8 @@ public class TheTvDbApiTest {
     public void testGetSeries() {
         LOG.info("testGetSeries");
         Series series = tvdb.getSeries(TVDBID, LANGUAGE_ENGLISH);
-        assertTrue(series.getSeriesName().equals(SERIES_NAME));
+        assertTrue("Wrong series name", series.getSeriesName().equals(SERIES_NAME));
+        assertFalse("No genres found", series.getGenres().isEmpty());
     }
 
     @Test
