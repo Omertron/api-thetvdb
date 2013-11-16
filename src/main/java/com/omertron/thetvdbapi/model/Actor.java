@@ -29,7 +29,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class Actor implements Comparable<Actor>, Serializable {
 
-    private static final long serialVersionUID = 1L; // Default serial UID
+    // Default serial UID
+    private static final long serialVersionUID = 1L;
     private int id;
     private String name;
     private String role;

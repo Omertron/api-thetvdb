@@ -25,7 +25,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class BannerUpdate implements Serializable {
 
-    private static final long serialVersionUID = 1L; // Default serial UID
+    // Default serial UID
+    private static final long serialVersionUID = 1L;
     private String seasonNum;
     private String series;
     private String format;

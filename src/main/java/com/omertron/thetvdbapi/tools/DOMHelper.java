@@ -49,7 +49,8 @@ public class DOMHelper {
     private static final String YES = "yes";
     private static final String ENCODING = "UTF-8";
     private static final int RETRY_COUNT = 5;
-    private static final int RETRY_TIME = 250;  // Milliseconds to retry
+    // Milliseconds to retry
+    private static final int RETRY_TIME = 250;
     private static CommonHttpClient httpClient = null;
 
     // Hide the constructor
@@ -96,8 +97,10 @@ public class DOMHelper {
     public static synchronized Document getEventDocFromUrl(String url) {
         String webPage;
         InputStream in = null;
-        int retryCount = 0;     // Count the number of times we download the web page
-        boolean valid = false;  // Is the web page valid
+        // Count the number of times we download the web page
+        int retryCount = 0;
+        // Is the web page valid
+        boolean valid = false;
 
         try {
             while (!valid && (retryCount < RETRY_COUNT)) {
