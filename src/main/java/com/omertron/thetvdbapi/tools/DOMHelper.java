@@ -108,6 +108,7 @@ public class DOMHelper {
                 DocumentBuilder db = dbf.newDocumentBuilder();
 
                 doc = db.parse(in);
+                in.close();
                 doc.getDocumentElement().normalize();
             }
         } catch (UnsupportedEncodingException ex) {
@@ -120,7 +121,9 @@ public class DOMHelper {
             throw new WebServiceException("Unable to parse TheTVDb response, please try again later.", error);
         } finally {
             try {
-                in.close();
+                if (in != null) {
+                    in.close();
+                }
             } catch (IOException ex) {
                 // Input Stream was already closed or null
             }
