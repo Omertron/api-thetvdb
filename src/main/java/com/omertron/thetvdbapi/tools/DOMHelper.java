@@ -95,12 +95,46 @@ public class DOMHelper {
      * @return
      */
     public static synchronized Document getEventDocFromUrl(String url) {
-        String webPage;
         InputStream in = null;
+        Document doc = null;
+
+        try {
+            String webPage = getValidWebpage(url);
+
+            if (StringUtils.isNotBlank(webPage)) {
+                in = new ByteArrayInputStream(webPage.getBytes(ENCODING));
+
+                DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+                DocumentBuilder db = dbf.newDocumentBuilder();
+
+                doc = db.parse(in);
+                doc.getDocumentElement().normalize();
+            }
+        } catch (UnsupportedEncodingException ex) {
+            throw new WebServiceException("Unable to encode URL: " + url, ex);
+        } catch (ParserConfigurationException error) {
+            throw new WebServiceException("Unable to parse TheTVDb response, please try again later.", error);
+        } catch (SAXException error) {
+            throw new WebServiceException("Unable to parse TheTVDb response, please try again later.", error);
+        } catch (IOException error) {
+            throw new WebServiceException("Unable to parse TheTVDb response, please try again later.", error);
+        } finally {
+            try {
+                in.close();
+            } catch (IOException ex) {
+                // Input Stream was already closed or null
+            }
+        }
+
+        return doc;
+    }
+
+    private static String getValidWebpage(String url) {
         // Count the number of times we download the web page
         int retryCount = 0;
         // Is the web page valid
         boolean valid = false;
+        String webPage;
 
         try {
             while (!valid && (retryCount < RETRY_COUNT)) {
@@ -122,7 +156,7 @@ public class DOMHelper {
                     throw new WebServiceException("Failed to download data from " + url);
                 }
 
-                in = new ByteArrayInputStream(webPage.getBytes(ENCODING));
+                return webPage;
             }
         } catch (UnsupportedEncodingException ex) {
             throw new WebServiceException("Unable to encode URL: " + url, ex);
@@ -132,33 +166,7 @@ public class DOMHelper {
             throw new WebServiceException("Unable to encode URL: " + url, ex);
         }
 
-        if (in == null) {
-            return null;
-        }
-
-        Document doc = null;
-
-        try {
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-
-            doc = db.parse(in);
-            doc.getDocumentElement().normalize();
-        } catch (ParserConfigurationException error) {
-            throw new WebServiceException("Unable to parse TheTVDb response, please try again later.", error);
-        } catch (SAXException error) {
-            throw new WebServiceException("Unable to parse TheTVDb response, please try again later.", error);
-        } catch (IOException error) {
-            throw new WebServiceException("Unable to parse TheTVDb response, please try again later.", error);
-        } finally {
-            try {
-                in.close();
-            } catch (IOException ex) {
-                // Input Stream was already closed or null
-            }
-        }
-
-        return doc;
+        return null;
     }
 
     /**
