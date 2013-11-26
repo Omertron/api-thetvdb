@@ -115,7 +115,7 @@ public class Banner implements Serializable {
     public void setSeason(String season) {
         try {
             this.season = Integer.parseInt(season);
-        } catch (Exception error) {
+        } catch (NumberFormatException ex) {
             this.season = 0;
         }
     }
@@ -135,7 +135,7 @@ public class Banner implements Serializable {
     public void setId(String id) {
         try {
             this.id = Integer.parseInt(id);
-        } catch (Exception ignore) {
+        } catch (NumberFormatException ex) {
             this.id = 0;
         }
     }
@@ -147,7 +147,7 @@ public class Banner implements Serializable {
     public void setRating(String rating) {
         try {
             this.rating = Float.parseFloat(rating);
-        } catch (Exception ignore) {
+        } catch (NumberFormatException ex) {
             this.rating = 0f;
         }
     }
@@ -155,7 +155,7 @@ public class Banner implements Serializable {
     public void setRatingCount(String ratingCount) {
         try {
             this.ratingCount = Integer.parseInt(ratingCount);
-        } catch (Exception ignore) {
+        } catch (NumberFormatException ex) {
             this.ratingCount = 0;
         }
     }

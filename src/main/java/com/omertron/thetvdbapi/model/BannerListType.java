@@ -21,10 +21,12 @@ package com.omertron.thetvdbapi.model;
 
 /**
  * Describes the list of possible banner types stored in the "BannerType" field returned from TheTVDB
+ *
  * @author Stuart.Boston
  *
  */
 public enum BannerListType {
+
     series, season, poster, fanart;
 
     public static BannerListType fromString(String type) {

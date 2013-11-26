@@ -242,13 +242,7 @@ public class DOMHelper {
     }
 
     private static String requestWebPage(URL url) throws IOException, URISyntaxException {
-        // use HTTP client implementation
-        if (httpClient != null) {
-            HttpGet httpGet = new HttpGet(url.toURI());
-            return httpClient.requestContent(httpGet);
-        }
-
-        // use web browser
-        return WebBrowser.request(url);
+        HttpGet httpGet = new HttpGet(url.toURI());
+        return httpClient.requestContent(httpGet);
     }
 }

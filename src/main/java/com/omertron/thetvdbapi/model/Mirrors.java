@@ -43,12 +43,11 @@ public class Mirrors {
     private static final int MASK_BANNER = 2;
     private static final int MASK_ZIP = 4;
 
-
     private static final Random RNDM = new Random();
 
-    private List<String> xmlList = new ArrayList<String>();
-    private List<String> bannerList = new ArrayList<String>();
-    private List<String> zipList = new ArrayList<String>();
+    private final List<String> xmlList = new ArrayList<String>();
+    private final List<String> bannerList = new ArrayList<String>();
+    private final List<String> zipList = new ArrayList<String>();
 
     public Mirrors(String apiKey) {
         // Make this synchronized so that only one

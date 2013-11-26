@@ -64,7 +64,7 @@ public class Actor implements Comparable<Actor>, Serializable {
     public void setId(String id) {
         try {
             this.id = Integer.parseInt(id);
-        } catch (Exception ignore) {
+        } catch (NumberFormatException ex) {
             this.id = 0;
         }
     }
@@ -88,7 +88,7 @@ public class Actor implements Comparable<Actor>, Serializable {
     public void setSortOrder(String sortOrder) {
         try {
             this.sortOrder = Integer.parseInt(sortOrder);
-        } catch (Exception ignore) {
+        } catch (NumberFormatException ex) {
             this.sortOrder = 0;
         }
     }

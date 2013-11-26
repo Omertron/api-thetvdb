@@ -27,7 +27,6 @@ import com.omertron.thetvdbapi.model.Series;
 import com.omertron.thetvdbapi.model.TVDBUpdates;
 import com.omertron.thetvdbapi.tools.DOMHelper;
 import com.omertron.thetvdbapi.tools.TvdbParser;
-import com.omertron.thetvdbapi.tools.WebBrowser;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.ParseException;
@@ -41,6 +40,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.CommonHttpClient;
+import org.yamj.api.common.http.DefaultPoolingHttpClient;
 
 /**
  * @author altman.matthew
@@ -61,10 +61,11 @@ public class TheTVDBApi {
     /**
      * Create an API object with the passed API Key
      *
-     * @param apiKey Must not be null or empty
+     * @param apiKey Must be valid
      */
     public TheTVDBApi(String apiKey) {
-        this(apiKey, null);
+        // No HttpClient passed, so use a default
+        this(apiKey, new DefaultPoolingHttpClient());
     }
 
     /**
@@ -109,8 +110,6 @@ public class TheTVDBApi {
         } else {
             bannerMirror += "/banners/";
         }
-
-        //zipMirror = mirrors.getMirror(Mirrors.TYPE_ZIP);
     }
 
     /**
@@ -122,15 +121,7 @@ public class TheTVDBApi {
      * @param password
      */
     public void setProxy(String host, String port, String username, String password) {
-        // should be set in HTTP client already
-        if (httpClient != null) {
-            return;
-        }
-
-        WebBrowser.setProxyHost(host);
-        WebBrowser.setProxyPort(port);
-        WebBrowser.setProxyUsername(username);
-        WebBrowser.setProxyPassword(password);
+        httpClient.setProxy(host, Integer.parseInt(port), username, password);
     }
 
     /**
@@ -140,13 +131,7 @@ public class TheTVDBApi {
      * @param webTimeoutRead
      */
     public void setTimeout(int webTimeoutConnect, int webTimeoutRead) {
-        // should be set in HTTP client already
-        if (httpClient != null) {
-            return;
-        }
-
-        WebBrowser.setWebTimeoutConnect(webTimeoutConnect);
-        WebBrowser.setWebTimeoutRead(webTimeoutRead);
+        httpClient.setTimeouts(webTimeoutConnect, webTimeoutRead);
     }
 
     /**
