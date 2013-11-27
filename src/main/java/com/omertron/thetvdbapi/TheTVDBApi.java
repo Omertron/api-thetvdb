@@ -120,8 +120,8 @@ public class TheTVDBApi {
      * @param username
      * @param password
      */
-    public void setProxy(String host, String port, String username, String password) {
-        httpClient.setProxy(host, Integer.parseInt(port), username, password);
+    public void setProxy(String host, int port, String username, String password) {
+        httpClient.setProxy(host, port, username, password);
     }
 
     /**
