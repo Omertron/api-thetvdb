@@ -121,7 +121,11 @@ public class TheTVDBApi {
      * @param password
      */
     public void setProxy(String host, int port, String username, String password) {
-        httpClient.setProxy(host, port, username, password);
+        if (httpClient == null) {
+            throw new WebServiceException("Failed to set proxy information");
+        } else {
+            httpClient.setProxy(host, port, username, password);
+        }
     }
 
     /**
@@ -131,7 +135,11 @@ public class TheTVDBApi {
      * @param webTimeoutRead
      */
     public void setTimeout(int webTimeoutConnect, int webTimeoutRead) {
-        httpClient.setTimeouts(webTimeoutConnect, webTimeoutRead);
+        if (httpClient == null) {
+            throw new WebServiceException("Failed to set timeout information");
+        } else {
+            httpClient.setTimeouts(webTimeoutConnect, webTimeoutRead);
+        }
     }
 
     /**
