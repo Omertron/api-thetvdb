@@ -19,13 +19,22 @@
  */
 package com.omertron.thetvdbapi.tools;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.ws.WebServiceException;
@@ -33,7 +42,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.HttpGet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 import org.yamj.api.common.http.CommonHttpClient;
 
@@ -52,6 +65,8 @@ public class DOMHelper {
     // Milliseconds to retry
     private static final int RETRY_TIME = 250;
     private static CommonHttpClient httpClient = null;
+    // Constants
+    private static final String ERROR_WRITING = "Error writing the document to ";
 
     // Hide the constructor
     protected DOMHelper() {
@@ -126,6 +141,7 @@ public class DOMHelper {
                 }
             } catch (IOException ex) {
                 // Input Stream was already closed or null
+                LOG.trace("Failed to close InputStream", ex);
             }
         }
 
@@ -209,13 +225,11 @@ public class DOMHelper {
             trans.setOutputProperty(OutputKeys.INDENT, YES);
             trans.transform(new DOMSource(doc), new StreamResult(new File(localFile)));
             return true;
-        } catch (TransformerConfigurationException error) {
-            LOG.warn("Error writing the document to " + localFile);
-            LOG.warn("Message: " + error.getMessage());
+        } catch (TransformerConfigurationException ex) {
+            LOG.warn(ERROR_WRITING + localFile, ex);
             return false;
-        } catch (TransformerException error) {
-            LOG.warn("Error writing the document to " + localFile);
-            LOG.warn("Message: " + error.getMessage());
+        } catch (TransformerException ex) {
+            LOG.warn(ERROR_WRITING + localFile, ex);
             return false;
         }
     }

@@ -161,7 +161,7 @@ public class TheTVDBApi {
                 urlBuilder.append(language).append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
-            LOG.warn(ex.getMessage());
+            LOG.warn(ex.getMessage(), ex);
             return null;
         }
 
@@ -196,7 +196,7 @@ public class TheTVDBApi {
                 urlBuilder.append(language).append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
-            LOG.warn(ex.getMessage());
+            LOG.warn(ex.getMessage(), ex);
             return null;
         }
 
@@ -228,7 +228,7 @@ public class TheTVDBApi {
                 urlBuilder.append(language).append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
-            LOG.warn(ex.getMessage());
+            LOG.warn(ex.getMessage(), ex);
             return null;
         }
 
@@ -270,7 +270,7 @@ public class TheTVDBApi {
                 urlBuilder.append(language).append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
-            LOG.warn(ex.getMessage());
+            LOG.warn(ex.getMessage(), ex);
             return new Episode();
         }
 
@@ -302,7 +302,7 @@ public class TheTVDBApi {
                 urlBuilder.append(language).append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
-            LOG.warn(ex.getMessage());
+            LOG.warn(ex.getMessage(), ex);
             return new Episode();
         }
 
@@ -331,7 +331,7 @@ public class TheTVDBApi {
                 urlBuilder.append(language).append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
-            LOG.warn(ex.getMessage());
+            LOG.warn(ex.getMessage(), ex);
             return new Episode();
         }
 
@@ -379,7 +379,7 @@ public class TheTVDBApi {
             urlBuilder.append(seriesId);
             urlBuilder.append("/banners.xml");
         } catch (WebServiceException ex) {
-            LOG.warn(ex.getMessage());
+            LOG.warn(ex.getMessage(), ex);
             return new Banners();
         }
 
@@ -401,7 +401,7 @@ public class TheTVDBApi {
             urlBuilder.append(seriesId);
             urlBuilder.append("/actors.xml");
         } catch (WebServiceException ex) {
-            LOG.warn(ex.getMessage());
+            LOG.warn(ex.getMessage(), ex);
             return new ArrayList<Actor>();
         }
         return TvdbParser.getActors(urlBuilder.toString(), getBannerMirror(apiKey));
@@ -417,11 +417,12 @@ public class TheTVDBApi {
             if (language != null) {
                 urlBuilder.append("&language=").append(language);
             }
-        } catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException ex) {
+            LOG.trace("Failed to encode title: " + title, ex);
             // Try and use the raw title
             urlBuilder.append(title);
         } catch (WebServiceException ex) {
-            LOG.warn(ex.getMessage());
+            LOG.warn(ex.getMessage(), ex);
             return new ArrayList<Series>();
         }
 
@@ -449,10 +450,10 @@ public class TheTVDBApi {
                 urlBuilder.append(XML_EXTENSION);
             }
         } catch (WebServiceException ex) {
-            LOG.warn(ex.getMessage());
+            LOG.warn(ex.getMessage(), ex);
             return new Episode();
         }
-        LOG.debug("URL: " + urlBuilder.toString());
+        LOG.trace("URL: " + urlBuilder.toString());
         return TvdbParser.getEpisode(urlBuilder.toString(), getBannerMirror(apiKey));
     }
 
@@ -463,7 +464,7 @@ public class TheTVDBApi {
         urlBuilder.append(apiKey);
         urlBuilder.append(WEEKLY_UPDATES_URL);
 
-        LOG.debug("URL: " + urlBuilder.toString());
+        LOG.trace("URL: " + urlBuilder.toString());
         return TvdbParser.getUpdates(urlBuilder.toString());
     }
 

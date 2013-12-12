@@ -38,6 +38,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.xml.ws.WebServiceException;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -58,6 +59,7 @@ public class TvdbParser {
     // Literals
     private static final String SERIES = "Series";
     private static final String TIME = "time";
+    private static final String FAILED_TO_GET_XML = "Failed to get XML document from URL";
 
     // Hide the constructor
     protected TvdbParser() {
@@ -86,6 +88,7 @@ public class TvdbParser {
                 return results;
             }
         } catch (WebServiceException ex) {
+            LOG.trace(FAILED_TO_GET_XML, ex);
             return results;
         }
 
@@ -146,7 +149,7 @@ public class TvdbParser {
                 }
             }
         } catch (WebServiceException ex) {
-            LOG.warn("All Episodes error: " + ex.getMessage());
+            LOG.warn("All Episodes error: " + ex.getMessage(), ex);
         }
 
         return episodeList;
@@ -184,7 +187,7 @@ public class TvdbParser {
                 }
             }
         } catch (WebServiceException ex) {
-            LOG.warn("Banners error: " + ex.getMessage());
+            LOG.warn("Banners error: " + ex.getMessage(), ex);
         }
 
         return banners;
@@ -221,7 +224,7 @@ public class TvdbParser {
                 }
             }
         } catch (WebServiceException ex) {
-            LOG.warn("Series error: " + ex.getMessage());
+            LOG.warn("Series error: " + ex.getMessage(), ex);
         }
 
         return episode;
@@ -247,6 +250,7 @@ public class TvdbParser {
         try {
             doc = DOMHelper.getEventDocFromUrl(urlString);
         } catch (WebServiceException ex) {
+            LOG.trace(FAILED_TO_GET_XML, ex);
             return seriesList;
         }
 
@@ -281,6 +285,7 @@ public class TvdbParser {
         try {
             doc = DOMHelper.getEventDocFromUrl(urlString);
         } catch (WebServiceException ex) {
+            LOG.trace(FAILED_TO_GET_XML, ex);
             return updates;
         }
 
@@ -419,6 +424,7 @@ public class TvdbParser {
         try {
             banner.setSeriesName(Boolean.parseBoolean(DOMHelper.getValueFromElement(eBanner, "SeriesName")));
         } catch (WebServiceException ex) {
+            LOG.trace("Failed to transform SeriesName to boolean", ex);
             banner.setSeriesName(false);
         }
 
@@ -483,10 +489,10 @@ public class TvdbParser {
     private static int getEpisodeValue(Element eEpisode, String key) {
         int episodeValue;
         try {
-            episodeValue = Integer.parseInt(DOMHelper.getValueFromElement(eEpisode, key));
-        } catch (NumberFormatException ex) {
-            episodeValue = 0;
+            String value = DOMHelper.getValueFromElement(eEpisode, key);
+            episodeValue = NumberUtils.toInt(value, 0);
         } catch (WebServiceException ex) {
+            LOG.trace("Failed to read episode value", ex);
             episodeValue = 0;
         }
 

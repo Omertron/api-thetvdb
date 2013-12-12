@@ -22,6 +22,7 @@ package com.omertron.thetvdbapi.model;
 import java.io.Serializable;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.lang3.math.NumberUtils;
 
 /**
  *
@@ -113,11 +114,7 @@ public class Banner implements Serializable {
     }
 
     public void setSeason(String season) {
-        try {
-            this.season = Integer.parseInt(season);
-        } catch (NumberFormatException ex) {
-            this.season = 0;
-        }
+        this.season = NumberUtils.toInt(season, 0);
     }
 
     public void setBannerType(BannerListType bannerType) {
@@ -133,11 +130,7 @@ public class Banner implements Serializable {
     }
 
     public void setId(String id) {
-        try {
-            this.id = Integer.parseInt(id);
-        } catch (NumberFormatException ex) {
-            this.id = 0;
-        }
+        this.id = NumberUtils.toInt(id, 0);
     }
 
     public void setColours(String colours) {
@@ -145,19 +138,11 @@ public class Banner implements Serializable {
     }
 
     public void setRating(String rating) {
-        try {
-            this.rating = Float.parseFloat(rating);
-        } catch (NumberFormatException ex) {
-            this.rating = 0f;
-        }
+        this.rating = NumberUtils.toFloat(rating, 0f);
     }
 
     public void setRatingCount(String ratingCount) {
-        try {
-            this.ratingCount = Integer.parseInt(ratingCount);
-        } catch (NumberFormatException ex) {
-            this.ratingCount = 0;
-        }
+        this.ratingCount = NumberUtils.toInt(ratingCount, 0);
     }
 
     public void setSeriesName(boolean seriesName) {

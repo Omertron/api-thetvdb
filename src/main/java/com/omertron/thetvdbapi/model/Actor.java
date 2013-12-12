@@ -22,6 +22,7 @@ package com.omertron.thetvdbapi.model;
 import java.io.Serializable;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.lang3.math.NumberUtils;
 
 /**
  *
@@ -62,11 +63,7 @@ public class Actor implements Comparable<Actor>, Serializable {
     }
 
     public void setId(String id) {
-        try {
-            this.id = Integer.parseInt(id);
-        } catch (NumberFormatException ex) {
-            this.id = 0;
-        }
+        this.id = NumberUtils.toInt(id, 0);
     }
 
     public void setName(String name) {
@@ -86,11 +83,7 @@ public class Actor implements Comparable<Actor>, Serializable {
     }
 
     public void setSortOrder(String sortOrder) {
-        try {
-            this.sortOrder = Integer.parseInt(sortOrder);
-        } catch (NumberFormatException ex) {
-            this.sortOrder = 0;
-        }
+        this.sortOrder = NumberUtils.toInt(sortOrder, 0);
     }
 
     @Override
