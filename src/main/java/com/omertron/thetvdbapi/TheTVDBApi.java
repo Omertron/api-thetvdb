@@ -33,6 +33,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.xml.ws.WebServiceException;
@@ -51,8 +52,8 @@ public class TheTVDBApi {
     private static final Logger LOG = LoggerFactory.getLogger(TheTVDBApi.class);
     private String apiKey = null;
     private CommonHttpClient httpClient;
-    private static String xmlMirror = null;
-    private static String bannerMirror = null;
+    private static String xmlMirror = "http://thetvdb.com/api/";
+    private static String bannerMirror = "http://thetvdb.com/banners/";
     private static final String XML_EXTENSION = ".xml";
     private static final String SERIES_URL = "/series/";
     private static final String ALL_URL = "/all/";
@@ -181,31 +182,27 @@ public class TheTVDBApi {
      * @return
      */
     public List<Episode> getAllEpisodes(String id, String language) {
-        if (!isValidNumber(id)) {
-            return new ArrayList<Episode>();
-        }
+        List<Episode> episodeList = Collections.emptyList();
 
-        StringBuilder urlBuilder = new StringBuilder();
-        try {
-            urlBuilder.append(getXmlMirror(apiKey));
+        if (isValidNumber(id)) {
+            StringBuilder urlBuilder = new StringBuilder();
+            try {
+                urlBuilder.append(getXmlMirror(apiKey));
+            } catch (WebServiceException ex) {
+                LOG.warn(ex.getMessage(), ex);
+                urlBuilder.append("http://thetvdb.com/api/");
+            }
             urlBuilder.append(apiKey);
             urlBuilder.append(SERIES_URL);
             urlBuilder.append(id);
             urlBuilder.append(ALL_URL);
-            if (language != null) {
+            if (StringUtils.isNotBlank(language)) {
                 urlBuilder.append(language).append(XML_EXTENSION);
             }
-        } catch (WebServiceException ex) {
-            LOG.warn(ex.getMessage(), ex);
-            return null;
-        }
 
-        List<Episode> episodeList = TvdbParser.getAllEpisodes(urlBuilder.toString(), -1, getBannerMirror(apiKey));
-        if (episodeList.isEmpty()) {
-            return null;
-        } else {
-            return episodeList;
+            episodeList = TvdbParser.getAllEpisodes(urlBuilder.toString(), -1, getBannerMirror(apiKey));
         }
+        return episodeList;
     }
 
     /**
