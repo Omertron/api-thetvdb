@@ -56,10 +56,22 @@ public class TvdbParser {
     private static final String VIGNETTE_PATH = "VignettePath";
     private static final String THUMBNAIL_PATH = "ThumbnailPath";
     private static final int MAX_EPISODE = 24;  // The anticipated largest episode number
+    // Error messages
+    private static final String ERROR_GET_XML = "Failed to get XML document from URL";
+    private static final String ERROR_RETRIEVE_EPISODE_INFO = "Unable to retrieve episode information from TheTVDb, try again later.";
+    private static final String ERROR_NOT_ALLOWED_IN_PROLOG = "content is not allowed in prolog";
     // Literals
     private static final String SERIES = "Series";
     private static final String TIME = "time";
-    private static final String FAILED_TO_GET_XML = "Failed to get XML document from URL";
+    private static final String EPISODE = "Episode";
+    private static final String BANNER = "Banner";
+    private static final String LAST_UPDATED = "lastupdated";
+    private static final String OVERVIEW = "Overview";
+    private static final String IMDB_ID = "IMDB_ID";
+    private static final String FIRST_AIRED = "FirstAired";
+    private static final String SERIES_NAME = "SeriesName";
+    private static final String RATING = "Rating";
+    private static final String LANGUAGE = "Language";
 
     // Hide the constructor
     protected TvdbParser() {
@@ -88,7 +100,7 @@ public class TvdbParser {
                 return results;
             }
         } catch (WebServiceException ex) {
-            LOG.trace(FAILED_TO_GET_XML, ex);
+            LOG.trace(ERROR_GET_XML, ex);
             return results;
         }
 
@@ -136,7 +148,7 @@ public class TvdbParser {
 
         try {
             Document doc = DOMHelper.getEventDocFromUrl(urlString);
-            nlEpisode = doc.getElementsByTagName("Episode");
+            nlEpisode = doc.getElementsByTagName(EPISODE);
             for (int loop = 0; loop < nlEpisode.getLength(); loop++) {
                 nEpisode = nlEpisode.item(loop);
                 if (nEpisode.getNodeType() == Node.ELEMENT_NODE) {
@@ -174,7 +186,7 @@ public class TvdbParser {
             Document doc = DOMHelper.getEventDocFromUrl(urlString);
 
             if (doc != null) {
-                nlBanners = doc.getElementsByTagName("Banner");
+                nlBanners = doc.getElementsByTagName(BANNER);
                 for (int loop = 0; loop < nlBanners.getLength(); loop++) {
                     nBanner = nlBanners.item(loop);
                     if (nBanner.getNodeType() == Node.ELEMENT_NODE) {
@@ -210,7 +222,7 @@ public class TvdbParser {
             Document doc = DOMHelper.getEventDocFromUrl(urlString);
 
             if (doc != null) {
-                nlEpisode = doc.getElementsByTagName("Episode");
+                nlEpisode = doc.getElementsByTagName(EPISODE);
                 for (int loop = 0; loop < nlEpisode.getLength(); loop++) {
                     nEpisode = nlEpisode.item(loop);
                     if (nEpisode.getNodeType() == Node.ELEMENT_NODE) {
@@ -250,7 +262,7 @@ public class TvdbParser {
         try {
             doc = DOMHelper.getEventDocFromUrl(urlString);
         } catch (WebServiceException ex) {
-            LOG.trace(FAILED_TO_GET_XML, ex);
+            LOG.trace(ERROR_GET_XML, ex);
             return seriesList;
         }
 
@@ -285,7 +297,7 @@ public class TvdbParser {
         try {
             doc = DOMHelper.getEventDocFromUrl(urlString);
         } catch (WebServiceException ex) {
-            LOG.trace(FAILED_TO_GET_XML, ex);
+            LOG.trace(ERROR_GET_XML, ex);
             return updates;
         }
 
@@ -302,10 +314,10 @@ public class TvdbParser {
                 if (updateNode.getNodeName().equals(SERIES)) {
 
                     seriesUpdates.add(parseNextSeriesUpdate((Element) updateNode));
-                } else if (updateNode.getNodeName().equals("Episode")) {
+                } else if (updateNode.getNodeName().equals(EPISODE)) {
 
                     episodeUpdates.add(parseNextEpisodeUpdate((Element) updateNode));
-                } else if (updateNode.getNodeName().equals("Banner")) {
+                } else if (updateNode.getNodeName().equals(BANNER)) {
 
                     bannerUpdates.add(parseNextBannerUpdate((Element) updateNode));
                 }
@@ -350,15 +362,15 @@ public class TvdbParser {
                 response.append("Episode number seems to be too large.");
             } else if (seasonId == 0 && episodeId > 1) {
                 response.append("This special episode does not exist.");
-            } else if (errorMessage.toLowerCase().contains("content is not allowed in prolog")) {
-                response.append("Unable to retrieve episode information from TheTVDb, try again later.");
+            } else if (errorMessage.toLowerCase().contains(ERROR_NOT_ALLOWED_IN_PROLOG)) {
+                response.append(ERROR_RETRIEVE_EPISODE_INFO);
             } else {
                 response.append("Unknown episode error: ").append(errorMessage);
             }
         } else {
             // Don't recognise the error format, so just return it
-            if (errorMessage.toLowerCase().contains("content is not allowed in prolog")) {
-                response.append("Unable to retrieve episode information from TheTVDb, try again later.");
+            if (errorMessage.toLowerCase().contains(ERROR_NOT_ALLOWED_IN_PROLOG)) {
+                response.append(ERROR_RETRIEVE_EPISODE_INFO);
             } else {
                 response.append("Episode error: ").append(errorMessage);
             }
@@ -415,14 +427,14 @@ public class TvdbParser {
         banner.setId(DOMHelper.getValueFromElement(eBanner, "id"));
         banner.setBannerType(BannerListType.fromString(DOMHelper.getValueFromElement(eBanner, "BannerType")));
         banner.setBannerType2(BannerType.fromString(DOMHelper.getValueFromElement(eBanner, "BannerType2")));
-        banner.setLanguage(DOMHelper.getValueFromElement(eBanner, "Language"));
+        banner.setLanguage(DOMHelper.getValueFromElement(eBanner, LANGUAGE));
         banner.setSeason(DOMHelper.getValueFromElement(eBanner, "Season"));
         banner.setColours(DOMHelper.getValueFromElement(eBanner, "Colors"));
-        banner.setRating(DOMHelper.getValueFromElement(eBanner, "Rating"));
+        banner.setRating(DOMHelper.getValueFromElement(eBanner, RATING));
         banner.setRatingCount(DOMHelper.getValueFromElement(eBanner, "RatingCount"));
 
         try {
-            banner.setSeriesName(Boolean.parseBoolean(DOMHelper.getValueFromElement(eBanner, "SeriesName")));
+            banner.setSeriesName(Boolean.parseBoolean(DOMHelper.getValueFromElement(eBanner, SERIES_NAME)));
         } catch (WebServiceException ex) {
             LOG.trace("Failed to transform SeriesName to boolean", ex);
             banner.setSeriesName(false);
@@ -451,13 +463,13 @@ public class TvdbParser {
         episode.setEpImgFlag(DOMHelper.getValueFromElement(eEpisode, "EpImgFlag"));
         episode.setEpisodeName(DOMHelper.getValueFromElement(eEpisode, "EpisodeName"));
         episode.setEpisodeNumber(getEpisodeValue(eEpisode, "EpisodeNumber"));
-        episode.setFirstAired(DOMHelper.getValueFromElement(eEpisode, "FirstAired"));
+        episode.setFirstAired(DOMHelper.getValueFromElement(eEpisode, FIRST_AIRED));
         episode.setGuestStars(parseList(DOMHelper.getValueFromElement(eEpisode, "GuestStars"), "|,"));
-        episode.setImdbId(DOMHelper.getValueFromElement(eEpisode, "IMDB_ID"));
-        episode.setLanguage(DOMHelper.getValueFromElement(eEpisode, "Language"));
-        episode.setOverview(DOMHelper.getValueFromElement(eEpisode, "Overview"));
+        episode.setImdbId(DOMHelper.getValueFromElement(eEpisode, IMDB_ID));
+        episode.setLanguage(DOMHelper.getValueFromElement(eEpisode, LANGUAGE));
+        episode.setOverview(DOMHelper.getValueFromElement(eEpisode, OVERVIEW));
         episode.setProductionCode(DOMHelper.getValueFromElement(eEpisode, "ProductionCode"));
-        episode.setRating(DOMHelper.getValueFromElement(eEpisode, "Rating"));
+        episode.setRating(DOMHelper.getValueFromElement(eEpisode, RATING));
 
         episode.setSeasonNumber(getEpisodeValue(eEpisode, "SeasonNumber"));
 
@@ -468,7 +480,7 @@ public class TvdbParser {
             episode.setFilename(bannerMirror + filename);
         }
 
-        episode.setLastUpdated(DOMHelper.getValueFromElement(eEpisode, "lastupdated"));
+        episode.setLastUpdated(DOMHelper.getValueFromElement(eEpisode, LAST_UPDATED));
         episode.setSeasonId(DOMHelper.getValueFromElement(eEpisode, "seasonid"));
         episode.setSeriesId(DOMHelper.getValueFromElement(eEpisode, "seriesid"));
 
@@ -513,16 +525,16 @@ public class TvdbParser {
         series.setAirsDayOfWeek(DOMHelper.getValueFromElement(eSeries, "Airs_DayOfWeek"));
         series.setAirsTime(DOMHelper.getValueFromElement(eSeries, "Airs_Time"));
         series.setContentRating(DOMHelper.getValueFromElement(eSeries, "ContentRating"));
-        series.setFirstAired(DOMHelper.getValueFromElement(eSeries, "FirstAired"));
+        series.setFirstAired(DOMHelper.getValueFromElement(eSeries, FIRST_AIRED));
         series.setGenres(parseList(DOMHelper.getValueFromElement(eSeries, "Genre"), "|,"));
-        series.setImdbId(DOMHelper.getValueFromElement(eSeries, "IMDB_ID"));
-        series.setLanguage(DOMHelper.getValueFromElement(eSeries, "language"));
+        series.setImdbId(DOMHelper.getValueFromElement(eSeries, IMDB_ID));
+        series.setLanguage(DOMHelper.getValueFromElement(eSeries, LANGUAGE));
         series.setNetwork(DOMHelper.getValueFromElement(eSeries, "Network"));
-        series.setOverview(DOMHelper.getValueFromElement(eSeries, "Overview"));
-        series.setRating(DOMHelper.getValueFromElement(eSeries, "Rating"));
+        series.setOverview(DOMHelper.getValueFromElement(eSeries, OVERVIEW));
+        series.setRating(DOMHelper.getValueFromElement(eSeries, RATING));
         series.setRuntime(DOMHelper.getValueFromElement(eSeries, "Runtime"));
         series.setSeriesId(DOMHelper.getValueFromElement(eSeries, "SeriesID"));
-        series.setSeriesName(DOMHelper.getValueFromElement(eSeries, "SeriesName"));
+        series.setSeriesName(DOMHelper.getValueFromElement(eSeries, SERIES_NAME));
         series.setStatus(DOMHelper.getValueFromElement(eSeries, "Status"));
 
         String artwork = DOMHelper.getValueFromElement(eSeries, TYPE_BANNER);
@@ -540,7 +552,7 @@ public class TvdbParser {
             series.setPoster(bannerMirror + artwork);
         }
 
-        series.setLastUpdated(DOMHelper.getValueFromElement(eSeries, "lastupdated"));
+        series.setLastUpdated(DOMHelper.getValueFromElement(eSeries, LAST_UPDATED));
         series.setZap2ItId(DOMHelper.getValueFromElement(eSeries, "zap2it_id"));
 
         return series;

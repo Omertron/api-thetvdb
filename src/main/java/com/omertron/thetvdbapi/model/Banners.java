@@ -101,13 +101,13 @@ public class Banners implements Serializable {
                 seriesId = banner.getId();
             }
 
-            if (banner.getBannerType() == BannerListType.series) {
+            if (banner.getBannerType() == BannerListType.SERIES) {
                 addSeriesBanner(banner);
-            } else if (banner.getBannerType() == BannerListType.season) {
+            } else if (banner.getBannerType() == BannerListType.SEASON) {
                 addSeasonBanner(banner);
-            } else if (banner.getBannerType() == BannerListType.poster) {
+            } else if (banner.getBannerType() == BannerListType.POSTER) {
                 addPosterBanner(banner);
-            } else if (banner.getBannerType() == BannerListType.fanart) {
+            } else if (banner.getBannerType() == BannerListType.FANART) {
                 addFanartBanner(banner);
             }
         }

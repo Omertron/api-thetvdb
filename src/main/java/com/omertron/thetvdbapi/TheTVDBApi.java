@@ -58,6 +58,7 @@ public class TheTVDBApi {
     private static final String SERIES_URL = "/series/";
     private static final String ALL_URL = "/all/";
     private static final String WEEKLY_UPDATES_URL = "/updates/updates_week.xml";
+    private static final String URL = "URL: ";
 
     /**
      * Create an API object with the passed API Key
@@ -347,13 +348,14 @@ public class TheTVDBApi {
         String year = null;
 
         Episode episode = getEpisode(id, seasonNbr, 1, language);
-        if ((episode != null) && ((episode.getFirstAired() != null && !episode.getFirstAired().isEmpty()))) {
+        if (episode != null && StringUtils.isNotBlank(episode.getFirstAired())) {
             Date date;
 
             try {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 date = dateFormat.parse(episode.getFirstAired());
-            } catch (ParseException error) {
+            } catch (ParseException ex) {
+                LOG.trace("Failed to transform date: " + episode.getFirstAired(), ex);
                 date = null;
             }
 
@@ -450,7 +452,7 @@ public class TheTVDBApi {
             LOG.warn(ex.getMessage(), ex);
             return new Episode();
         }
-        LOG.trace("URL: " + urlBuilder.toString());
+        LOG.trace(URL + urlBuilder.toString());
         return TvdbParser.getEpisode(urlBuilder.toString(), getBannerMirror(apiKey));
     }
 
@@ -461,7 +463,7 @@ public class TheTVDBApi {
         urlBuilder.append(apiKey);
         urlBuilder.append(WEEKLY_UPDATES_URL);
 
-        LOG.trace("URL: " + urlBuilder.toString());
+        LOG.trace(URL + urlBuilder.toString());
         return TvdbParser.getUpdates(urlBuilder.toString());
     }
 

@@ -27,15 +27,15 @@ package com.omertron.thetvdbapi.model;
  */
 public enum BannerType {
 
-    Graphical("graphical"),
-    Season("season"),
-    SeasonWide("seasonwide"),
-    Blank("blank"),
-    Text("text"),
-    FanartHD("1920x1080"),
-    FanartSD("1280x720"),
-    Poster("680x1000"),
-    Artwork("artwork");
+    GRAPHICAL("graphical"),
+    SEASON("season"),
+    SEASONWIDE("seasonwide"),
+    BLANK("blank"),
+    TEXT("text"),
+    FANART_HD("1920x1080"),
+    FANART_SD("1280x720"),
+    POSTER("680x1000"),
+    ARTWORK("artwork");
 
     private final String type;
 
@@ -49,7 +49,7 @@ public enum BannerType {
 
     /**
      * Set the banner type from a string. If the banner type isn't found, but the type contains an "x" as in 1920x1080 then the type
-     * will be set to Artwork
+ will be set to ARTWORK
      *
      * @param type
      * @return
@@ -63,13 +63,13 @@ public enum BannerType {
                     }
                 }
 
-                // If we've not found the type, then try a generic Artwork for the 1920x1080, 1280x720 or 680x1000 values
+                // If we've not found the type, then try a generic ARTWORK for the 1920x1080, 1280x720 or 680x1000 values
                 if (type.toLowerCase().contains("x")) {
-                    return BannerType.Artwork;
+                    return BannerType.ARTWORK;
                 }
             } catch (IllegalArgumentException ex) {
                 if (type.toLowerCase().contains("x")) {
-                    return BannerType.Artwork;
+                    return BannerType.ARTWORK;
                 } else {
                     throw new IllegalArgumentException("BannerType '" + type + "' does not exist", ex);
                 }

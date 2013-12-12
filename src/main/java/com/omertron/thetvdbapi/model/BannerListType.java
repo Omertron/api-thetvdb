@@ -27,7 +27,10 @@ package com.omertron.thetvdbapi.model;
  */
 public enum BannerListType {
 
-    series, season, poster, fanart;
+    SERIES,
+    SEASON,
+    POSTER,
+    FANART;
 
     public static BannerListType fromString(String type) {
         if (type != null) {
