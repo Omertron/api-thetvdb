@@ -35,7 +35,7 @@ public enum BannerListType {
     public static BannerListType fromString(String type) {
         if (type != null) {
             try {
-                return BannerListType.valueOf(type.trim().toLowerCase());
+                return BannerListType.valueOf(type.trim().toUpperCase());
             } catch (IllegalArgumentException ex) {
                 throw new IllegalArgumentException("BannerListType " + type + " does not exist", ex);
             }

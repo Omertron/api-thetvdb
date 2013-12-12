@@ -167,6 +167,7 @@ public class TheTVDBApi {
             return null;
         }
 
+        LOG.trace(URL + urlBuilder.toString());
         List<Series> seriesList = TvdbParser.getSeriesList(urlBuilder.toString(), getBannerMirror(apiKey));
         if (seriesList.isEmpty()) {
             return null;
@@ -201,6 +202,7 @@ public class TheTVDBApi {
                 urlBuilder.append(language).append(XML_EXTENSION);
             }
 
+            LOG.trace(URL + urlBuilder.toString());
             episodeList = TvdbParser.getAllEpisodes(urlBuilder.toString(), -1, getBannerMirror(apiKey));
         }
         return episodeList;
@@ -230,6 +232,7 @@ public class TheTVDBApi {
             return null;
         }
 
+        LOG.trace(URL + urlBuilder.toString());
         List<Episode> episodeList = TvdbParser.getAllEpisodes(urlBuilder.toString(), season, getBannerMirror(apiKey));
         if (episodeList.isEmpty()) {
             return null;
@@ -272,6 +275,7 @@ public class TheTVDBApi {
             return new Episode();
         }
 
+        LOG.trace(URL + urlBuilder.toString());
         return TvdbParser.getEpisode(urlBuilder.toString(), getBannerMirror(apiKey));
     }
 
@@ -304,6 +308,7 @@ public class TheTVDBApi {
             return new Episode();
         }
 
+        LOG.trace(URL + urlBuilder.toString());
         return TvdbParser.getEpisode(urlBuilder.toString(), getBannerMirror(apiKey));
     }
 
@@ -333,6 +338,7 @@ public class TheTVDBApi {
             return new Episode();
         }
 
+        LOG.trace(URL + urlBuilder.toString());
         return TvdbParser.getEpisode(urlBuilder.toString(), getBannerMirror(apiKey));
     }
 
@@ -382,6 +388,7 @@ public class TheTVDBApi {
             return new Banners();
         }
 
+        LOG.trace(URL + urlBuilder.toString());
         return TvdbParser.getBanners(urlBuilder.toString(), getBannerMirror(apiKey));
     }
 
@@ -403,6 +410,8 @@ public class TheTVDBApi {
             LOG.warn(ex.getMessage(), ex);
             return new ArrayList<Actor>();
         }
+
+        LOG.trace(URL + urlBuilder.toString());
         return TvdbParser.getActors(urlBuilder.toString(), getBannerMirror(apiKey));
     }
 
@@ -425,6 +434,7 @@ public class TheTVDBApi {
             return new ArrayList<Series>();
         }
 
+        LOG.trace(URL + urlBuilder.toString());
         return TvdbParser.getSeriesList(urlBuilder.toString(), getBannerMirror(apiKey));
     }
 
@@ -452,6 +462,7 @@ public class TheTVDBApi {
             LOG.warn(ex.getMessage(), ex);
             return new Episode();
         }
+
         LOG.trace(URL + urlBuilder.toString());
         return TvdbParser.getEpisode(urlBuilder.toString(), getBannerMirror(apiKey));
     }
