@@ -25,8 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.nio.charset.Charset;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -39,7 +38,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.ws.WebServiceException;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.methods.HttpGet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -181,8 +179,6 @@ public class DOMHelper {
             throw new WebServiceException("Unable to encode URL: " + url, ex);
         } catch (IOException ex) {
             throw new WebServiceException("Unable to download URL: " + url, ex);
-        } catch (URISyntaxException ex) {
-            throw new WebServiceException("Unable to encode URL: " + url, ex);
         }
 
         return null;
@@ -262,12 +258,7 @@ public class DOMHelper {
         } while ((t1 - t0) < milliseconds);
     }
 
-    private static String requestWebPage(String url) throws IOException, URISyntaxException {
-        return requestWebPage(new URL(url));
-    }
-
-    private static String requestWebPage(URL url) throws IOException, URISyntaxException {
-        HttpGet httpGet = new HttpGet(url.toURI());
-        return httpClient.requestContent(httpGet);
+    private static String requestWebPage(String url) throws IOException {
+        return httpClient.requestContent(url, Charset.forName("UTF-8"));
     }
 }
