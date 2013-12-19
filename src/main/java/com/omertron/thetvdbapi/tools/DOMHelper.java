@@ -259,6 +259,6 @@ public class DOMHelper {
     }
 
     private static String requestWebPage(String url) throws IOException {
-        return httpClient.requestContent(url, Charset.forName("UTF-8"));
+        return httpClient.requestContent(url, Charset.forName(ENCODING));
     }
 }
