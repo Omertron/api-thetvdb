@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
-        <version>7</version>
+        <version>9</version>
     </parent>
 
     <prerequisites>
@@ -71,6 +71,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <distribution.format>zip</distribution.format>
+        <version.slf4j>1.7.6</version.slf4j>
     </properties>
 
     <dependencies>
@@ -83,12 +84,12 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.5</version>
+            <version>${version.slf4j}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-jdk14</artifactId>
-            <version>1.7.5</version>
+            <version>${version.slf4j}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
