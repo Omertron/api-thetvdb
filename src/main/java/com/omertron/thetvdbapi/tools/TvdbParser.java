@@ -528,7 +528,7 @@ public class TvdbParser {
         series.setFirstAired(DOMHelper.getValueFromElement(eSeries, FIRST_AIRED));
         series.setGenres(parseList(DOMHelper.getValueFromElement(eSeries, "Genre"), "|,"));
         series.setImdbId(DOMHelper.getValueFromElement(eSeries, IMDB_ID));
-        series.setLanguage(DOMHelper.getValueFromElement(eSeries, LANGUAGE));
+        series.setLanguage(DOMHelper.getValueFromElement(eSeries, "language"));
         series.setNetwork(DOMHelper.getValueFromElement(eSeries, "Network"));
         series.setOverview(DOMHelper.getValueFromElement(eSeries, OVERVIEW));
         series.setRating(DOMHelper.getValueFromElement(eSeries, RATING));
