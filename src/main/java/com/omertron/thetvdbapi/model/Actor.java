@@ -20,6 +20,8 @@
 package com.omertron.thetvdbapi.model;
 
 import java.io.Serializable;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -98,52 +100,26 @@ public class Actor implements Comparable<Actor>, Serializable {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + id;
-        result = prime * result + ((image == null) ? 0 : image.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((role == null) ? 0 : role.hashCode());
-        result = prime * result + sortOrder;
-        return result;
+        return new HashCodeBuilder()
+                .append(id)
+                .append(name)
+                .append(role)
+                .append(image)
+                .append(sortOrder)
+                .toHashCode();
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-
-        if (obj == null) {
+        if (obj instanceof Actor) {
+            final Actor other = (Actor) obj;
+            return new EqualsBuilder()
+                    .append(id, other.id)
+                    .append(name, other.name)
+                    .append(role, other.role)
+                    .isEquals();
+        } else {
             return false;
         }
-
-        if (!(obj instanceof Actor)) {
-            return false;
-        }
-
-        Actor other = (Actor) obj;
-
-        if (id != other.id) {
-            return false;
-        }
-
-        if (name == null) {
-            if (other.name != null) {
-                return false;
-            }
-        } else if (!name.equals(other.name)) {
-            return false;
-        }
-
-        if (role == null) {
-            if (other.role != null) {
-                return false;
-            }
-        } else if (!role.equals(other.role)) {
-            return false;
-        }
-
-        return true;
     }
 }
