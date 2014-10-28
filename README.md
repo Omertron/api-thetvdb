@@ -24,7 +24,7 @@ Usage
 =====
 Create an instance of TheTVDB using your apiKey which must be requested [HERE](http://thetvdb.com/?tab=apiregister)
 
-`TheTVDB tvDB = new TheTVDB("your_api_key");`
+`TheTVDBApi tvDB = new TheTVDBApi("your_api_key");`
 
 ### Search for Series by name and language
 The language is optional and may be null, which would end up defaulting to English
