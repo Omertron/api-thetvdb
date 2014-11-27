@@ -97,10 +97,6 @@ public class Banners implements Serializable {
 
     public void addBanner(Banner banner) {
         if (banner != null) {
-            if (seriesId == 0) {
-                seriesId = banner.getId();
-            }
-
             if (banner.getBannerType() == BannerListType.SERIES) {
                 addSeriesBanner(banner);
             } else if (banner.getBannerType() == BannerListType.SEASON) {
