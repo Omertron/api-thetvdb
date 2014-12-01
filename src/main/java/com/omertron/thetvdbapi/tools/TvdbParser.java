@@ -55,11 +55,17 @@ public class TvdbParser {
     private static final String BANNER_PATH = "BannerPath";
     private static final String VIGNETTE_PATH = "VignettePath";
     private static final String THUMBNAIL_PATH = "ThumbnailPath";
-    private static final int MAX_EPISODE = 24;  // The anticipated largest episode number
+    // The anticipated largest episode number
+    private static final int MAX_EPISODE = 24;
     // Error messages
     private static final String ERROR_GET_XML = "Failed to get XML document from URL";
     private static final String ERROR_RETRIEVE_EPISODE_INFO = "Unable to retrieve episode information from TheTVDb, try again later.";
     private static final String ERROR_NOT_ALLOWED_IN_PROLOG = "content is not allowed in prolog";
+    // Constants
+    private static final int ERROR_MSG_EPISODE = 3;
+    private static final int ERROR_MSG_SEASON = 2;
+    private static final int ERROR_MSG_SERIES = 1;
+    private static final int ERROR_MSG_GROUP_COUNT = 3;
     // Literals
     private static final String SERIES = "Series";
     private static final String TIME = "time";
@@ -345,10 +351,10 @@ public class TvdbParser {
         Matcher matcher = pattern.matcher(errorMessage);
 
         // See if the error message matches the pattern and therefore we can decode it
-        if (matcher.find() && matcher.groupCount() == 3) {
-            int seriesId = Integer.parseInt(matcher.group(1));
-            int seasonId = Integer.parseInt(matcher.group(2));
-            int episodeId = Integer.parseInt(matcher.group(3));
+        if (matcher.find() && matcher.groupCount() == ERROR_MSG_GROUP_COUNT) {
+            int seriesId = Integer.parseInt(matcher.group(ERROR_MSG_SERIES));
+            int seasonId = Integer.parseInt(matcher.group(ERROR_MSG_SEASON));
+            int episodeId = Integer.parseInt(matcher.group(ERROR_MSG_EPISODE));
 
             response.append("Series Id: ").append(seriesId);
             response.append(", Season: ").append(seasonId);

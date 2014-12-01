@@ -65,6 +65,8 @@ public class DOMHelper {
     private static CommonHttpClient httpClient = null;
     // Constants
     private static final String ERROR_WRITING = "Error writing the document to ";
+    private static final String ERROR_UNABLE_TO_ENCODE_URL = "Unable to encode URL: ";
+    private static final String ERROR_UNABLE_TO_PARSE = "Unable to parse TheTVDb response, please try again later.";
 
     // Hide the constructor
     protected DOMHelper() {
@@ -125,13 +127,13 @@ public class DOMHelper {
                 doc.getDocumentElement().normalize();
             }
         } catch (UnsupportedEncodingException ex) {
-            throw new WebServiceException("Unable to encode URL: " + url, ex);
+            throw new WebServiceException(ERROR_UNABLE_TO_ENCODE_URL + url, ex);
         } catch (ParserConfigurationException error) {
-            throw new WebServiceException("Unable to parse TheTVDb response, please try again later.", error);
+            throw new WebServiceException(ERROR_UNABLE_TO_PARSE, error);
         } catch (SAXException error) {
-            throw new WebServiceException("Unable to parse TheTVDb response, please try again later.", error);
+            throw new WebServiceException(ERROR_UNABLE_TO_PARSE, error);
         } catch (IOException error) {
-            throw new WebServiceException("Unable to parse TheTVDb response, please try again later.", error);
+            throw new WebServiceException(ERROR_UNABLE_TO_PARSE, error);
         } finally {
             try {
                 if (in != null) {
@@ -176,7 +178,7 @@ public class DOMHelper {
                 return webPage;
             }
         } catch (UnsupportedEncodingException ex) {
-            throw new WebServiceException("Unable to encode URL: " + url, ex);
+            throw new WebServiceException(ERROR_UNABLE_TO_ENCODE_URL + url, ex);
         } catch (IOException ex) {
             throw new WebServiceException("Unable to download URL: " + url, ex);
         }

@@ -93,22 +93,22 @@ public class Mirrors {
             case MASK_BANNER:
                 bannerList.add(url);
                 break;
-            case (MASK_XML + MASK_BANNER):
+            case MASK_XML + MASK_BANNER:
                 xmlList.add(url);
                 bannerList.add(url);
                 break;
             case MASK_ZIP:
                 zipList.add(url);
                 break;
-            case (MASK_XML + MASK_ZIP):
+            case MASK_XML + MASK_ZIP:
                 xmlList.add(url);
                 zipList.add(url);
                 break;
-            case (MASK_BANNER + MASK_ZIP):
+            case MASK_BANNER + MASK_ZIP:
                 bannerList.add(url);
                 zipList.add(url);
                 break;
-            case (MASK_XML + MASK_BANNER + MASK_ZIP):
+            case MASK_XML + MASK_BANNER + MASK_ZIP:
                 xmlList.add(url);
                 bannerList.add(url);
                 zipList.add(url);
