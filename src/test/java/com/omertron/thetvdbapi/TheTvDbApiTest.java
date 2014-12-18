@@ -25,7 +25,9 @@ import com.omertron.thetvdbapi.model.Episode;
 import com.omertron.thetvdbapi.model.Series;
 import java.util.List;
 import org.junit.AfterClass;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -33,7 +35,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * JUnit tests for TheTvDb class. The tester must enter the API key for these tests to work. Requires JUnit 4.5.
+ * JUnit tests for TheTvDb class. The tester must enter the API key for these
+ * tests to work. Requires JUnit 4.5.
  *
  * @author stuart.boston
  *
@@ -140,11 +143,11 @@ public class TheTvDbApiTest {
     @Test
     public void testGetBanners() {
         LOG.info("testGetBanners");
-        Banners banners = tvdb.getBanners("72023");
-        assertFalse(banners.getFanartList().isEmpty());
-        assertFalse(banners.getPosterList().isEmpty());
-        assertFalse(banners.getSeasonList().isEmpty());
-        assertFalse(banners.getSeriesList().isEmpty());
+        Banners banners = tvdb.getBanners("80348");
+        assertFalse("No fanart banners found", banners.getFanartList().isEmpty());
+        assertFalse("No poster banners found", banners.getPosterList().isEmpty());
+        assertFalse("No season banners found", banners.getSeasonList().isEmpty());
+        assertFalse("No series banners found", banners.getSeriesList().isEmpty());
     }
 
     @Test
