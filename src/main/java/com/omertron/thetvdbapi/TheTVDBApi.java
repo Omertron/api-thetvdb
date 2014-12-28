@@ -22,7 +22,6 @@ package com.omertron.thetvdbapi;
 import com.omertron.thetvdbapi.model.Actor;
 import com.omertron.thetvdbapi.model.Banners;
 import com.omertron.thetvdbapi.model.Episode;
-import com.omertron.thetvdbapi.model.Mirrors;
 import com.omertron.thetvdbapi.model.Series;
 import com.omertron.thetvdbapi.model.TVDBUpdates;
 import com.omertron.thetvdbapi.tools.DOMHelper;
@@ -89,34 +88,6 @@ public class TheTVDBApi {
     }
 
     /**
-     * Get the mirror information from TheTVDb
-     *
-     * @return True if everything is OK, false otherwise.
-     */
-    private static void getMirrors(String apiKey) {
-        // If we don't need to get the mirrors, then just return
-        if (xmlMirror != null && bannerMirror != null) {
-            return;
-        }
-
-        Mirrors mirrors = new Mirrors(apiKey);
-        xmlMirror = mirrors.getMirror(Mirrors.TYPE_XML);
-        bannerMirror = mirrors.getMirror(Mirrors.TYPE_BANNER);
-
-        if (xmlMirror == null) {
-            throw new WebServiceException("There is a problem getting the xmlMirror data from TheTVDB, this means it is likely to be down.");
-        } else {
-            xmlMirror += "/api/";
-        }
-
-        if (bannerMirror == null) {
-            throw new WebServiceException("There is a problem getting the bannerMirror data from TheTVDB, this means it is likely to be down.");
-        } else {
-            bannerMirror += "/banners/";
-        }
-    }
-
-    /**
      * Set the web browser proxy information
      *
      * @param host
@@ -155,18 +126,13 @@ public class TheTVDBApi {
      */
     public Series getSeries(String id, String language) {
         StringBuilder urlBuilder = new StringBuilder();
-        try {
-            urlBuilder.append(getXmlMirror(apiKey));
-            urlBuilder.append(apiKey);
-            urlBuilder.append(SERIES_URL);
-            urlBuilder.append(id);
-            urlBuilder.append("/");
-            if (language != null) {
-                urlBuilder.append(language).append(XML_EXTENSION);
-            }
-        } catch (WebServiceException ex) {
-            LOG.warn(ex.getMessage(), ex);
-            return null;
+        urlBuilder.append(getXmlMirror(apiKey));
+        urlBuilder.append(apiKey);
+        urlBuilder.append(SERIES_URL);
+        urlBuilder.append(id);
+        urlBuilder.append("/");
+        if (language != null) {
+            urlBuilder.append(language).append(XML_EXTENSION);
         }
 
         LOG.trace(URL, urlBuilder.toString());
@@ -190,12 +156,7 @@ public class TheTVDBApi {
 
         if (isValidNumber(id)) {
             StringBuilder urlBuilder = new StringBuilder();
-            try {
-                urlBuilder.append(getXmlMirror(apiKey));
-            } catch (WebServiceException ex) {
-                LOG.warn(ex.getMessage(), ex);
-                urlBuilder.append("http://thetvdb.com/api/");
-            }
+            urlBuilder.append(getXmlMirror(apiKey));
             urlBuilder.append(apiKey);
             urlBuilder.append(SERIES_URL);
             urlBuilder.append(id);
@@ -221,18 +182,13 @@ public class TheTVDBApi {
      */
     public List<Episode> getSeasonEpisodes(String id, int season, String language) {
         StringBuilder urlBuilder = new StringBuilder();
-        try {
-            urlBuilder.append(getXmlMirror(apiKey));
-            urlBuilder.append(apiKey);
-            urlBuilder.append(SERIES_URL);
-            urlBuilder.append(id);
-            urlBuilder.append(ALL_URL);
-            if (language != null) {
-                urlBuilder.append(language).append(XML_EXTENSION);
-            }
-        } catch (WebServiceException ex) {
-            LOG.warn(ex.getMessage(), ex);
-            return Collections.emptyList();
+        urlBuilder.append(getXmlMirror(apiKey));
+        urlBuilder.append(apiKey);
+        urlBuilder.append(SERIES_URL);
+        urlBuilder.append(id);
+        urlBuilder.append(ALL_URL);
+        if (language != null) {
+            urlBuilder.append(language).append(XML_EXTENSION);
         }
 
         LOG.trace(URL, urlBuilder.toString());
@@ -283,22 +239,17 @@ public class TheTVDBApi {
         }
 
         StringBuilder urlBuilder = new StringBuilder();
-        try {
-            urlBuilder.append(getXmlMirror(apiKey));
-            urlBuilder.append(apiKey);
-            urlBuilder.append(SERIES_URL);
-            urlBuilder.append(seriesId);
-            urlBuilder.append(episodeType);
-            urlBuilder.append(seasonNbr);
-            urlBuilder.append("/");
-            urlBuilder.append(episodeNbr);
-            urlBuilder.append("/");
-            if (language != null) {
-                urlBuilder.append(language).append(XML_EXTENSION);
-            }
-        } catch (WebServiceException ex) {
-            LOG.warn(ex.getMessage(), ex);
-            return new Episode();
+        urlBuilder.append(getXmlMirror(apiKey));
+        urlBuilder.append(apiKey);
+        urlBuilder.append(SERIES_URL);
+        urlBuilder.append(seriesId);
+        urlBuilder.append(episodeType);
+        urlBuilder.append(seasonNbr);
+        urlBuilder.append("/");
+        urlBuilder.append(episodeNbr);
+        urlBuilder.append("/");
+        if (language != null) {
+            urlBuilder.append(language).append(XML_EXTENSION);
         }
 
         LOG.trace(URL, urlBuilder.toString());
@@ -315,20 +266,15 @@ public class TheTVDBApi {
      */
     public Episode getAbsoluteEpisode(String seriesId, int episodeNbr, String language) {
         StringBuilder urlBuilder = new StringBuilder();
-        try {
-            urlBuilder.append(getXmlMirror(apiKey));
-            urlBuilder.append(apiKey);
-            urlBuilder.append(SERIES_URL);
-            urlBuilder.append(seriesId);
-            urlBuilder.append("/absolute/");
-            urlBuilder.append(episodeNbr);
-            urlBuilder.append("/");
-            if (language != null) {
-                urlBuilder.append(language).append(XML_EXTENSION);
-            }
-        } catch (WebServiceException ex) {
-            LOG.warn(ex.getMessage(), ex);
-            return new Episode();
+        urlBuilder.append(getXmlMirror(apiKey));
+        urlBuilder.append(apiKey);
+        urlBuilder.append(SERIES_URL);
+        urlBuilder.append(seriesId);
+        urlBuilder.append("/absolute/");
+        urlBuilder.append(episodeNbr);
+        urlBuilder.append("/");
+        if (language != null) {
+            urlBuilder.append(language).append(XML_EXTENSION);
         }
 
         LOG.trace(URL, urlBuilder.toString());
@@ -370,16 +316,11 @@ public class TheTVDBApi {
 
     public Banners getBanners(String seriesId) {
         StringBuilder urlBuilder = new StringBuilder();
-        try {
-            urlBuilder.append(getXmlMirror(apiKey));
-            urlBuilder.append(apiKey);
-            urlBuilder.append(SERIES_URL);
-            urlBuilder.append(seriesId);
-            urlBuilder.append("/banners.xml");
-        } catch (WebServiceException ex) {
-            LOG.warn(ex.getMessage(), ex);
-            return new Banners();
-        }
+        urlBuilder.append(getXmlMirror(apiKey));
+        urlBuilder.append(apiKey);
+        urlBuilder.append(SERIES_URL);
+        urlBuilder.append(seriesId);
+        urlBuilder.append("/banners.xml");
 
         LOG.trace(URL, urlBuilder.toString());
         Banners b = TvdbParser.getBanners(urlBuilder.toString(), getBannerMirror(apiKey));
@@ -399,16 +340,11 @@ public class TheTVDBApi {
      */
     public List<Actor> getActors(String seriesId) {
         StringBuilder urlBuilder = new StringBuilder();
-        try {
-            urlBuilder.append(getXmlMirror(apiKey));
-            urlBuilder.append(apiKey);
-            urlBuilder.append(SERIES_URL);
-            urlBuilder.append(seriesId);
-            urlBuilder.append("/actors.xml");
-        } catch (WebServiceException ex) {
-            LOG.warn(ex.getMessage(), ex);
-            return new ArrayList<Actor>();
-        }
+        urlBuilder.append(getXmlMirror(apiKey));
+        urlBuilder.append(apiKey);
+        urlBuilder.append(SERIES_URL);
+        urlBuilder.append(seriesId);
+        urlBuilder.append("/actors.xml");
 
         LOG.trace(URL, urlBuilder.toString());
         return TvdbParser.getActors(urlBuilder.toString(), getBannerMirror(apiKey));
@@ -428,9 +364,6 @@ public class TheTVDBApi {
             LOG.trace("Failed to encode title: " + title, ex);
             // Try and use the raw title
             urlBuilder.append(title);
-        } catch (WebServiceException ex) {
-            LOG.warn(ex.getMessage(), ex);
-            return new ArrayList<Series>();
         }
 
         LOG.trace(URL, urlBuilder.toString());
@@ -447,19 +380,14 @@ public class TheTVDBApi {
     public Episode getEpisodeById(String episodeId, String language) {
         StringBuilder urlBuilder = new StringBuilder();
 
-        try {
-            urlBuilder.append(getXmlMirror(apiKey));
-            urlBuilder.append(apiKey);
-            urlBuilder.append("/episodes/");
-            urlBuilder.append(episodeId);
-            urlBuilder.append("/");
-            if (StringUtils.isNotBlank(language)) {
-                urlBuilder.append(language);
-                urlBuilder.append(XML_EXTENSION);
-            }
-        } catch (WebServiceException ex) {
-            LOG.warn(ex.getMessage(), ex);
-            return new Episode();
+        urlBuilder.append(getXmlMirror(apiKey));
+        urlBuilder.append(apiKey);
+        urlBuilder.append("/episodes/");
+        urlBuilder.append(episodeId);
+        urlBuilder.append("/");
+        if (StringUtils.isNotBlank(language)) {
+            urlBuilder.append(language);
+            urlBuilder.append(XML_EXTENSION);
         }
 
         LOG.trace(URL, urlBuilder.toString());
@@ -489,8 +417,6 @@ public class TheTVDBApi {
      * @return
      */
     public static String getXmlMirror(String apiKey) {
-        // Force a load of the mirror information if it doesn't exist
-        getMirrors(apiKey);
         return xmlMirror;
     }
 
@@ -501,8 +427,6 @@ public class TheTVDBApi {
      * @return
      */
     public static String getBannerMirror(String apiKey) {
-        // Force a load of the mirror information if it doesn't exist
-        getMirrors(apiKey);
         return bannerMirror;
     }
 
