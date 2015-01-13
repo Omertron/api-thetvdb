@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -37,16 +38,18 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.ws.WebServiceException;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
+import org.yamj.api.common.exception.ClientAPIException;
 import org.yamj.api.common.http.CommonHttpClient;
+import org.yamj.api.common.http.DigestedResponse;
 
 /**
  * Generic set of routines to process the DOM model data
@@ -99,7 +102,7 @@ public class DOMHelper {
             if (tagNodeList == null || tagNodeList.getLength() == 0) {
                 return "";
             }
-            return ((Node) tagNodeList.item(0)).getNodeValue();
+            return tagNodeList.item(0).getNodeValue();
         }
     }
 
@@ -153,29 +156,31 @@ public class DOMHelper {
         int retryCount = 0;
         // Is the web page valid
         boolean valid = false;
-        String webPage;
+        DigestedResponse webPage;
 
         try {
             while (!valid && (retryCount < RETRY_COUNT)) {
                 retryCount++;
                 webPage = requestWebPage(url);
-                if (StringUtils.isNotBlank(webPage)) {
+                final String content = webPage.getContent();
+                if (StringUtils.isNotBlank(content)) {
                     // See if the ID is null
-                    if (!webPage.contains("<id>") || webPage.contains("<id></id>")) {
+                    if (!content.contains("<id>") || content.contains("<id></id>")) {
                         // Wait an increasing amount of time the more retries that happen
                         waiting(retryCount * RETRY_TIME);
                         continue;
-                    } else {
-                        valid = true;
                     }
+
+                    valid = true;
                 }
 
                 // Couldn't get a valid webPage so, quit.
                 if (!valid) {
-                    throw new WebServiceException("Failed to download data from " + url);
+
+                    throw new ClientAPIException(webPage);
                 }
 
-                return webPage;
+                return content;
             }
         } catch (UnsupportedEncodingException ex) {
             throw new WebServiceException(ERROR_UNABLE_TO_ENCODE_URL + url, ex);
@@ -260,7 +265,7 @@ public class DOMHelper {
         } while ((t1 - t0) < milliseconds);
     }
 
-    private static String requestWebPage(String url) throws IOException {
+    private static DigestedResponse requestWebPage(String url) throws IOException {
         return httpClient.requestContent(url, Charset.forName(ENCODING));
     }
 }
