@@ -71,7 +71,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <distribution.format>zip</distribution.format>
-        <version.slf4j>1.7.9</version.slf4j>
+        <version.slf4j>1.7.10</version.slf4j>
     </properties>
 
     <dependencies>
