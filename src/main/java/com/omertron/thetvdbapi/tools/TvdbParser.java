@@ -19,6 +19,7 @@
  */
 package com.omertron.thetvdbapi.tools;
 
+import com.omertron.thetvdbapi.TvDbException;
 import com.omertron.thetvdbapi.model.Actor;
 import com.omertron.thetvdbapi.model.Banner;
 import com.omertron.thetvdbapi.model.BannerListType;
@@ -91,8 +92,9 @@ public class TvdbParser {
      * @param urlString
      * @param bannerMirror
      * @return
+     * @throws com.omertron.thetvdbapi.TvDbException
      */
-    public static List<Actor> getActors(String urlString, String bannerMirror) {
+    public static List<Actor> getActors(String urlString, String bannerMirror) throws TvDbException {
         List<Actor> results = new ArrayList<Actor>();
         Actor actor;
         Document doc;
@@ -144,30 +146,27 @@ public class TvdbParser {
      * @param season
      * @param bannerMirror
      * @return
+     * @throws com.omertron.thetvdbapi.TvDbException
      */
-    public static List<Episode> getAllEpisodes(String urlString, int season, String bannerMirror) {
+    public static List<Episode> getAllEpisodes(String urlString, int season, String bannerMirror) throws TvDbException {
         List<Episode> episodeList = new ArrayList<Episode>();
         Episode episode;
         NodeList nlEpisode;
         Node nEpisode;
         Element eEpisode;
 
-        try {
-            Document doc = DOMHelper.getEventDocFromUrl(urlString);
-            nlEpisode = doc.getElementsByTagName(EPISODE);
-            for (int loop = 0; loop < nlEpisode.getLength(); loop++) {
-                nEpisode = nlEpisode.item(loop);
-                if (nEpisode.getNodeType() == Node.ELEMENT_NODE) {
-                    eEpisode = (Element) nEpisode;
-                    episode = parseNextEpisode(eEpisode, bannerMirror);
-                    if ((episode != null) && (season == -1 || episode.getSeasonNumber() == season)) {
-                        // Add the episode only if the season is -1 (all seasons) or matches the season
-                        episodeList.add(episode);
-                    }
+        Document doc = DOMHelper.getEventDocFromUrl(urlString);
+        nlEpisode = doc.getElementsByTagName(EPISODE);
+        for (int loop = 0; loop < nlEpisode.getLength(); loop++) {
+            nEpisode = nlEpisode.item(loop);
+            if (nEpisode.getNodeType() == Node.ELEMENT_NODE) {
+                eEpisode = (Element) nEpisode;
+                episode = parseNextEpisode(eEpisode, bannerMirror);
+                if ((episode != null) && (season == -1 || episode.getSeasonNumber() == season)) {
+                    // Add the episode only if the season is -1 (all seasons) or matches the season
+                    episodeList.add(episode);
                 }
             }
-        } catch (WebServiceException ex) {
-            LOG.warn("All Episodes error: " + ex.getMessage(), ex);
         }
 
         return episodeList;
@@ -179,8 +178,9 @@ public class TvdbParser {
      * @param urlString
      * @param bannerMirror
      * @return
+     * @throws com.omertron.thetvdbapi.TvDbException
      */
-    public static Banners getBanners(String urlString, String bannerMirror) {
+    public static Banners getBanners(String urlString, String bannerMirror) throws TvDbException {
         Banners banners = new Banners();
         Banner banner;
 
@@ -188,24 +188,20 @@ public class TvdbParser {
         Node nBanner;
         Element eBanner;
 
-        try {
-            Document doc = DOMHelper.getEventDocFromUrl(urlString);
+        Document doc = DOMHelper.getEventDocFromUrl(urlString);
 
-            if (doc != null) {
-                nlBanners = doc.getElementsByTagName(BANNER);
-                for (int loop = 0; loop < nlBanners.getLength(); loop++) {
-                    nBanner = nlBanners.item(loop);
-                    if (nBanner.getNodeType() == Node.ELEMENT_NODE) {
-                        eBanner = (Element) nBanner;
-                        banner = parseNextBanner(eBanner, bannerMirror);
-                        if (banner != null) {
-                            banners.addBanner(banner);
-                        }
+        if (doc != null) {
+            nlBanners = doc.getElementsByTagName(BANNER);
+            for (int loop = 0; loop < nlBanners.getLength(); loop++) {
+                nBanner = nlBanners.item(loop);
+                if (nBanner.getNodeType() == Node.ELEMENT_NODE) {
+                    eBanner = (Element) nBanner;
+                    banner = parseNextBanner(eBanner, bannerMirror);
+                    if (banner != null) {
+                        banners.addBanner(banner);
                     }
                 }
             }
-        } catch (WebServiceException ex) {
-            LOG.warn("Banners error: " + ex.getMessage(), ex);
         }
 
         return banners;
@@ -217,32 +213,29 @@ public class TvdbParser {
      * @param urlString
      * @param bannerMirror
      * @return
+     * @throws com.omertron.thetvdbapi.TvDbException
      */
-    public static Episode getEpisode(String urlString, String bannerMirror) {
+    public static Episode getEpisode(String urlString, String bannerMirror) throws TvDbException {
         Episode episode = new Episode();
         NodeList nlEpisode;
         Node nEpisode;
         Element eEpisode;
 
-        try {
-            Document doc = DOMHelper.getEventDocFromUrl(urlString);
+        Document doc = DOMHelper.getEventDocFromUrl(urlString);
 
-            if (doc != null) {
-                nlEpisode = doc.getElementsByTagName(EPISODE);
-                for (int loop = 0; loop < nlEpisode.getLength(); loop++) {
-                    nEpisode = nlEpisode.item(loop);
-                    if (nEpisode.getNodeType() == Node.ELEMENT_NODE) {
-                        eEpisode = (Element) nEpisode;
-                        episode = parseNextEpisode(eEpisode, bannerMirror);
-                        if (episode != null) {
-                            // We only need the first episode
-                            break;
-                        }
+        if (doc != null) {
+            nlEpisode = doc.getElementsByTagName(EPISODE);
+            for (int loop = 0; loop < nlEpisode.getLength(); loop++) {
+                nEpisode = nlEpisode.item(loop);
+                if (nEpisode.getNodeType() == Node.ELEMENT_NODE) {
+                    eEpisode = (Element) nEpisode;
+                    episode = parseNextEpisode(eEpisode, bannerMirror);
+                    if (episode != null) {
+                        // We only need the first episode
+                        break;
                     }
                 }
             }
-        } catch (WebServiceException ex) {
-            LOG.warn("Series error: " + ex.getMessage(), ex);
         }
 
         return episode;
@@ -255,22 +248,16 @@ public class TvdbParser {
      * @param urlString
      * @param bannerMirror
      * @return
+     * @throws com.omertron.thetvdbapi.TvDbException
      */
-    public static List<Series> getSeriesList(String urlString, String bannerMirror) {
+    public static List<Series> getSeriesList(String urlString, String bannerMirror) throws TvDbException {
         List<Series> seriesList = new ArrayList<Series>();
         Series series;
         NodeList nlSeries;
         Node nSeries;
         Element eSeries;
 
-        Document doc;
-
-        try {
-            doc = DOMHelper.getEventDocFromUrl(urlString);
-        } catch (WebServiceException ex) {
-            LOG.trace(ERROR_GET_XML, ex);
-            return seriesList;
-        }
+        Document doc = DOMHelper.getEventDocFromUrl(urlString);
 
         if (doc != null) {
             nlSeries = doc.getElementsByTagName(SERIES);
@@ -294,18 +281,12 @@ public class TvdbParser {
      *
      * @param urlString
      * @return
+     * @throws com.omertron.thetvdbapi.TvDbException
      */
-    public static TVDBUpdates getUpdates(String urlString) {
+    public static TVDBUpdates getUpdates(String urlString) throws TvDbException {
         TVDBUpdates updates = new TVDBUpdates();
 
-        Document doc;
-
-        try {
-            doc = DOMHelper.getEventDocFromUrl(urlString);
-        } catch (WebServiceException ex) {
-            LOG.trace(ERROR_GET_XML, ex);
-            return updates;
-        }
+        Document doc = DOMHelper.getEventDocFromUrl(urlString);
 
         if (doc != null) {
             Node root = doc.getChildNodes().item(0);

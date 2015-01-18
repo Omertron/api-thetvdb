@@ -30,12 +30,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import javax.xml.ws.WebServiceException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
@@ -52,8 +50,8 @@ public class TheTVDBApi {
     private static final Logger LOG = LoggerFactory.getLogger(TheTVDBApi.class);
     private String apiKey = null;
     private CommonHttpClient httpClient;
-    private static String xmlMirror = "http://thetvdb.com/api/";
-    private static String bannerMirror = "http://thetvdb.com/banners/";
+    private static final String URL_XML = "http://thetvdb.com/api/";
+    private static final String URL_BANNER = "http://thetvdb.com/banners/";
     private static final String XML_EXTENSION = ".xml";
     private static final String SERIES_URL = "/series/";
     private static final String ALL_URL = "/all/";
@@ -71,8 +69,7 @@ public class TheTVDBApi {
     }
 
     /**
-     * Create an API object with the passed API key and using the supplied
-     * HttpClient
+     * Create an API object with the passed API key and using the supplied HttpClient
      *
      * @param apiKey Must not be null or empty
      * @param httpClient
@@ -96,11 +93,7 @@ public class TheTVDBApi {
      * @param password
      */
     public void setProxy(String host, int port, String username, String password) {
-        if (httpClient == null) {
-            throw new WebServiceException("Failed to set proxy information");
-        } else {
-            httpClient.setProxy(host, port, username, password);
-        }
+        httpClient.setProxy(host, port, username, password);
     }
 
     /**
@@ -110,11 +103,7 @@ public class TheTVDBApi {
      * @param webTimeoutRead
      */
     public void setTimeout(int webTimeoutConnect, int webTimeoutRead) {
-        if (httpClient == null) {
-            throw new WebServiceException("Failed to set timeout information");
-        } else {
-            httpClient.setTimeouts(webTimeoutConnect, webTimeoutRead);
-        }
+        httpClient.setTimeouts(webTimeoutConnect, webTimeoutRead);
     }
 
     /**
@@ -123,8 +112,9 @@ public class TheTVDBApi {
      * @param id
      * @param language
      * @return
+     * @throws com.omertron.thetvdbapi.TvDbException
      */
-    public Series getSeries(String id, String language) {
+    public Series getSeries(String id, String language) throws TvDbException {
         StringBuilder urlBuilder = new StringBuilder();
         urlBuilder.append(getXmlMirror(apiKey));
         urlBuilder.append(apiKey);
@@ -150,8 +140,9 @@ public class TheTVDBApi {
      * @param id
      * @param language
      * @return
+     * @throws com.omertron.thetvdbapi.TvDbException
      */
-    public List<Episode> getAllEpisodes(String id, String language) {
+    public List<Episode> getAllEpisodes(String id, String language) throws TvDbException {
         List<Episode> episodeList = Collections.emptyList();
 
         if (isValidNumber(id)) {
@@ -172,15 +163,15 @@ public class TheTVDBApi {
     }
 
     /**
-     * Get all the episodes from a specific season for a series. Note: This
-     * could be a lot of records
+     * Get all the episodes from a specific season for a series. Note: This could be a lot of records
      *
      * @param id
      * @param season
      * @param language
      * @return
+     * @throws com.omertron.thetvdbapi.TvDbException
      */
-    public List<Episode> getSeasonEpisodes(String id, int season, String language) {
+    public List<Episode> getSeasonEpisodes(String id, int season, String language) throws TvDbException {
         StringBuilder urlBuilder = new StringBuilder();
         urlBuilder.append(getXmlMirror(apiKey));
         urlBuilder.append(apiKey);
@@ -203,8 +194,9 @@ public class TheTVDBApi {
      * @param episodeNbr
      * @param language
      * @return
+     * @throws com.omertron.thetvdbapi.TvDbException
      */
-    public Episode getEpisode(String seriesId, int seasonNbr, int episodeNbr, String language) {
+    public Episode getEpisode(String seriesId, int seasonNbr, int episodeNbr, String language) throws TvDbException {
         return getTVEpisode(seriesId, seasonNbr, episodeNbr, language, "/default/");
     }
 
@@ -216,14 +208,14 @@ public class TheTVDBApi {
      * @param episodeNbr
      * @param language
      * @return
+     * @throws com.omertron.thetvdbapi.TvDbException
      */
-    public Episode getDVDEpisode(String seriesId, int seasonNbr, int episodeNbr, String language) {
+    public Episode getDVDEpisode(String seriesId, int seasonNbr, int episodeNbr, String language) throws TvDbException {
         return getTVEpisode(seriesId, seasonNbr, episodeNbr, language, "/dvd/");
     }
 
     /**
-     * Generic function to get either the standard TV episode list or the DVD
-     * list
+     * Generic function to get either the standard TV episode list or the DVD list
      *
      * @param seriesId
      * @param seasonNbr
@@ -231,8 +223,9 @@ public class TheTVDBApi {
      * @param language
      * @param episodeType
      * @return
+     * @throws com.omertron.thetvdbapi.TvDbException
      */
-    private Episode getTVEpisode(String seriesId, int seasonNbr, int episodeNbr, String language, String episodeType) {
+    private Episode getTVEpisode(String seriesId, int seasonNbr, int episodeNbr, String language, String episodeType) throws TvDbException {
         if (!isValidNumber(seriesId) || !isValidNumber(seasonNbr) || !isValidNumber(episodeNbr)) {
             // Invalid number passed
             return new Episode();
@@ -263,8 +256,9 @@ public class TheTVDBApi {
      * @param episodeNbr
      * @param language
      * @return
+     * @throws com.omertron.thetvdbapi.TvDbException
      */
-    public Episode getAbsoluteEpisode(String seriesId, int episodeNbr, String language) {
+    public Episode getAbsoluteEpisode(String seriesId, int episodeNbr, String language) throws TvDbException {
         StringBuilder urlBuilder = new StringBuilder();
         urlBuilder.append(getXmlMirror(apiKey));
         urlBuilder.append(apiKey);
@@ -288,8 +282,9 @@ public class TheTVDBApi {
      * @param seasonNbr
      * @param language
      * @return
+     * @throws com.omertron.thetvdbapi.TvDbException
      */
-    public String getSeasonYear(String id, int seasonNbr, String language) {
+    public String getSeasonYear(String id, int seasonNbr, String language) throws TvDbException {
         String year = null;
 
         Episode episode = getEpisode(id, seasonNbr, 1, language);
@@ -314,7 +309,14 @@ public class TheTVDBApi {
         return year;
     }
 
-    public Banners getBanners(String seriesId) {
+    /**
+     * Get a list of banners for the series id
+     *
+     * @param seriesId
+     * @return
+     * @throws TvDbException
+     */
+    public Banners getBanners(String seriesId) throws TvDbException {
         StringBuilder urlBuilder = new StringBuilder();
         urlBuilder.append(getXmlMirror(apiKey));
         urlBuilder.append(apiKey);
@@ -337,8 +339,9 @@ public class TheTVDBApi {
      *
      * @param seriesId
      * @return
+     * @throws com.omertron.thetvdbapi.TvDbException
      */
-    public List<Actor> getActors(String seriesId) {
+    public List<Actor> getActors(String seriesId) throws TvDbException {
         StringBuilder urlBuilder = new StringBuilder();
         urlBuilder.append(getXmlMirror(apiKey));
         urlBuilder.append(apiKey);
@@ -350,7 +353,15 @@ public class TheTVDBApi {
         return TvdbParser.getActors(urlBuilder.toString(), getBannerMirror(apiKey));
     }
 
-    public List<Series> searchSeries(String title, String language) {
+    /**
+     * Get a list of series using a title and language
+     *
+     * @param title
+     * @param language
+     * @return
+     * @throws TvDbException
+     */
+    public List<Series> searchSeries(String title, String language) throws TvDbException {
         StringBuilder urlBuilder = new StringBuilder();
 
         try {
@@ -376,8 +387,9 @@ public class TheTVDBApi {
      * @param episodeId
      * @param language
      * @return
+     * @throws com.omertron.thetvdbapi.TvDbException
      */
-    public Episode getEpisodeById(String episodeId, String language) {
+    public Episode getEpisodeById(String episodeId, String language) throws TvDbException {
         StringBuilder urlBuilder = new StringBuilder();
 
         urlBuilder.append(getXmlMirror(apiKey));
@@ -398,8 +410,9 @@ public class TheTVDBApi {
      * Get the weekly updates
      *
      * @return
+     * @throws com.omertron.thetvdbapi.TvDbException
      */
-    public TVDBUpdates getWeeklyUpdates() {
+    public TVDBUpdates getWeeklyUpdates() throws TvDbException {
         StringBuilder urlBuilder = new StringBuilder();
 
         urlBuilder.append(getXmlMirror(apiKey));
@@ -417,7 +430,7 @@ public class TheTVDBApi {
      * @return
      */
     public static String getXmlMirror(String apiKey) {
-        return xmlMirror;
+        return URL_XML;
     }
 
     /**
@@ -427,7 +440,7 @@ public class TheTVDBApi {
      * @return
      */
     public static String getBannerMirror(String apiKey) {
-        return bannerMirror;
+        return URL_BANNER;
     }
 
     /**

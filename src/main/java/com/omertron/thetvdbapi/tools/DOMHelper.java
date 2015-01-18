@@ -19,6 +19,7 @@
  */
 package com.omertron.thetvdbapi.tools;
 
+import com.omertron.thetvdbapi.TvDbException;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +38,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import javax.xml.ws.WebServiceException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -47,7 +47,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
-import org.yamj.api.common.exception.ClientAPIException;
+import org.yamj.api.common.exception.ApiExceptionType;
 import org.yamj.api.common.http.CommonHttpClient;
 import org.yamj.api.common.http.DigestedResponse;
 
@@ -61,15 +61,17 @@ public class DOMHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(DOMHelper.class);
     private static final String YES = "yes";
-    private static final String ENCODING = "UTF-8";
+    private static final Charset ENCODING = Charset.forName("UTF-8");
     private static final int RETRY_COUNT = 5;
     // Milliseconds to retry
     private static final int RETRY_TIME = 250;
     private static CommonHttpClient httpClient = null;
     // Constants
-    private static final String ERROR_WRITING = "Error writing the document to ";
+    private static final String ERROR_WRITING = "Error writing the document to {}";
     private static final String ERROR_UNABLE_TO_ENCODE_URL = "Unable to encode URL: ";
     private static final String ERROR_UNABLE_TO_PARSE = "Unable to parse TheTVDb response, please try again later.";
+    private static final int HTTP_STATUS_300 = 300;
+    private static final int HTTP_STATUS_500 = 500;
 
     // Hide the constructor
     protected DOMHelper() {
@@ -111,8 +113,9 @@ public class DOMHelper {
      *
      * @param url
      * @return
+     * @throws com.omertron.thetvdbapi.TvDbException
      */
-    public static synchronized Document getEventDocFromUrl(String url) {
+    public static synchronized Document getEventDocFromUrl(String url) throws TvDbException {
         InputStream in = null;
         Document doc = null;
 
@@ -130,13 +133,9 @@ public class DOMHelper {
                 doc.getDocumentElement().normalize();
             }
         } catch (UnsupportedEncodingException ex) {
-            throw new WebServiceException(ERROR_UNABLE_TO_ENCODE_URL + url, ex);
-        } catch (ParserConfigurationException error) {
-            throw new WebServiceException(ERROR_UNABLE_TO_PARSE, error);
-        } catch (SAXException error) {
-            throw new WebServiceException(ERROR_UNABLE_TO_PARSE, error);
-        } catch (IOException error) {
-            throw new WebServiceException(ERROR_UNABLE_TO_PARSE, error);
+            throw new TvDbException(ApiExceptionType.INVALID_URL, "Unable to encode URL", url, ex);
+        } catch (ParserConfigurationException | SAXException | IOException error) {
+            throw new TvDbException(ApiExceptionType.MAPPING_FAILED, ERROR_UNABLE_TO_PARSE, url, error);
         } finally {
             try {
                 if (in != null) {
@@ -151,41 +150,34 @@ public class DOMHelper {
         return doc;
     }
 
-    private static String getValidWebpage(String url) {
+    private static String getValidWebpage(String url) throws TvDbException {
         // Count the number of times we download the web page
         int retryCount = 0;
         // Is the web page valid
         boolean valid = false;
         DigestedResponse webPage;
 
-        try {
-            while (!valid && (retryCount < RETRY_COUNT)) {
-                retryCount++;
-                webPage = requestWebPage(url);
-                final String content = webPage.getContent();
-                if (StringUtils.isNotBlank(content)) {
-                    // See if the ID is null
-                    if (!content.contains("<id>") || content.contains("<id></id>")) {
-                        // Wait an increasing amount of time the more retries that happen
-                        waiting(retryCount * RETRY_TIME);
-                        continue;
-                    }
-
-                    valid = true;
+        while (!valid && (retryCount < RETRY_COUNT)) {
+            retryCount++;
+            webPage = requestWebPage(url);
+            final String content = webPage.getContent();
+            if (StringUtils.isNotBlank(content)) {
+                // See if the ID is null
+                if (!content.contains("<id>") || content.contains("<id></id>")) {
+                    // Wait an increasing amount of time the more retries that happen
+                    waiting(retryCount * RETRY_TIME);
+                    continue;
                 }
 
-                // Couldn't get a valid webPage so, quit.
-                if (!valid) {
-
-                    throw new ClientAPIException(webPage);
-                }
-
-                return content;
+                valid = true;
             }
-        } catch (UnsupportedEncodingException ex) {
-            throw new WebServiceException(ERROR_UNABLE_TO_ENCODE_URL + url, ex);
-        } catch (IOException ex) {
-            throw new WebServiceException("Unable to download URL: " + url, ex);
+
+            // Couldn't get a valid webPage so, quit.
+            if (!valid) {
+                throw new TvDbException(ApiExceptionType.UNKNOWN_CAUSE, webPage.getContent(), webPage.getStatusCode(), url);
+            }
+
+            return content;
         }
 
         return null;
@@ -229,10 +221,10 @@ public class DOMHelper {
             trans.transform(new DOMSource(doc), new StreamResult(new File(localFile)));
             return true;
         } catch (TransformerConfigurationException ex) {
-            LOG.warn(ERROR_WRITING + localFile, ex);
+            LOG.warn(ERROR_WRITING, localFile, ex);
             return false;
         } catch (TransformerException ex) {
-            LOG.warn(ERROR_WRITING + localFile, ex);
+            LOG.warn(ERROR_WRITING, localFile, ex);
             return false;
         }
     }
@@ -265,7 +257,20 @@ public class DOMHelper {
         } while ((t1 - t0) < milliseconds);
     }
 
-    private static DigestedResponse requestWebPage(String url) throws IOException {
-        return httpClient.requestContent(url, Charset.forName(ENCODING));
+    private static DigestedResponse requestWebPage(String url) throws TvDbException {
+        try {
+            final DigestedResponse response = httpClient.requestContent(url, ENCODING);
+
+            if (response.getStatusCode() >= HTTP_STATUS_500) {
+                throw new TvDbException(ApiExceptionType.HTTP_503_ERROR, response.getContent(), response.getStatusCode(), url);
+            } else if (response.getStatusCode() >= HTTP_STATUS_300) {
+                throw new TvDbException(ApiExceptionType.HTTP_404_ERROR, response.getContent(), response.getStatusCode(), url);
+            }
+
+            return response;
+        } catch (IOException ex) {
+            throw new TvDbException(ApiExceptionType.CONNECTION_ERROR, "Error retrieving URL", url, ex);
+        }
+
     }
 }
