@@ -35,8 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * JUnit tests for TheTvDb class. The tester must enter the API key for these
- * tests to work. Requires JUnit 4.5.
+ * JUnit tests for TheTvDb class. The tester must enter the API key for these tests to work. Requires JUnit 4.5.
  *
  * @author stuart.boston
  *
@@ -77,7 +76,7 @@ public class TheTvDbApiTest {
     }
 
     @Test
-    public void testNaming() {
+    public void testNaming() throws TvDbException {
         LOG.info("testNaming");
         String seriesName = "Agents of Shield";
         List<Series> seriesList = tvdb.searchSeries(seriesName, null);
@@ -91,7 +90,7 @@ public class TheTvDbApiTest {
     }
 
     @Test
-    public void testGetSeries() {
+    public void testGetSeries() throws TvDbException {
         LOG.info("testGetSeries");
         Series series = tvdb.getSeries(TVDBID, LANGUAGE_ENGLISH);
         assertTrue("Wrong series name", series.getSeriesName().equals(SERIES_NAME));
@@ -99,49 +98,49 @@ public class TheTvDbApiTest {
     }
 
     @Test
-    public void testGetAllEpisodes() {
+    public void testGetAllEpisodes() throws TvDbException {
         LOG.info("testGetAllEpisodes");
         List<Episode> episodes = tvdb.getAllEpisodes(TVDBID, LANGUAGE_ENGLISH);
         assertFalse(episodes.isEmpty());
     }
 
     @Test
-    public void testGetSeasonEpisodes() {
+    public void testGetSeasonEpisodes() throws TvDbException {
         LOG.info("testGetSeasonEpisodes");
         List<Episode> episodes = tvdb.getSeasonEpisodes(TVDBID, 1, LANGUAGE_ENGLISH);
         assertFalse(episodes.isEmpty());
     }
 
     @Test
-    public void testGetEpisode() {
+    public void testGetEpisode() throws TvDbException {
         LOG.info("testGetEpisode");
         Episode episode = tvdb.getEpisode(TVDBID, 1, 1, LANGUAGE_ENGLISH);
         assertTrue(episode.getEpisodeName().length() > 0);
     }
 
     @Test
-    public void testGetDVDEpisode() {
+    public void testGetDVDEpisode() throws TvDbException {
         LOG.info("testGetDVDEpisode");
         Episode episode = tvdb.getDVDEpisode(TVDBID, 1, 1, LANGUAGE_ENGLISH);
         assertTrue(episode.getDvdEpisodeNumber().length() > 0);
     }
 
     @Test
-    public void testGetAbsoluteEpisode() {
+    public void testGetAbsoluteEpisode() throws TvDbException {
         LOG.info("testGetAbsoluteEpisode");
         Episode episode = tvdb.getAbsoluteEpisode(TVDBID, 1, LANGUAGE_ENGLISH);
         assertTrue(episode.getAbsoluteNumber().equals("1"));
     }
 
     @Test
-    public void testGetSeasonYear() {
+    public void testGetSeasonYear() throws TvDbException {
         LOG.info("testGetSeasonYear");
         String year = tvdb.getSeasonYear(TVDBID, 1, LANGUAGE_ENGLISH);
         assertTrue(year.equals(SEASON_YEAR));
     }
 
     @Test
-    public void testGetBanners() {
+    public void testGetBanners() throws TvDbException {
         LOG.info("testGetBanners");
         Banners banners = tvdb.getBanners("80348");
         assertFalse("No fanart banners found", banners.getFanartList().isEmpty());
@@ -151,14 +150,14 @@ public class TheTvDbApiTest {
     }
 
     @Test
-    public void testGetActors() {
+    public void testGetActors() throws TvDbException {
         LOG.info("testGetActors");
         List<Actor> actors = tvdb.getActors(TVDBID);
         assertFalse(actors.isEmpty());
     }
 
     @Test
-    public void testSearchSeries() {
+    public void testSearchSeries() throws TvDbException {
         LOG.info("testSearchSeries");
         List<Series> seriesList = tvdb.searchSeries(SERIES_NAME, LANGUAGE_ENGLISH);
         assertFalse(seriesList.isEmpty());
@@ -174,7 +173,7 @@ public class TheTvDbApiTest {
     }
 
     @Test
-    public void testGetXmlMirror() throws Throwable {
+    public void testGetXmlMirror() throws TvDbException {
         LOG.info("testGetXmlMirror");
         String mirror = TheTVDBApi.getXmlMirror(API_KEY);
         assertTrue(mirror.length() > 0);
@@ -189,9 +188,10 @@ public class TheTvDbApiTest {
 
     /**
      * Test of getEpisodeById method, of class TheTVDBApi.
+     * @throws com.omertron.thetvdbapi.TvDbException
      */
     @Test
-    public void testGetEpisodeById() {
+    public void testGetEpisodeById() throws TvDbException {
         LOG.info("getEpisodeById");
         Episode result = tvdb.getEpisodeById(EPISODE_ID, LANGUAGE_ENGLISH);
         assertEquals(TVDBID, result.getSeriesId());
