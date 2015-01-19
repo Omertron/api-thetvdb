@@ -68,7 +68,6 @@ public class DOMHelper {
     private static CommonHttpClient httpClient = null;
     // Constants
     private static final String ERROR_WRITING = "Error writing the document to {}";
-    private static final String ERROR_UNABLE_TO_ENCODE_URL = "Unable to encode URL: ";
     private static final String ERROR_UNABLE_TO_PARSE = "Unable to parse TheTVDb response, please try again later.";
     private static final int HTTP_STATUS_300 = 300;
     private static final int HTTP_STATUS_500 = 500;
