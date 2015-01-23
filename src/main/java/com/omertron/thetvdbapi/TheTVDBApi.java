@@ -69,7 +69,8 @@ public class TheTVDBApi {
     }
 
     /**
-     * Create an API object with the passed API key and using the supplied HttpClient
+     * Create an API object with the passed API key and using the supplied
+     * HttpClient
      *
      * @param apiKey Must not be null or empty
      * @param httpClient
@@ -163,7 +164,8 @@ public class TheTVDBApi {
     }
 
     /**
-     * Get all the episodes from a specific season for a series. Note: This could be a lot of records
+     * Get all the episodes from a specific season for a series. Note: This
+     * could be a lot of records
      *
      * @param id
      * @param season
@@ -215,7 +217,8 @@ public class TheTVDBApi {
     }
 
     /**
-     * Generic function to get either the standard TV episode list or the DVD list
+     * Generic function to get either the standard TV episode list or the DVD
+     * list
      *
      * @param seriesId
      * @param seasonNbr
@@ -295,7 +298,7 @@ public class TheTVDBApi {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 date = dateFormat.parse(episode.getFirstAired());
             } catch (ParseException ex) {
-                LOG.trace("Failed to transform date: " + episode.getFirstAired(), ex);
+                LOG.trace("Failed to transform date: {}", episode.getFirstAired(), ex);
                 date = null;
             }
 
@@ -372,7 +375,7 @@ public class TheTVDBApi {
                 urlBuilder.append("&language=").append(language);
             }
         } catch (UnsupportedEncodingException ex) {
-            LOG.trace("Failed to encode title: " + title, ex);
+            LOG.trace("Failed to encode title: {}", title, ex);
             // Try and use the raw title
             urlBuilder.append(title);
         }
