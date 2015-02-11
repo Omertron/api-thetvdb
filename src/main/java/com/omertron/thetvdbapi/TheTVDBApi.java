@@ -36,10 +36,10 @@ import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yamj.api.common.http.CommonHttpClient;
-import org.yamj.api.common.http.DefaultPoolingHttpClient;
+import org.yamj.api.common.http.SimpleHttpClientBuilder;
 
 /**
  * @author altman.matthew
@@ -49,7 +49,7 @@ public class TheTVDBApi {
 
     private static final Logger LOG = LoggerFactory.getLogger(TheTVDBApi.class);
     private String apiKey = null;
-    private CommonHttpClient httpClient;
+    private CloseableHttpClient httpClient;
     private static final String URL_XML = "http://thetvdb.com/api/";
     private static final String URL_BANNER = "http://thetvdb.com/banners/";
     private static final String XML_EXTENSION = ".xml";
@@ -65,7 +65,7 @@ public class TheTVDBApi {
      */
     public TheTVDBApi(String apiKey) {
         // No HttpClient passed, so use a default
-        this(apiKey, new DefaultPoolingHttpClient());
+        this(apiKey, new SimpleHttpClientBuilder().build());
     }
 
     /**
@@ -75,7 +75,7 @@ public class TheTVDBApi {
      * @param apiKey Must not be null or empty
      * @param httpClient
      */
-    public TheTVDBApi(String apiKey, CommonHttpClient httpClient) {
+    public TheTVDBApi(String apiKey, CloseableHttpClient httpClient) {
         if (StringUtils.isBlank(apiKey)) {
             return;
         }
@@ -83,28 +83,6 @@ public class TheTVDBApi {
         this.apiKey = apiKey;
         this.httpClient = httpClient;
         DOMHelper.setHttpClient(this.httpClient);
-    }
-
-    /**
-     * Set the web browser proxy information
-     *
-     * @param host
-     * @param port
-     * @param username
-     * @param password
-     */
-    public void setProxy(String host, int port, String username, String password) {
-        httpClient.setProxy(host, port, username, password);
-    }
-
-    /**
-     * Set the web browser timeout settings
-     *
-     * @param webTimeoutConnect
-     * @param webTimeoutRead
-     */
-    public void setTimeout(int webTimeoutConnect, int webTimeoutRead) {
-        httpClient.setTimeouts(webTimeoutConnect, webTimeoutRead);
     }
 
     /**

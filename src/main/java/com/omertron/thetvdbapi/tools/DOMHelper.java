@@ -27,7 +27,6 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -38,8 +37,9 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -48,8 +48,8 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 import org.yamj.api.common.exception.ApiExceptionType;
-import org.yamj.api.common.http.CommonHttpClient;
 import org.yamj.api.common.http.DigestedResponse;
+import org.yamj.api.common.http.DigestedResponseReader;
 
 /**
  * Generic set of routines to process the DOM model data
@@ -61,11 +61,12 @@ public class DOMHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(DOMHelper.class);
     private static final String YES = "yes";
-    private static final Charset ENCODING = Charset.forName("UTF-8");
+    private static final String DEFAULT_CHARSET = "UTF-8";
+    private static final Charset CHARSET = Charset.forName(DEFAULT_CHARSET);
     private static final int RETRY_COUNT = 5;
     // Milliseconds to retry
     private static final int RETRY_TIME = 250;
-    private static CommonHttpClient httpClient = null;
+    private static CloseableHttpClient httpClient = null;
     // Constants
     private static final String ERROR_WRITING = "Error writing the document to {}";
     private static final String ERROR_UNABLE_TO_PARSE = "Unable to parse TheTVDb response, please try again later.";
@@ -78,7 +79,7 @@ public class DOMHelper {
         throw new UnsupportedOperationException();
     }
 
-    public static void setHttpClient(CommonHttpClient newHttpClient) {
+    public static void setHttpClient(CloseableHttpClient newHttpClient) {
         httpClient = newHttpClient;
     }
 
@@ -122,7 +123,7 @@ public class DOMHelper {
             String webPage = getValidWebpage(url);
 
             if (StringUtils.isNotBlank(webPage)) {
-                in = new ByteArrayInputStream(webPage.getBytes(ENCODING));
+                in = new ByteArrayInputStream(webPage.getBytes(CHARSET));
 
                 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
                 DocumentBuilder db = dbf.newDocumentBuilder();
@@ -258,7 +259,9 @@ public class DOMHelper {
 
     private static DigestedResponse requestWebPage(String url) throws TvDbException {
         try {
-            final DigestedResponse response = httpClient.requestContent(url, ENCODING);
+            HttpGet httpGet = new HttpGet(url);
+            httpGet.addHeader("accept", "application/xml");
+            final DigestedResponse response = DigestedResponseReader.requestContent(httpClient, httpGet, CHARSET);
 
             if (response.getStatusCode() >= HTTP_STATUS_500) {
                 throw new TvDbException(ApiExceptionType.HTTP_503_ERROR, response.getContent(), response.getStatusCode(), url);
