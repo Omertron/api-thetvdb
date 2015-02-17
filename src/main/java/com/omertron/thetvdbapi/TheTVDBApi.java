@@ -36,7 +36,7 @@ import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.client.HttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.SimpleHttpClientBuilder;
@@ -49,7 +49,7 @@ public class TheTVDBApi {
 
     private static final Logger LOG = LoggerFactory.getLogger(TheTVDBApi.class);
     private String apiKey = null;
-    private CloseableHttpClient httpClient;
+    private HttpClient httpClient;
     private static final String URL_XML = "http://thetvdb.com/api/";
     private static final String URL_BANNER = "http://thetvdb.com/banners/";
     private static final String XML_EXTENSION = ".xml";
@@ -75,7 +75,7 @@ public class TheTVDBApi {
      * @param apiKey Must not be null or empty
      * @param httpClient
      */
-    public TheTVDBApi(String apiKey, CloseableHttpClient httpClient) {
+    public TheTVDBApi(String apiKey, HttpClient httpClient) {
         if (StringUtils.isBlank(apiKey)) {
             return;
         }

@@ -38,8 +38,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -66,7 +66,7 @@ public class DOMHelper {
     private static final int RETRY_COUNT = 5;
     // Milliseconds to retry
     private static final int RETRY_TIME = 250;
-    private static CloseableHttpClient httpClient = null;
+    private static HttpClient httpClient = null;
     // Constants
     private static final String ERROR_WRITING = "Error writing the document to {}";
     private static final String ERROR_UNABLE_TO_PARSE = "Unable to parse TheTVDb response, please try again later.";
@@ -79,7 +79,7 @@ public class DOMHelper {
         throw new UnsupportedOperationException();
     }
 
-    public static void setHttpClient(CloseableHttpClient newHttpClient) {
+    public static void setHttpClient(HttpClient newHttpClient) {
         httpClient = newHttpClient;
     }
 
