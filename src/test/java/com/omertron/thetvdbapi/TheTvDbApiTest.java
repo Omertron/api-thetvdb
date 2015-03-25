@@ -172,22 +172,9 @@ public class TheTvDbApiTest {
         assertTrue("Series not found", found);
     }
 
-    @Test
-    public void testGetXmlMirror() throws TvDbException {
-        LOG.info("testGetXmlMirror");
-        String mirror = TheTVDBApi.getXmlMirror(API_KEY);
-        assertTrue(mirror.length() > 0);
-    }
-
-    @Test
-    public void testGetBannerMirror() {
-        LOG.info("testGetBannerMirror");
-        String mirror = TheTVDBApi.getBannerMirror(API_KEY);
-        assertTrue(mirror.length() > 0);
-    }
-
     /**
      * Test of getEpisodeById method, of class TheTVDBApi.
+     *
      * @throws com.omertron.thetvdbapi.TvDbException
      */
     @Test

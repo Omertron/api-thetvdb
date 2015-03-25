@@ -95,7 +95,7 @@ public class TvdbParser {
      * @throws com.omertron.thetvdbapi.TvDbException
      */
     public static List<Actor> getActors(String urlString, String bannerMirror) throws TvDbException {
-        List<Actor> results = new ArrayList<Actor>();
+        List<Actor> results = new ArrayList<>();
         Actor actor;
         Document doc;
         NodeList nlActor;
@@ -149,7 +149,7 @@ public class TvdbParser {
      * @throws com.omertron.thetvdbapi.TvDbException
      */
     public static List<Episode> getAllEpisodes(String urlString, int season, String bannerMirror) throws TvDbException {
-        List<Episode> episodeList = new ArrayList<Episode>();
+        List<Episode> episodeList = new ArrayList<>();
         Episode episode;
         NodeList nlEpisode;
         Node nEpisode;
@@ -197,9 +197,7 @@ public class TvdbParser {
                 if (nBanner.getNodeType() == Node.ELEMENT_NODE) {
                     eBanner = (Element) nBanner;
                     banner = parseNextBanner(eBanner, bannerMirror);
-                    if (banner != null) {
-                        banners.addBanner(banner);
-                    }
+                    banners.addBanner(banner);
                 }
             }
         }
@@ -251,7 +249,7 @@ public class TvdbParser {
      * @throws com.omertron.thetvdbapi.TvDbException
      */
     public static List<Series> getSeriesList(String urlString, String bannerMirror) throws TvDbException {
-        List<Series> seriesList = new ArrayList<Series>();
+        List<Series> seriesList = new ArrayList<>();
         Series series;
         NodeList nlSeries;
         Node nSeries;
@@ -290,23 +288,24 @@ public class TvdbParser {
 
         if (doc != null) {
             Node root = doc.getChildNodes().item(0);
-            List<SeriesUpdate> seriesUpdates = new ArrayList<SeriesUpdate>();
-            List<EpisodeUpdate> episodeUpdates = new ArrayList<EpisodeUpdate>();
-            List<BannerUpdate> bannerUpdates = new ArrayList<BannerUpdate>();
+            List<SeriesUpdate> seriesUpdates = new ArrayList<>();
+            List<EpisodeUpdate> episodeUpdates = new ArrayList<>();
+            List<BannerUpdate> bannerUpdates = new ArrayList<>();
 
             NodeList updateNodes = root.getChildNodes();
             Node updateNode;
             for (int i = 0; i < updateNodes.getLength(); i++) {
                 updateNode = updateNodes.item(i);
-                if (updateNode.getNodeName().equals(SERIES)) {
-
-                    seriesUpdates.add(parseNextSeriesUpdate((Element) updateNode));
-                } else if (updateNode.getNodeName().equals(EPISODE)) {
-
-                    episodeUpdates.add(parseNextEpisodeUpdate((Element) updateNode));
-                } else if (updateNode.getNodeName().equals(BANNER)) {
-
-                    bannerUpdates.add(parseNextBannerUpdate((Element) updateNode));
+                switch (updateNode.getNodeName()) {
+                    case SERIES:
+                        seriesUpdates.add(parseNextSeriesUpdate((Element) updateNode));
+                        break;
+                    case EPISODE:
+                        episodeUpdates.add(parseNextEpisodeUpdate((Element) updateNode));
+                        break;
+                    case BANNER:
+                        bannerUpdates.add(parseNextBannerUpdate((Element) updateNode));
+                        break;
                 }
             }
 
@@ -373,7 +372,7 @@ public class TvdbParser {
      * @param delim
      */
     private static List<String> parseList(String input, String delim) {
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
 
         StringTokenizer st = new StringTokenizer(input, delim);
         while (st.hasMoreTokens()) {
