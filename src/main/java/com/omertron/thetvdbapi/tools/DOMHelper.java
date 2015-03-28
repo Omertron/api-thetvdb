@@ -116,35 +116,18 @@ public class DOMHelper {
      * @throws com.omertron.thetvdbapi.TvDbException
      */
     public static synchronized Document getEventDocFromUrl(String url) throws TvDbException {
-        InputStream in = null;
         Document doc = null;
 
-        try {
-            String webPage = getValidWebpage(url);
-
-            if (StringUtils.isNotBlank(webPage)) {
-                in = new ByteArrayInputStream(webPage.getBytes(CHARSET));
-
-                DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-                DocumentBuilder db = dbf.newDocumentBuilder();
-
-                doc = db.parse(in);
-                in.close();
-                doc.getDocumentElement().normalize();
-            }
+        String webPage = getValidWebpage(url);
+        try (InputStream in = new ByteArrayInputStream(webPage.getBytes(CHARSET))) {
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            doc = db.parse(in);
+            doc.getDocumentElement().normalize();
         } catch (UnsupportedEncodingException ex) {
             throw new TvDbException(ApiExceptionType.INVALID_URL, "Unable to encode URL", url, ex);
         } catch (ParserConfigurationException | SAXException | IOException error) {
             throw new TvDbException(ApiExceptionType.MAPPING_FAILED, ERROR_UNABLE_TO_PARSE, url, error);
-        } finally {
-            try {
-                if (in != null) {
-                    in.close();
-                }
-            } catch (IOException ex) {
-                // Input Stream was already closed or null
-                LOG.trace("Failed to close InputStream", ex);
-            }
         }
 
         return doc;
