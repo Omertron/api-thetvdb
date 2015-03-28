@@ -216,28 +216,30 @@ public class TvdbParser {
     public static Episode getEpisode(String urlString, String bannerMirror) throws TvDbException {
         Episode episode = new Episode();
         NodeList nlEpisode;
-        Node nEpisode;
-        Element eEpisode;
-
         Document doc = DOMHelper.getEventDocFromUrl(urlString);
 
         if (doc != null) {
             nlEpisode = doc.getElementsByTagName(EPISODE);
             for (int loop = 0; loop < nlEpisode.getLength(); loop++) {
-                nEpisode = nlEpisode.item(loop);
-                if (nEpisode.getNodeType() == Node.ELEMENT_NODE) {
-                    eEpisode = (Element) nEpisode;
-                    episode = parseNextEpisode(eEpisode, bannerMirror);
-                    if (episode != null) {
-                        // We only need the first episode
-                        break;
-                    }
-                }
+                decodeEpisode(nlEpisode.item(loop), bannerMirror);
             }
         }
 
         return episode;
+    }
 
+    private static Episode decodeEpisode(Node nEpisode, String bannerMirror) {
+        Element eEpisode;
+        if (nEpisode.getNodeType() == Node.ELEMENT_NODE) {
+            eEpisode = (Element) nEpisode;
+            Episode episode = parseNextEpisode(eEpisode, bannerMirror);
+            if (episode != null) {
+                // We only need the first episode
+                return episode;
+            }
+        }
+
+        return new Episode();
     }
 
     /**
@@ -256,17 +258,18 @@ public class TvdbParser {
         Element eSeries;
 
         Document doc = DOMHelper.getEventDocFromUrl(urlString);
+        if (doc == null) {
+            return Collections.emptyList();
+        }
 
-        if (doc != null) {
-            nlSeries = doc.getElementsByTagName(SERIES);
-            for (int loop = 0; loop < nlSeries.getLength(); loop++) {
-                nSeries = nlSeries.item(loop);
-                if (nSeries.getNodeType() == Node.ELEMENT_NODE) {
-                    eSeries = (Element) nSeries;
-                    series = parseNextSeries(eSeries, bannerMirror);
-                    if (series != null) {
-                        seriesList.add(series);
-                    }
+        nlSeries = doc.getElementsByTagName(SERIES);
+        for (int loop = 0; loop < nlSeries.getLength(); loop++) {
+            nSeries = nlSeries.item(loop);
+            if (nSeries.getNodeType() == Node.ELEMENT_NODE) {
+                eSeries = (Element) nSeries;
+                series = parseNextSeries(eSeries, bannerMirror);
+                if (series != null) {
+                    seriesList.add(series);
                 }
             }
         }
