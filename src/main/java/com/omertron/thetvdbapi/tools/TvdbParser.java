@@ -306,6 +306,8 @@ public class TvdbParser {
                     case BANNER:
                         bannerUpdates.add(parseNextBannerUpdate((Element) updateNode));
                         break;
+                    default:
+                        LOG.warn("Unknown update type '{}'", updateNode.getNodeName());
                 }
             }
 
