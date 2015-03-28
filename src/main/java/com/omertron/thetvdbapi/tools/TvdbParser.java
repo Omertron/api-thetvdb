@@ -216,30 +216,28 @@ public class TvdbParser {
     public static Episode getEpisode(String urlString, String bannerMirror) throws TvDbException {
         Episode episode = new Episode();
         NodeList nlEpisode;
-        Document doc = DOMHelper.getEventDocFromUrl(urlString);
+        Node nEpisode;
+        Element eEpisode;
 
-        if (doc != null) {
-            nlEpisode = doc.getElementsByTagName(EPISODE);
-            for (int loop = 0; loop < nlEpisode.getLength(); loop++) {
-                decodeEpisode(nlEpisode.item(loop), bannerMirror);
+        Document doc = DOMHelper.getEventDocFromUrl(urlString);
+        if (doc == null) {
+            return new Episode();
+        }
+
+        nlEpisode = doc.getElementsByTagName(EPISODE);
+        for (int loop = 0; loop < nlEpisode.getLength(); loop++) {
+            nEpisode = nlEpisode.item(loop);
+            if (nEpisode.getNodeType() == Node.ELEMENT_NODE) {
+                eEpisode = (Element) nEpisode;
+                episode = parseNextEpisode(eEpisode, bannerMirror);
+                if (episode != null) {
+                    // We only need the first episode
+                    break;
+                }
             }
         }
 
         return episode;
-    }
-
-    private static Episode decodeEpisode(Node nEpisode, String bannerMirror) {
-        Element eEpisode;
-        if (nEpisode.getNodeType() == Node.ELEMENT_NODE) {
-            eEpisode = (Element) nEpisode;
-            Episode episode = parseNextEpisode(eEpisode, bannerMirror);
-            if (episode != null) {
-                // We only need the first episode
-                return episode;
-            }
-        }
-
-        return new Episode();
     }
 
     /**
