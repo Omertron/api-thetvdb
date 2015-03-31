@@ -50,6 +50,7 @@ import org.w3c.dom.NodeList;
 public class TvdbParser {
 
     private static final Logger LOG = LoggerFactory.getLogger(TvdbParser.class);
+    private static final String URL_BANNER = "http://thetvdb.com/banners/";
     private static final String TYPE_BANNER = "banner";
     private static final String TYPE_FANART = "fanart";
     private static final String TYPE_POSTER = "poster";
@@ -90,11 +91,10 @@ public class TvdbParser {
      * Get a list of the actors from the URL
      *
      * @param urlString
-     * @param bannerMirror
      * @return
      * @throws com.omertron.thetvdbapi.TvDbException
      */
-    public static List<Actor> getActors(String urlString, String bannerMirror) throws TvDbException {
+    public static List<Actor> getActors(String urlString) throws TvDbException {
         List<Actor> results = new ArrayList<>();
         Actor actor;
         Document doc;
@@ -124,7 +124,7 @@ public class TvdbParser {
                 actor.setId(DOMHelper.getValueFromElement(eActor, "id"));
                 String image = DOMHelper.getValueFromElement(eActor, "Image");
                 if (!image.isEmpty()) {
-                    actor.setImage(bannerMirror + image);
+                    actor.setImage(URL_BANNER + image);
                 }
                 actor.setName(DOMHelper.getValueFromElement(eActor, "Name"));
                 actor.setRole(DOMHelper.getValueFromElement(eActor, "Role"));
@@ -144,11 +144,10 @@ public class TvdbParser {
      *
      * @param urlString
      * @param season
-     * @param bannerMirror
      * @return
      * @throws com.omertron.thetvdbapi.TvDbException
      */
-    public static List<Episode> getAllEpisodes(String urlString, int season, String bannerMirror) throws TvDbException {
+    public static List<Episode> getAllEpisodes(String urlString, int season) throws TvDbException {
         List<Episode> episodeList = new ArrayList<>();
         Episode episode;
         NodeList nlEpisode;
@@ -161,7 +160,7 @@ public class TvdbParser {
             nEpisode = nlEpisode.item(loop);
             if (nEpisode.getNodeType() == Node.ELEMENT_NODE) {
                 eEpisode = (Element) nEpisode;
-                episode = parseNextEpisode(eEpisode, bannerMirror);
+                episode = parseNextEpisode(eEpisode);
                 if ((episode != null) && (season == -1 || episode.getSeasonNumber() == season)) {
                     // Add the episode only if the season is -1 (all seasons) or matches the season
                     episodeList.add(episode);
@@ -176,11 +175,10 @@ public class TvdbParser {
      * Get a list of banners from the URL
      *
      * @param urlString
-     * @param bannerMirror
      * @return
      * @throws com.omertron.thetvdbapi.TvDbException
      */
-    public static Banners getBanners(String urlString, String bannerMirror) throws TvDbException {
+    public static Banners getBanners(String urlString) throws TvDbException {
         Banners banners = new Banners();
         Banner banner;
 
@@ -196,7 +194,7 @@ public class TvdbParser {
                 nBanner = nlBanners.item(loop);
                 if (nBanner.getNodeType() == Node.ELEMENT_NODE) {
                     eBanner = (Element) nBanner;
-                    banner = parseNextBanner(eBanner, bannerMirror);
+                    banner = parseNextBanner(eBanner);
                     banners.addBanner(banner);
                 }
             }
@@ -209,11 +207,10 @@ public class TvdbParser {
      * Get the episode information from the URL
      *
      * @param urlString
-     * @param bannerMirror
      * @return
      * @throws com.omertron.thetvdbapi.TvDbException
      */
-    public static Episode getEpisode(String urlString, String bannerMirror) throws TvDbException {
+    public static Episode getEpisode(String urlString) throws TvDbException {
         Episode episode = new Episode();
         NodeList nlEpisode;
         Node nEpisode;
@@ -229,7 +226,7 @@ public class TvdbParser {
             nEpisode = nlEpisode.item(loop);
             if (nEpisode.getNodeType() == Node.ELEMENT_NODE) {
                 eEpisode = (Element) nEpisode;
-                episode = parseNextEpisode(eEpisode, bannerMirror);
+                episode = parseNextEpisode(eEpisode);
                 if (episode != null) {
                     // We only need the first episode
                     break;
@@ -244,11 +241,10 @@ public class TvdbParser {
      * Get a list of series from the URL
      *
      * @param urlString
-     * @param bannerMirror
      * @return
      * @throws com.omertron.thetvdbapi.TvDbException
      */
-    public static List<Series> getSeriesList(String urlString, String bannerMirror) throws TvDbException {
+    public static List<Series> getSeriesList(String urlString) throws TvDbException {
         List<Series> seriesList = new ArrayList<>();
         Series series;
         NodeList nlSeries;
@@ -265,7 +261,7 @@ public class TvdbParser {
             nSeries = nlSeries.item(loop);
             if (nSeries.getNodeType() == Node.ELEMENT_NODE) {
                 eSeries = (Element) nSeries;
-                series = parseNextSeries(eSeries, bannerMirror);
+                series = parseNextSeries(eSeries);
                 if (series != null) {
                     seriesList.add(series);
                 }
@@ -394,23 +390,23 @@ public class TvdbParser {
      * @param eBanner
      * @throws Throwable
      */
-    private static Banner parseNextBanner(Element eBanner, String bannerMirror) {
+    private static Banner parseNextBanner(Element eBanner) {
         Banner banner = new Banner();
         String artwork;
 
         artwork = DOMHelper.getValueFromElement(eBanner, BANNER_PATH);
         if (!artwork.isEmpty()) {
-            banner.setUrl(bannerMirror + artwork);
+            banner.setUrl(URL_BANNER + artwork);
         }
 
         artwork = DOMHelper.getValueFromElement(eBanner, VIGNETTE_PATH);
         if (!artwork.isEmpty()) {
-            banner.setVignette(bannerMirror + artwork);
+            banner.setVignette(URL_BANNER + artwork);
         }
 
         artwork = DOMHelper.getValueFromElement(eBanner, THUMBNAIL_PATH);
         if (!artwork.isEmpty()) {
-            banner.setThumb(bannerMirror + artwork);
+            banner.setThumb(URL_BANNER + artwork);
         }
 
         banner.setId(DOMHelper.getValueFromElement(eBanner, "id"));
@@ -438,7 +434,7 @@ public class TvdbParser {
      * @param doc
      * @throws Throwable
      */
-    private static Episode parseNextEpisode(Element eEpisode, String bannerMirror) {
+    private static Episode parseNextEpisode(Element eEpisode) {
         Episode episode = new Episode();
 
         episode.setId(DOMHelper.getValueFromElement(eEpisode, "id"));
@@ -466,7 +462,7 @@ public class TvdbParser {
         episode.setAbsoluteNumber(DOMHelper.getValueFromElement(eEpisode, "absolute_number"));
         String filename = DOMHelper.getValueFromElement(eEpisode, "filename");
         if (StringUtils.isNotBlank(filename)) {
-            episode.setFilename(bannerMirror + filename);
+            episode.setFilename(URL_BANNER + filename);
         }
 
         episode.setLastUpdated(DOMHelper.getValueFromElement(eEpisode, LAST_UPDATED));
@@ -506,7 +502,7 @@ public class TvdbParser {
      * @param eSeries
      * @throws Throwable
      */
-    private static Series parseNextSeries(Element eSeries, String bannerMirror) {
+    private static Series parseNextSeries(Element eSeries) {
         Series series = new Series();
 
         series.setId(DOMHelper.getValueFromElement(eSeries, "id"));
@@ -528,17 +524,17 @@ public class TvdbParser {
 
         String artwork = DOMHelper.getValueFromElement(eSeries, TYPE_BANNER);
         if (!artwork.isEmpty()) {
-            series.setBanner(bannerMirror + artwork);
+            series.setBanner(URL_BANNER + artwork);
         }
 
         artwork = DOMHelper.getValueFromElement(eSeries, TYPE_FANART);
         if (!artwork.isEmpty()) {
-            series.setFanart(bannerMirror + artwork);
+            series.setFanart(URL_BANNER + artwork);
         }
 
         artwork = DOMHelper.getValueFromElement(eSeries, TYPE_POSTER);
         if (!artwork.isEmpty()) {
-            series.setPoster(bannerMirror + artwork);
+            series.setPoster(URL_BANNER + artwork);
         }
 
         series.setLastUpdated(DOMHelper.getValueFromElement(eSeries, LAST_UPDATED));

@@ -50,8 +50,7 @@ public class TheTVDBApi {
     private static final Logger LOG = LoggerFactory.getLogger(TheTVDBApi.class);
     private String apiKey = null;
     private HttpClient httpClient;
-    private static final String URL_XML = "http://thetvdb.com/api/";
-    private static final String URL_BANNER = "http://thetvdb.com/banners/";
+    private static final String BASE_URL = "http://thetvdb.com/api/";
     private static final String XML_EXTENSION = ".xml";
     private static final String SERIES_URL = "/series/";
     private static final String ALL_URL = "/all/";
@@ -69,8 +68,7 @@ public class TheTVDBApi {
     }
 
     /**
-     * Create an API object with the passed API key and using the supplied
-     * HttpClient
+     * Create an API object with the passed API key and using the supplied HttpClient
      *
      * @param apiKey Must not be null or empty
      * @param httpClient
@@ -95,17 +93,17 @@ public class TheTVDBApi {
      */
     public Series getSeries(String id, String language) throws TvDbException {
         StringBuilder urlBuilder = new StringBuilder();
-        urlBuilder.append(URL_XML);
+        urlBuilder.append(BASE_URL);
         urlBuilder.append(apiKey);
         urlBuilder.append(SERIES_URL);
         urlBuilder.append(id);
         urlBuilder.append("/");
-        if (language != null) {
+        if (StringUtils.isNotBlank(language)) {
             urlBuilder.append(language).append(XML_EXTENSION);
         }
 
         LOG.trace(URL, urlBuilder.toString());
-        List<Series> seriesList = TvdbParser.getSeriesList(urlBuilder.toString(), URL_BANNER);
+        List<Series> seriesList = TvdbParser.getSeriesList(urlBuilder.toString());
         if (seriesList.isEmpty()) {
             return null;
         } else {
@@ -126,7 +124,7 @@ public class TheTVDBApi {
 
         if (isValidNumber(id)) {
             StringBuilder urlBuilder = new StringBuilder();
-            urlBuilder.append(URL_XML);
+            urlBuilder.append(BASE_URL);
             urlBuilder.append(apiKey);
             urlBuilder.append(SERIES_URL);
             urlBuilder.append(id);
@@ -136,14 +134,13 @@ public class TheTVDBApi {
             }
 
             LOG.trace(URL, urlBuilder.toString());
-            episodeList = TvdbParser.getAllEpisodes(urlBuilder.toString(), -1, URL_BANNER);
+            episodeList = TvdbParser.getAllEpisodes(urlBuilder.toString(), -1);
         }
         return episodeList;
     }
 
     /**
-     * Get all the episodes from a specific season for a series. Note: This
-     * could be a lot of records
+     * Get all the episodes from a specific season for a series. Note: This could be a lot of records
      *
      * @param id
      * @param season
@@ -153,17 +150,17 @@ public class TheTVDBApi {
      */
     public List<Episode> getSeasonEpisodes(String id, int season, String language) throws TvDbException {
         StringBuilder urlBuilder = new StringBuilder();
-        urlBuilder.append(URL_XML);
+        urlBuilder.append(BASE_URL);
         urlBuilder.append(apiKey);
         urlBuilder.append(SERIES_URL);
         urlBuilder.append(id);
         urlBuilder.append(ALL_URL);
-        if (language != null) {
+        if (StringUtils.isNotBlank(language)) {
             urlBuilder.append(language).append(XML_EXTENSION);
         }
 
         LOG.trace(URL, urlBuilder.toString());
-        return TvdbParser.getAllEpisodes(urlBuilder.toString(), season, URL_BANNER);
+        return TvdbParser.getAllEpisodes(urlBuilder.toString(), season);
     }
 
     /**
@@ -195,8 +192,7 @@ public class TheTVDBApi {
     }
 
     /**
-     * Generic function to get either the standard TV episode list or the DVD
-     * list
+     * Generic function to get either the standard TV episode list or the DVD list
      *
      * @param seriesId
      * @param seasonNbr
@@ -213,7 +209,7 @@ public class TheTVDBApi {
         }
 
         StringBuilder urlBuilder = new StringBuilder();
-        urlBuilder.append(URL_XML);
+        urlBuilder.append(BASE_URL);
         urlBuilder.append(apiKey);
         urlBuilder.append(SERIES_URL);
         urlBuilder.append(seriesId);
@@ -222,12 +218,12 @@ public class TheTVDBApi {
         urlBuilder.append("/");
         urlBuilder.append(episodeNbr);
         urlBuilder.append("/");
-        if (language != null) {
+        if (StringUtils.isNotBlank(language)) {
             urlBuilder.append(language).append(XML_EXTENSION);
         }
 
         LOG.trace(URL, urlBuilder.toString());
-        return TvdbParser.getEpisode(urlBuilder.toString(), URL_BANNER);
+        return TvdbParser.getEpisode(urlBuilder.toString());
     }
 
     /**
@@ -241,19 +237,19 @@ public class TheTVDBApi {
      */
     public Episode getAbsoluteEpisode(String seriesId, int episodeNbr, String language) throws TvDbException {
         StringBuilder urlBuilder = new StringBuilder();
-        urlBuilder.append(URL_XML);
+        urlBuilder.append(BASE_URL);
         urlBuilder.append(apiKey);
         urlBuilder.append(SERIES_URL);
         urlBuilder.append(seriesId);
         urlBuilder.append("/absolute/");
         urlBuilder.append(episodeNbr);
         urlBuilder.append("/");
-        if (language != null) {
+        if (StringUtils.isNotBlank(language)) {
             urlBuilder.append(language).append(XML_EXTENSION);
         }
 
         LOG.trace(URL, urlBuilder.toString());
-        return TvdbParser.getEpisode(urlBuilder.toString(), URL_BANNER);
+        return TvdbParser.getEpisode(urlBuilder.toString());
     }
 
     /**
@@ -299,14 +295,14 @@ public class TheTVDBApi {
      */
     public Banners getBanners(String seriesId) throws TvDbException {
         StringBuilder urlBuilder = new StringBuilder();
-        urlBuilder.append(URL_XML);
+        urlBuilder.append(BASE_URL);
         urlBuilder.append(apiKey);
         urlBuilder.append(SERIES_URL);
         urlBuilder.append(seriesId);
         urlBuilder.append("/banners.xml");
 
         LOG.trace(URL, urlBuilder.toString());
-        Banners b = TvdbParser.getBanners(urlBuilder.toString(), URL_BANNER);
+        Banners b = TvdbParser.getBanners(urlBuilder.toString());
 
         if (b != null) {
             b.setSeriesId(NumberUtils.toInt(seriesId));
@@ -324,14 +320,14 @@ public class TheTVDBApi {
      */
     public List<Actor> getActors(String seriesId) throws TvDbException {
         StringBuilder urlBuilder = new StringBuilder();
-        urlBuilder.append(URL_XML);
+        urlBuilder.append(BASE_URL);
         urlBuilder.append(apiKey);
         urlBuilder.append(SERIES_URL);
         urlBuilder.append(seriesId);
         urlBuilder.append("/actors.xml");
 
         LOG.trace(URL, urlBuilder.toString());
-        return TvdbParser.getActors(urlBuilder.toString(), URL_BANNER);
+        return TvdbParser.getActors(urlBuilder.toString());
     }
 
     /**
@@ -346,10 +342,10 @@ public class TheTVDBApi {
         StringBuilder urlBuilder = new StringBuilder();
 
         try {
-            urlBuilder.append(URL_XML);
+            urlBuilder.append(BASE_URL);
             urlBuilder.append("GetSeries.php?seriesname=");
             urlBuilder.append(URLEncoder.encode(title, "UTF-8"));
-            if (language != null) {
+            if (StringUtils.isNotBlank(language)) {
                 urlBuilder.append("&language=").append(language);
             }
         } catch (UnsupportedEncodingException ex) {
@@ -359,7 +355,7 @@ public class TheTVDBApi {
         }
 
         LOG.trace(URL, urlBuilder.toString());
-        return TvdbParser.getSeriesList(urlBuilder.toString(), URL_BANNER);
+        return TvdbParser.getSeriesList(urlBuilder.toString());
     }
 
     /**
@@ -373,7 +369,7 @@ public class TheTVDBApi {
     public Episode getEpisodeById(String episodeId, String language) throws TvDbException {
         StringBuilder urlBuilder = new StringBuilder();
 
-        urlBuilder.append(URL_XML);
+        urlBuilder.append(BASE_URL);
         urlBuilder.append(apiKey);
         urlBuilder.append("/episodes/");
         urlBuilder.append(episodeId);
@@ -384,7 +380,7 @@ public class TheTVDBApi {
         }
 
         LOG.trace(URL, urlBuilder.toString());
-        return TvdbParser.getEpisode(urlBuilder.toString(), URL_BANNER);
+        return TvdbParser.getEpisode(urlBuilder.toString());
     }
 
     /**
@@ -396,7 +392,7 @@ public class TheTVDBApi {
     public TVDBUpdates getWeeklyUpdates() throws TvDbException {
         StringBuilder urlBuilder = new StringBuilder();
 
-        urlBuilder.append(URL_XML);
+        urlBuilder.append(BASE_URL);
         urlBuilder.append(apiKey);
         urlBuilder.append(WEEKLY_UPDATES_URL);
 
