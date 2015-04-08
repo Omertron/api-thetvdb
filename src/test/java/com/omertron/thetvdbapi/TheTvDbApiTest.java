@@ -31,8 +31,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * JUnit tests for TheTvDb class. The tester must enter the API key for these tests to work. Requires JUnit 4.5.
@@ -40,10 +38,8 @@ import org.slf4j.LoggerFactory;
  * @author stuart.boston
  *
  */
-public class TheTvDbApiTest {
+public class TheTvDbApiTest extends AbstractTests {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TheTvDbApiTest.class);
-    private static final String API_KEY = "2805AD2873519EC5";
     private final TheTVDBApi tvdb;
     private static final String LANGUAGE_ENGLISH = "en";
     private static final String TVDBID = "80348";
@@ -59,12 +55,12 @@ public class TheTvDbApiTest {
 //    private static final String SEASON_YEAR = "2008";
 
     public TheTvDbApiTest() {
-        tvdb = new TheTVDBApi(API_KEY);
+        tvdb = new TheTVDBApi(getApiKey());
     }
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        TestLogger.Configure();
+        doConfiguration();
     }
 
     @AfterClass

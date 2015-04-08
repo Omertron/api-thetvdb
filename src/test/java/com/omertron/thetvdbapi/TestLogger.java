@@ -20,9 +20,16 @@
 package com.omertron.thetvdbapi;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Properties;
 import java.util.logging.LogManager;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,26 +54,15 @@ public class TestLogger {
         config.append("java.util.logging.ConsoleHandler.level = ").append(level).append(CRLF);
         // Only works with Java 7 or later
         config.append("java.util.logging.SimpleFormatter.format = [%1$tH:%1$tM:%1$tS %4$6s] %2$s - %5$s %6$s%n").append(CRLF);
-        // Exclude logging messages
-        // Note: This does not work for apache
+        // Exclude http logging
+        config.append("sun.net.www.protocol.http.HttpURLConnection.level = OFF").append(CRLF);
         config.append("org.apache.http.level = SEVERE").append(CRLF);
 
-        InputStream ins = new ByteArrayInputStream(config.toString().getBytes());
-        try {
+        try (InputStream ins = new ByteArrayInputStream(config.toString().getBytes())) {
             LogManager.getLogManager().readConfiguration(ins);
-            // Exclude http logging
-            System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
-            System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "warn");
-
-        } catch (IOException ex) {
-            LOG.warn("Failed to configure log manager due to an IO problem", ex);
+        } catch (IOException e) {
+            LOG.warn("Failed to configure log manager due to an IO problem", e);
             return Boolean.FALSE;
-        } finally {
-            try {
-                ins.close();
-            } catch (IOException ex) {
-                LOG.info("Failed to close input stream", ex);
-            }
         }
         LOG.debug("Logger initialized to '{}' level", level);
         return Boolean.TRUE;
@@ -79,5 +75,60 @@ public class TestLogger {
      */
     public static boolean Configure() {
         return Configure("ALL");
+    }
+
+    /**
+     * Load properties from a file
+     *
+     * @param props
+     * @param propertyFile
+     */
+    public static void loadProperties(Properties props, File propertyFile) {
+        InputStream is = null;
+        try {
+            is = new FileInputStream(propertyFile);
+            props.load(is);
+        } catch (Exception ex) {
+            LOG.warn("Failed to load properties file", ex);
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException ex) {
+                    LOG.warn("Failed to close properties file", ex);
+                }
+            }
+        }
+    }
+
+    /**
+     * Save properties to a file
+     *
+     * @param props
+     * @param propertyFile
+     * @param headerText
+     */
+    public static void saveProperties(Properties props, File propertyFile, String headerText) {
+        OutputStream out = null;
+
+        try {
+            out = new FileOutputStream(propertyFile);
+            if (StringUtils.isNotBlank(headerText)) {
+                props.store(out, headerText);
+            }
+        } catch (FileNotFoundException ex) {
+            LOG.warn("Failed to find properties file", ex);
+        } catch (IOException ex) {
+            LOG.warn("Failed to read properties file", ex);
+        } finally {
+            if (out != null) {
+                try {
+                    out.flush();
+                    out.close();
+                } catch (IOException ex) {
+                    LOG.warn("Failed to close properties file", ex);
+                }
+            }
+        }
     }
 }
