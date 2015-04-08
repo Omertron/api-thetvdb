@@ -49,33 +49,25 @@ public enum BannerType {
 
     /**
      * Set the banner type from a string. If the banner type isn't found, but the type contains an "x" as in 1920x1080 then the type
- will be set to ARTWORK
+     * will be set to ARTWORK
      *
      * @param type
      * @return
      */
     public static BannerType fromString(String type) {
         if (type != null) {
-            try {
-                for (BannerType bannerType : BannerType.values()) {
-                    if (type.equalsIgnoreCase(bannerType.type)) {
-                        return bannerType;
-                    }
-                }
-
-                // If we've not found the type, then try a generic ARTWORK for the 1920x1080, 1280x720 or 680x1000 values
-                if (type.toLowerCase().contains("x")) {
-                    return BannerType.ARTWORK;
-                }
-            } catch (IllegalArgumentException ex) {
-                if (type.toLowerCase().contains("x")) {
-                    return BannerType.ARTWORK;
-                } else {
-                    throw new IllegalArgumentException("BannerType '" + type + "' does not exist", ex);
+            for (BannerType bannerType : BannerType.values()) {
+                if (type.equalsIgnoreCase(bannerType.type)) {
+                    return bannerType;
                 }
             }
+
+            // If we've not found the type, then try a generic ARTWORK for the 1920x1080, 1280x720 or 680x1000 values
+            if (type.toLowerCase().contains("x")) {
+                return BannerType.ARTWORK;
+            }
         }
-        throw new IllegalArgumentException("BannerType is null");
+        throw new IllegalArgumentException("BannerType is empty/null");
     }
 
 }
