@@ -4,13 +4,11 @@ __Originally written by__: Matthew Altman (sTyLeS)
 
 __Maintained by__: Stuart Boston (Omertron AT Gmail DOT com)
 
-Originally written for use by Yet Another Movie Jukebox [(YAMJ)](http://code.google.com/p/moviejukebox/), but anyone can use it for other projects as well.
-
 This API uses [TheTVDB.com API](http://www.thetvdb.com/wiki/index.php/Programmers_API)
 
-[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=Omertron&url=https://github.com/Omertron/api-thetvdb&title=TheTVDB API&language=&tags=github&category=software)
+Originally written for use by YetAnotherMovieJukebox ([YAMJv2](https://github.com/YAMJ/yamj-v2) & [YAMJv3](https://github.com/YAMJ/yamj-v3)), but anyone can feel free to use it for other projects as well.
 
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Omertron/api-thetvdb/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+[![Build Status](http://jenkins.omertron.com/job/API-TheTVDb/badge/icon)](http://jenkins.omertron.com/job/API-TheTVDb)
 
 ***
 ### TheTVDB.com
