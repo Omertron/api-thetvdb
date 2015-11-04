@@ -154,12 +154,12 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
-                    <version>2.5.5</version>
+                    <version>2.6</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-clean-plugin</artifactId>
-                    <version>2.6.1</version>
+                    <version>3.0.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -199,12 +199,12 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.18.1</version>
+                    <version>2.19</version>
                 </plugin>
                 <plugin>
                     <groupId>pl.project13.maven</groupId>
                     <artifactId>git-commit-id-plugin</artifactId>
-                    <version>2.1.15</version>
+                    <version>2.2.0</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -316,12 +316,12 @@
             <extension>
                 <groupId>org.apache.maven.scm</groupId>
                 <artifactId>maven-scm-provider-gitexe</artifactId>
-                <version>1.9.2</version>
+                <version>1.9.4</version>
             </extension>
             <extension>
                 <groupId>org.apache.maven.scm</groupId>
                 <artifactId>maven-scm-manager-plexus</artifactId>
-                <version>1.9.2</version>
+                <version>1.9.4</version>
             </extension>
             <extension>
                 <groupId>org.kathrynhuxtable.maven.wagon</groupId>
