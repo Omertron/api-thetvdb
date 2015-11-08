@@ -26,6 +26,7 @@ import com.omertron.thetvdbapi.model.BannerListType;
 import com.omertron.thetvdbapi.model.BannerType;
 import com.omertron.thetvdbapi.model.BannerUpdate;
 import com.omertron.thetvdbapi.model.Banners;
+import com.omertron.thetvdbapi.model.BaseUpdate;
 import com.omertron.thetvdbapi.model.Episode;
 import com.omertron.thetvdbapi.model.EpisodeUpdate;
 import com.omertron.thetvdbapi.model.Series;
@@ -275,10 +276,11 @@ public class TvdbParser {
      * Get a list of updates from the URL
      *
      * @param urlString
+     * @param seriesId
      * @return
      * @throws com.omertron.thetvdbapi.TvDbException
      */
-    public static TVDBUpdates getUpdates(String urlString) throws TvDbException {
+    public static TVDBUpdates getUpdates(String urlString, int seriesId) throws TvDbException {
         TVDBUpdates updates = new TVDBUpdates();
 
         Document doc = DOMHelper.getEventDocFromUrl(urlString);
@@ -295,13 +297,22 @@ public class TvdbParser {
                 updateNode = updateNodes.item(i);
                 switch (updateNode.getNodeName()) {
                     case SERIES:
-                        seriesUpdates.add(parseNextSeriesUpdate((Element) updateNode));
+                        SeriesUpdate su = parseNextSeriesUpdate((Element) updateNode);
+                        if (isValidUpdate(seriesId, su)) {
+                            seriesUpdates.add(su);
+                        }
                         break;
                     case EPISODE:
-                        episodeUpdates.add(parseNextEpisodeUpdate((Element) updateNode));
+                        EpisodeUpdate eu = parseNextEpisodeUpdate((Element) updateNode);
+                        if (isValidUpdate(seriesId, eu)) {
+                            episodeUpdates.add(eu);
+                        }
                         break;
                     case BANNER:
-                        bannerUpdates.add(parseNextBannerUpdate((Element) updateNode));
+                        BannerUpdate bu = parseNextBannerUpdate((Element) updateNode);
+                        if (isValidUpdate(seriesId, bu)) {
+                            bannerUpdates.add(bu);
+                        }
                         break;
                     default:
                         LOG.warn("Unknown update type '{}'", updateNode.getNodeName());
@@ -315,6 +326,10 @@ public class TvdbParser {
         }
 
         return updates;
+    }
+
+    private static boolean isValidUpdate(int seriesId, BaseUpdate update) {
+        return seriesId == 0 || update.getSeriesId() == seriesId;
     }
 
     /**
@@ -551,7 +566,7 @@ public class TvdbParser {
     private static SeriesUpdate parseNextSeriesUpdate(Element element) {
         SeriesUpdate seriesUpdate = new SeriesUpdate();
 
-        seriesUpdate.setId(DOMHelper.getValueFromElement(element, "id"));
+        seriesUpdate.setSeriesId(DOMHelper.getValueFromElement(element, "id"));
         seriesUpdate.setTime(DOMHelper.getValueFromElement(element, TIME));
 
         return seriesUpdate;
@@ -565,8 +580,8 @@ public class TvdbParser {
     private static EpisodeUpdate parseNextEpisodeUpdate(Element element) {
         EpisodeUpdate episodeUpdate = new EpisodeUpdate();
 
-        episodeUpdate.setId(DOMHelper.getValueFromElement(element, "id"));
-        episodeUpdate.setSeries(DOMHelper.getValueFromElement(element, SERIES));
+        episodeUpdate.setSeriesId(DOMHelper.getValueFromElement(element, "id"));
+        episodeUpdate.setEpisodeId(DOMHelper.getValueFromElement(element, SERIES));
         episodeUpdate.setTime(DOMHelper.getValueFromElement(element, TIME));
 
         return episodeUpdate;
@@ -581,7 +596,7 @@ public class TvdbParser {
         BannerUpdate bannerUpdate = new BannerUpdate();
 
         bannerUpdate.setSeasonNum(DOMHelper.getValueFromElement(element, "SeasonNum"));
-        bannerUpdate.setSeries(DOMHelper.getValueFromElement(element, SERIES));
+        bannerUpdate.setSeriesId(DOMHelper.getValueFromElement(element, SERIES));
         bannerUpdate.setFormat(DOMHelper.getValueFromElement(element, "format"));
         bannerUpdate.setLanguage(DOMHelper.getValueFromElement(element, "language"));
         bannerUpdate.setPath(DOMHelper.getValueFromElement(element, "path"));

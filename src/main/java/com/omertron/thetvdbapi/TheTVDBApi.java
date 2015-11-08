@@ -68,7 +68,8 @@ public class TheTVDBApi {
     }
 
     /**
-     * Create an API object with the passed API key and using the supplied HttpClient
+     * Create an API object with the passed API key and using the supplied
+     * HttpClient
      *
      * @param apiKey Must not be null or empty
      * @param httpClient
@@ -140,7 +141,8 @@ public class TheTVDBApi {
     }
 
     /**
-     * Get all the episodes from a specific season for a series. Note: This could be a lot of records
+     * Get all the episodes from a specific season for a series. Note: This
+     * could be a lot of records
      *
      * @param id
      * @param season
@@ -192,7 +194,8 @@ public class TheTVDBApi {
     }
 
     /**
-     * Generic function to get either the standard TV episode list or the DVD list
+     * Generic function to get either the standard TV episode list or the DVD
+     * list
      *
      * @param seriesId
      * @param seasonNbr
@@ -390,6 +393,17 @@ public class TheTVDBApi {
      * @throws com.omertron.thetvdbapi.TvDbException
      */
     public TVDBUpdates getWeeklyUpdates() throws TvDbException {
+        return getWeeklyUpdates(0);
+    }
+
+    /**
+     * Get the weekly updates limited by Series ID
+     *
+     * @param seriesId 0 (zero) gets all series
+     * @return
+     * @throws com.omertron.thetvdbapi.TvDbException
+     */
+    public TVDBUpdates getWeeklyUpdates(int seriesId) throws TvDbException {
         StringBuilder urlBuilder = new StringBuilder();
 
         urlBuilder.append(BASE_URL);
@@ -397,7 +411,7 @@ public class TheTVDBApi {
         urlBuilder.append(WEEKLY_UPDATES_URL);
 
         LOG.trace(URL, urlBuilder.toString());
-        return TvdbParser.getUpdates(urlBuilder.toString());
+        return TvdbParser.getUpdates(urlBuilder.toString(), seriesId);
     }
 
     /**

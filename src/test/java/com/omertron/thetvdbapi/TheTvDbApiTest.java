@@ -23,7 +23,9 @@ import com.omertron.thetvdbapi.model.Actor;
 import com.omertron.thetvdbapi.model.Banners;
 import com.omertron.thetvdbapi.model.Episode;
 import com.omertron.thetvdbapi.model.Series;
+import com.omertron.thetvdbapi.model.TVDBUpdates;
 import java.util.List;
+import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -33,7 +35,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * JUnit tests for TheTvDb class. The tester must enter the API key for these tests to work. Requires JUnit 4.5.
+ * JUnit tests for TheTvDb class. The tester must enter the API key for these
+ * tests to work. Requires JUnit 4.5.
  *
  * @author stuart.boston
  *
@@ -71,7 +74,11 @@ public class TheTvDbApiTest extends AbstractTests {
     public void setUp() throws Exception {
     }
 
-    @Test
+    @After
+    public void tearDown() throws Exception {
+    }
+
+    //@Test
     public void testNaming() throws TvDbException {
         LOG.info("testNaming");
         String seriesName = "Agents of Shield";
@@ -85,7 +92,7 @@ public class TheTvDbApiTest extends AbstractTests {
         assertTrue("No series found for " + seriesName, seriesList.size() > 0);
     }
 
-    @Test
+    //@Test
     public void testGetSeries() throws TvDbException {
         LOG.info("testGetSeries");
         Series series = tvdb.getSeries(TVDBID, LANGUAGE_ENGLISH);
@@ -93,49 +100,49 @@ public class TheTvDbApiTest extends AbstractTests {
         assertFalse("No genres found", series.getGenres().isEmpty());
     }
 
-    @Test
+    //@Test
     public void testGetAllEpisodes() throws TvDbException {
         LOG.info("testGetAllEpisodes");
         List<Episode> episodes = tvdb.getAllEpisodes(TVDBID, LANGUAGE_ENGLISH);
         assertFalse(episodes.isEmpty());
     }
 
-    @Test
+    //@Test
     public void testGetSeasonEpisodes() throws TvDbException {
         LOG.info("testGetSeasonEpisodes");
         List<Episode> episodes = tvdb.getSeasonEpisodes(TVDBID, 1, LANGUAGE_ENGLISH);
         assertFalse(episodes.isEmpty());
     }
 
-    @Test
+    //@Test
     public void testGetEpisode() throws TvDbException {
         LOG.info("testGetEpisode");
         Episode episode = tvdb.getEpisode(TVDBID, 1, 1, LANGUAGE_ENGLISH);
         assertTrue(episode.getEpisodeName().length() > 0);
     }
 
-    @Test
+    //@Test
     public void testGetDVDEpisode() throws TvDbException {
         LOG.info("testGetDVDEpisode");
         Episode episode = tvdb.getDVDEpisode(TVDBID, 1, 1, LANGUAGE_ENGLISH);
         assertTrue(episode.getDvdEpisodeNumber().length() > 0);
     }
 
-    @Test
+    //@Test
     public void testGetAbsoluteEpisode() throws TvDbException {
         LOG.info("testGetAbsoluteEpisode");
         Episode episode = tvdb.getAbsoluteEpisode(TVDBID, 1, LANGUAGE_ENGLISH);
         assertTrue(episode.getAbsoluteNumber().equals("1"));
     }
 
-    @Test
+    //@Test
     public void testGetSeasonYear() throws TvDbException {
         LOG.info("testGetSeasonYear");
         String year = tvdb.getSeasonYear(TVDBID, 1, LANGUAGE_ENGLISH);
         assertTrue(year.equals(SEASON_YEAR));
     }
 
-    @Test
+    //@Test
     public void testGetBanners() throws TvDbException {
         LOG.info("testGetBanners");
         Banners banners = tvdb.getBanners("80348");
@@ -145,14 +152,14 @@ public class TheTvDbApiTest extends AbstractTests {
         assertFalse("No series banners found", banners.getSeriesList().isEmpty());
     }
 
-    @Test
+    //@Test
     public void testGetActors() throws TvDbException {
         LOG.info("testGetActors");
         List<Actor> actors = tvdb.getActors(TVDBID);
         assertFalse(actors.isEmpty());
     }
 
-    @Test
+    //@Test
     public void testSearchSeries() throws TvDbException {
         LOG.info("testSearchSeries");
         List<Series> seriesList = tvdb.searchSeries(SERIES_NAME, LANGUAGE_ENGLISH);
@@ -173,11 +180,25 @@ public class TheTvDbApiTest extends AbstractTests {
      *
      * @throws com.omertron.thetvdbapi.TvDbException
      */
-    @Test
+    //@Test
     public void testGetEpisodeById() throws TvDbException {
         LOG.info("getEpisodeById");
         Episode result = tvdb.getEpisodeById(EPISODE_ID, LANGUAGE_ENGLISH);
         assertEquals(TVDBID, result.getSeriesId());
         assertEquals(SEASON_ID, result.getSeasonId());
+    }
+
+    /**
+     * Test of getWeeklyUpdates method, of class TheTVDBApi.
+     *
+     * @throws com.omertron.thetvdbapi.TvDbException
+     */
+    @Test
+    public void testGetWeeklyUpdates() throws TvDbException {
+        LOG.info("getWeeklyUpdates");
+        TVDBUpdates result = tvdb.getWeeklyUpdates();
+        assertFalse("No Banner results", result.getBannerUpdates().isEmpty());
+        assertFalse("No Episode results", result.getEpisodeUpdates().isEmpty());
+        assertFalse("No Series results", result.getSeriesUpdates().isEmpty());
     }
 }
