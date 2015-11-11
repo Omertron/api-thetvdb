@@ -82,6 +82,20 @@ __Example__
 
 `List<Actor> actors = tvDB.getActors("73739");`
 
+
+Proxy Support
+-------------
+
+If you want to add proxy support you can do this through building a HttpClient via the SimpleHttpClientBuilder method and then passing this to the constructor of the API.
+
+    HttpClient hc = new SimpleHttpClientBuilder()
+            .setProxyHost("HOST")
+            .setProxyPort(PORT)
+            .setProxyUsername("USERNAME")
+            .setProxyPassword("PASSWORD")
+            .build();
+
+
 Project Logging
 ---------------
 This project uses [SLF4J](http://www.slf4j.org) to abstract the logging in the project.
