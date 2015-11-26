@@ -22,6 +22,7 @@ package com.omertron.thetvdbapi;
 import com.omertron.thetvdbapi.model.Actor;
 import com.omertron.thetvdbapi.model.Banners;
 import com.omertron.thetvdbapi.model.Episode;
+import com.omertron.thetvdbapi.model.Language;
 import com.omertron.thetvdbapi.model.Series;
 import com.omertron.thetvdbapi.model.TVDBUpdates;
 import java.util.List;
@@ -200,5 +201,17 @@ public class TheTvDbApiTest extends AbstractTests {
         assertFalse("No Banner results", result.getBannerUpdates().isEmpty());
         assertFalse("No Episode results", result.getEpisodeUpdates().isEmpty());
         assertFalse("No Series results", result.getSeriesUpdates().isEmpty());
+    }
+
+    /**
+     * Test of getLanguages method, of class TheTVDBApi.
+     *
+     * @throws com.omertron.thetvdbapi.TvDbException
+     */
+    @Test
+    public void testGetLanguages() throws TvDbException {
+        LOG.info("testGetLanguages");
+        List<Language> result = tvdb.getLanguages();
+        assertFalse("No Languages results", result.isEmpty());
     }
 }

@@ -22,6 +22,7 @@ package com.omertron.thetvdbapi;
 import com.omertron.thetvdbapi.model.Actor;
 import com.omertron.thetvdbapi.model.Banners;
 import com.omertron.thetvdbapi.model.Episode;
+import com.omertron.thetvdbapi.model.Language;
 import com.omertron.thetvdbapi.model.Series;
 import com.omertron.thetvdbapi.model.TVDBUpdates;
 import com.omertron.thetvdbapi.tools.DOMHelper;
@@ -412,6 +413,24 @@ public class TheTVDBApi {
 
         LOG.trace(URL, urlBuilder.toString());
         return TvdbParser.getUpdates(urlBuilder.toString(), seriesId);
+    }
+
+    /**
+     * Gets the languages.
+     *
+     * @return the languages
+     * @throws com.omertron.thetvdbapi.TvDbException
+     */
+    public List<Language> getLanguages() throws TvDbException {
+        StringBuilder urlBuilder = new StringBuilder();
+
+        urlBuilder.append(BASE_URL);
+        urlBuilder.append(apiKey);
+        urlBuilder.append("/languages");
+        urlBuilder.append(XML_EXTENSION);
+
+        LOG.trace(URL, urlBuilder.toString());
+        return TvdbParser.getLanguages(urlBuilder.toString());
     }
 
     /**

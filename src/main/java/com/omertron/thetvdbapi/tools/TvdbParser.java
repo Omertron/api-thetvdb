@@ -29,6 +29,7 @@ import com.omertron.thetvdbapi.model.Banners;
 import com.omertron.thetvdbapi.model.BaseUpdate;
 import com.omertron.thetvdbapi.model.Episode;
 import com.omertron.thetvdbapi.model.EpisodeUpdate;
+import com.omertron.thetvdbapi.model.Language;
 import com.omertron.thetvdbapi.model.Series;
 import com.omertron.thetvdbapi.model.SeriesUpdate;
 import com.omertron.thetvdbapi.model.TVDBUpdates;
@@ -332,7 +333,39 @@ public class TvdbParser {
         return seriesId == 0 || update.getSeriesId() == seriesId;
     }
 
-    /**
+	/**
+	 * Gets the languages.
+	 *
+	 * @param urlString the url string
+	 * @return the languages
+	 * @throws TvDbException the tv db exception
+	 */
+	public static List<Language> getLanguages(String urlString) throws TvDbException {
+        List<Language> languages = new ArrayList<>();
+
+        NodeList nlLanguages;
+        Node nLanguage;
+        Element eLanguage;
+
+        Document doc = DOMHelper.getEventDocFromUrl(urlString);
+
+        if (doc != null) {
+            nlLanguages = doc.getElementsByTagName(LANGUAGE);
+
+            for (int loop = 0; loop < nlLanguages.getLength(); loop++) {
+                nLanguage = nlLanguages.item(loop);
+
+                if (nLanguage.getNodeType() == Node.ELEMENT_NODE) {
+                    eLanguage = (Element) nLanguage;
+                    languages.add(parseNextLanguage(eLanguage));
+                }
+            }
+        }
+
+		return languages;
+	}
+
+	/**
      * Parse the error message to return a more user friendly message
      *
      * @param errorMessage
@@ -604,5 +637,21 @@ public class TvdbParser {
         bannerUpdate.setType(DOMHelper.getValueFromElement(element, "type"));
 
         return bannerUpdate;
+    }
+
+    /**
+     * Parses the next language.
+     *
+     * @param element the element
+     * @return the language
+     */
+    private static Language parseNextLanguage(Element element) {
+	    Language language = new Language();
+
+	    language.setName(DOMHelper.getValueFromElement(element, "name"));
+	    language.setAbbreviation(DOMHelper.getValueFromElement(element, "abbreviation"));
+	    language.setId(DOMHelper.getValueFromElement(element, "id"));
+
+	    return language;
     }
 }
