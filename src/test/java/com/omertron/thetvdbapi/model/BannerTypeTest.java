@@ -23,16 +23,12 @@
 package com.omertron.thetvdbapi.model;
 
 import com.omertron.thetvdbapi.TestLogger;
-import org.junit.After;
-import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -44,24 +40,8 @@ public class BannerTypeTest {
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
-    public BannerTypeTest() {
-    }
-
-    @BeforeClass
     public static void setUpClass() {
-        TestLogger.Configure();
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
+        TestLogger.configure();
     }
 
     /**

@@ -333,14 +333,14 @@ public class TvdbParser {
         return seriesId == 0 || update.getSeriesId() == seriesId;
     }
 
-	/**
-	 * Gets the languages.
-	 *
-	 * @param urlString the url string
-	 * @return the languages
-	 * @throws TvDbException the tv db exception
-	 */
-	public static List<Language> getLanguages(String urlString) throws TvDbException {
+    /**
+     * Gets the languages.
+     *
+     * @param urlString the url string
+     * @return the languages
+     * @throws TvDbException the tv db exception
+     */
+    public static List<Language> getLanguages(String urlString) throws TvDbException {
         List<Language> languages = new ArrayList<>();
 
         NodeList nlLanguages;
@@ -362,10 +362,10 @@ public class TvdbParser {
             }
         }
 
-		return languages;
-	}
+        return languages;
+    }
 
-	/**
+    /**
      * Parse the error message to return a more user friendly message
      *
      * @param errorMessage
@@ -400,8 +400,8 @@ public class TvdbParser {
             } else {
                 response.append("Unknown episode error: ").append(errorMessage);
             }
-        } else {
-            // Don't recognise the error format, so just return it
+        } else // Don't recognise the error format, so just return it
+        {
             if (errorMessage.toLowerCase().contains(ERROR_NOT_ALLOWED_IN_PROLOG)) {
                 response.append(ERROR_RETRIEVE_EPISODE_INFO);
             } else {
@@ -646,12 +646,12 @@ public class TvdbParser {
      * @return the language
      */
     private static Language parseNextLanguage(Element element) {
-	    Language language = new Language();
+        Language language = new Language();
 
-	    language.setName(DOMHelper.getValueFromElement(element, "name"));
-	    language.setAbbreviation(DOMHelper.getValueFromElement(element, "abbreviation"));
-	    language.setId(DOMHelper.getValueFromElement(element, "id"));
+        language.setName(DOMHelper.getValueFromElement(element, "name"));
+        language.setAbbreviation(DOMHelper.getValueFromElement(element, "abbreviation"));
+        language.setId(DOMHelper.getValueFromElement(element, "id"));
 
-	    return language;
+        return language;
     }
 }

@@ -24,33 +24,36 @@ import java.util.Properties;
 import static org.junit.Assert.fail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import static org.junit.Assert.fail;
+import static org.junit.Assert.fail;
+import static org.junit.Assert.fail;
 
 public class AbstractTests {
 
     protected static final Logger LOG = LoggerFactory.getLogger(AbstractTests.class);
-    private static final String PROP_FIlENAME = "testing.properties";
-    private static final Properties props = new Properties();
+    private static final String PROP_FILENAME = "testing.properties";
+    private static final Properties PROPS = new Properties();
 
     /**
      * Do the initial configuration for the test cases
      *
      * @throws MovieDbException
      */
-    protected static final void doConfiguration()  {
-        TestLogger.Configure();
+    protected static final void doConfiguration() {
+        TestLogger.configure();
 
-        if (props.isEmpty()) {
-            File f = new File(PROP_FIlENAME);
+        if (PROPS.isEmpty()) {
+            File f = new File(PROP_FILENAME);
             if (f.exists()) {
-                LOG.info("Loading properties from '{}'", PROP_FIlENAME);
-                TestLogger.loadProperties(props, f);
+                LOG.info("Loading properties from '{}'", PROP_FILENAME);
+                TestLogger.loadProperties(PROPS, f);
             } else {
-                LOG.info("Property file '{}' not found, creating dummy file.", PROP_FIlENAME);
+                LOG.info("Property file '{}' not found, creating dummy file.", PROP_FILENAME);
 
-                props.setProperty("API_Key", "INSERT_YOUR_KEY_HERE");
+                PROPS.setProperty("API_Key", "INSERT_YOUR_KEY_HERE");
 
-                TestLogger.saveProperties(props, f, "Properties file for tests");
-                fail("Failed to get key information from properties file '" + PROP_FIlENAME + "'");
+                TestLogger.saveProperties(PROPS, f, "Properties file for tests");
+                fail("Failed to get key information from properties file '" + PROP_FILENAME + "'");
             }
         }
     }
@@ -61,7 +64,7 @@ public class AbstractTests {
      * @return
      */
     protected static String getApiKey() {
-        return props.getProperty("API_Key");
+        return PROPS.getProperty("API_Key");
     }
 
     /**
@@ -71,7 +74,7 @@ public class AbstractTests {
      * @return
      */
     protected static String getProperty(String property) {
-        return props.getProperty(property);
+        return PROPS.getProperty(property);
     }
 
 }
