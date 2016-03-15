@@ -63,12 +63,12 @@ public class TheTvDbApiTest extends AbstractTests {
         String seriesName = "Agents of Shield";
         List<Series> seriesList = tvdb.searchSeries(seriesName, null);
         LOG.info("Found {} matched for '{}'", seriesList.size(), seriesName);
-        assertTrue("No series found for " + seriesName, seriesList.size() > 0);
+        assertFalse("No series found for " + seriesName, seriesList.isEmpty());
 
         seriesName = "Agents of S.h.i.e.l.d.";
         seriesList = tvdb.searchSeries(seriesName, null);
         LOG.info("Found {} matched for '{}'", seriesList.size(), seriesName);
-        assertTrue("No series found for " + seriesName, seriesList.size() > 0);
+        assertFalse("No series found for " + seriesName, seriesList.isEmpty());
     }
 
     @Test
@@ -111,7 +111,7 @@ public class TheTvDbApiTest extends AbstractTests {
     public void testGetAbsoluteEpisode() throws TvDbException {
         LOG.info("testGetAbsoluteEpisode");
         Episode episode = tvdb.getAbsoluteEpisode(TVDBID, 1, LANGUAGE_ENGLISH);
-        assertTrue(episode.getAbsoluteNumber().equals("1"));
+        assertTrue("1".equals(episode.getAbsoluteNumber()));
     }
 
     @Test

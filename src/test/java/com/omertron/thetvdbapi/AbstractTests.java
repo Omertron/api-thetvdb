@@ -21,11 +21,8 @@ package com.omertron.thetvdbapi;
 
 import java.io.File;
 import java.util.Properties;
-import static org.junit.Assert.fail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import static org.junit.Assert.fail;
-import static org.junit.Assert.fail;
 import static org.junit.Assert.fail;
 
 public class AbstractTests {
@@ -33,6 +30,10 @@ public class AbstractTests {
     protected static final Logger LOG = LoggerFactory.getLogger(AbstractTests.class);
     private static final String PROP_FILENAME = "testing.properties";
     private static final Properties PROPS = new Properties();
+
+    protected AbstractTests() {
+        // Nothing to do in the constructor
+    }
 
     /**
      * Do the initial configuration for the test cases
