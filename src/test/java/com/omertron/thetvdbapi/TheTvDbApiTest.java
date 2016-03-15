@@ -33,8 +33,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * JUnit tests for TheTvDb class. The tester must enter the API key for these
- * tests to work. Requires JUnit 4.5.
+ * JUnit tests for TheTvDb class. The tester must enter the API key for these tests to work. Requires JUnit 4.5.
  *
  * @author stuart.boston
  *
@@ -192,5 +191,20 @@ public class TheTvDbApiTest extends AbstractTests {
         LOG.info("testGetLanguages");
         List<Language> result = tvdb.getLanguages();
         assertFalse("No Languages results", result.isEmpty());
+    }
+
+    /**
+     * Test for non-existent series, should return empty list
+     *
+     * @throws TvDbException
+     */
+    @Test
+    public void test() throws TvDbException {
+        String title = "fargo xsadasdasaad";
+        String language = "en";
+        List<Series> results = tvdb.searchSeries(title, language);
+
+        assertFalse("Null list, should be empty", results == null);
+        assertTrue("List is not empty", results.isEmpty());
     }
 }

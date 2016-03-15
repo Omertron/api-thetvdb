@@ -252,7 +252,7 @@ public class TvdbParser {
         NodeList nlSeries;
         Node nSeries;
         Element eSeries;
-
+        
         Document doc = DOMHelper.getEventDocFromUrl(urlString);
         if (doc == null) {
             return Collections.emptyList();

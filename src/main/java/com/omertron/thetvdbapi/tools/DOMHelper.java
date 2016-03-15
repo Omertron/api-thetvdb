@@ -119,6 +119,12 @@ public class DOMHelper {
         Document doc = null;
 
         String webPage = getValidWebpage(url);
+        
+        // If the webpage returned is null or empty, quit
+        if(StringUtils.isBlank(webPage)){
+            return null;
+        }
+        
         try (InputStream in = new ByteArrayInputStream(webPage.getBytes(CHARSET))) {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
