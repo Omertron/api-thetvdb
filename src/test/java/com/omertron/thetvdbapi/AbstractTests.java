@@ -38,7 +38,6 @@ public class AbstractTests {
     /**
      * Do the initial configuration for the test cases
      *
-     * @throws MovieDbException
      */
     protected static final void doConfiguration() {
         TestLogger.configure();
@@ -62,7 +61,7 @@ public class AbstractTests {
     /**
      * Get the API Key
      *
-     * @return
+     * @return the API Key
      */
     protected static String getApiKey() {
         return PROPS.getProperty("API_Key");
@@ -71,8 +70,8 @@ public class AbstractTests {
     /**
      * Get the named property
      *
-     * @param property
-     * @return
+     * @param property The property to get the value for
+     * @return value of property
      */
     protected static String getProperty(String property) {
         return PROPS.getProperty(property);

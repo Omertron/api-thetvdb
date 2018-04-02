@@ -80,8 +80,8 @@ public class TestLogger {
     /**
      * Load properties from a file
      *
-     * @param props
-     * @param propertyFile
+     * @param props The property collection to load the file into
+     * @param propertyFile the file to load
      */
     public static void loadProperties(Properties props, File propertyFile) {
         InputStream is = null;
@@ -104,9 +104,9 @@ public class TestLogger {
     /**
      * Save properties to a file
      *
-     * @param props
-     * @param propertyFile
-     * @param headerText
+     * @param props the property collection to save
+     * @param propertyFile the file to save to
+     * @param headerText text to save at the top of the property file
      */
     public static void saveProperties(Properties props, File propertyFile, String headerText) {
         OutputStream out = null;
