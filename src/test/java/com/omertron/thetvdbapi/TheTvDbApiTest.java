@@ -157,7 +157,7 @@ public class TheTvDbApiTest extends AbstractTests {
     /**
      * Test of getEpisodeById method, of class TheTVDBApi.
      *
-     * @throws com.omertron.thetvdbapi.TvDbException
+     * @throws TvDbException re throw of exception
      */
     @Test
     public void testGetEpisodeById() throws TvDbException {
@@ -170,7 +170,7 @@ public class TheTvDbApiTest extends AbstractTests {
     /**
      * Test of getWeeklyUpdates method, of class TheTVDBApi.
      *
-     * @throws com.omertron.thetvdbapi.TvDbException
+     * @throws TvDbException re throw of exception
      */
     @Test
     public void testGetWeeklyUpdates() throws TvDbException {
@@ -184,7 +184,7 @@ public class TheTvDbApiTest extends AbstractTests {
     /**
      * Test of getLanguages method, of class TheTVDBApi.
      *
-     * @throws com.omertron.thetvdbapi.TvDbException
+     * @throws TvDbException re throw of exception
      */
     @Test
     public void testGetLanguages() throws TvDbException {
@@ -196,7 +196,7 @@ public class TheTvDbApiTest extends AbstractTests {
     /**
      * Test for non-existent series, should return empty list
      *
-     * @throws TvDbException
+     * @throws TvDbException re throw of exception
      */
     @Test
     public void test() throws TvDbException {
