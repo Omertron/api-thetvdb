@@ -52,7 +52,6 @@ public class TheTVDBApi {
     private String apiKey = null;
     private HttpClient httpClient;
     private static final String BASE_URL = "http://thetvdb.com/api/";
-    private static final String XML_EXTENSION = ".xml";
     private static final String SERIES_URL = "/series/";
     private static final String ALL_URL = "/all/";
     private static final String WEEKLY_UPDATES_URL = "/updates/updates_week.xml";
@@ -101,16 +100,15 @@ public class TheTVDBApi {
                   .append(id)
                   .append("/");
         if (StringUtils.isNotBlank(language)) {
-            urlBuilder.append(language).append(XML_EXTENSION);
+            urlBuilder.append(language);
         }
 
         LOG.trace(URL, urlBuilder.toString());
         List<Series> seriesList = TvdbParser.getSeriesList(urlBuilder.toString());
         if (seriesList.isEmpty()) {
             return null;
-        } else {
-            return seriesList.get(0);
         }
+        return seriesList.get(0);
     }
 
     /**
@@ -132,7 +130,7 @@ public class TheTVDBApi {
                       .append(id)
                       .append(ALL_URL);
             if (StringUtils.isNotBlank(language)) {
-                urlBuilder.append(language).append(XML_EXTENSION);
+                urlBuilder.append(language);
             }
 
             LOG.trace(URL, urlBuilder.toString());
@@ -159,7 +157,7 @@ public class TheTVDBApi {
                   .append(id)
                   .append(ALL_URL);
         if (StringUtils.isNotBlank(language)) {
-            urlBuilder.append(language).append(XML_EXTENSION);
+            urlBuilder.append(language);
         }
 
         LOG.trace(URL, urlBuilder.toString());
@@ -223,7 +221,7 @@ public class TheTVDBApi {
                   .append(episodeNbr)
                   .append("/");
         if (StringUtils.isNotBlank(language)) {
-            urlBuilder.append(language).append(XML_EXTENSION);
+            urlBuilder.append(language);
         }
 
         LOG.trace(URL, urlBuilder.toString());
@@ -249,7 +247,7 @@ public class TheTVDBApi {
                   .append(episodeNbr)
                   .append("/");
         if (StringUtils.isNotBlank(language)) {
-            urlBuilder.append(language).append(XML_EXTENSION);
+            urlBuilder.append(language);
         }
 
         LOG.trace(URL, urlBuilder.toString());
@@ -380,7 +378,6 @@ public class TheTVDBApi {
                   .append("/");
         if (StringUtils.isNotBlank(language)) {
             urlBuilder.append(language);
-            urlBuilder.append(XML_EXTENSION);
         }
 
         LOG.trace(URL, urlBuilder.toString());
@@ -426,8 +423,7 @@ public class TheTVDBApi {
 
         urlBuilder.append(BASE_URL)
                   .append(apiKey)
-                  .append("/languages")
-                  .append(XML_EXTENSION);
+                  .append("/languages");
 
         LOG.trace(URL, urlBuilder.toString());
         return TvdbParser.getLanguages(urlBuilder.toString());
@@ -439,7 +435,7 @@ public class TheTVDBApi {
      * @param number
      * @return
      */
-    private boolean isValidNumber(String number) {
+    private static boolean isValidNumber(String number) {
         return isValidNumber(NumberUtils.toInt(number, 0));
     }
 
@@ -449,7 +445,7 @@ public class TheTVDBApi {
      * @param number
      * @return
      */
-    private boolean isValidNumber(int number) {
+    private static boolean isValidNumber(int number) {
         return number >= 0;
     }
 }
